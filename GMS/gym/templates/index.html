@@ -1,0 +1,555 @@
+{% extends 'navigation.html' %}
+{% load static %}
+{% block body %}
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap'); /* Added Montserrat font */
+
+    .team-member .team-img img {
+        /* Sets up a smooth transition for any transformation */
+        transition: transform 0.4s ease;
+    }
+
+    .team-member:hover .team-img img {
+        /* Scales the image up to 110% when the card is hovered over */
+        transform: scale(1.1);
+    }
+    
+    /* --- HERO BANNER STYLES --- */
+    #hero-banner h2 {
+        font-family: 'Poppins', sans-serif; /* New font style */
+        font-size: 72px; 
+        font-weight: 500;
+        color: #FFD700; /* New gold color */
+        text-transform: uppercase;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    }
+    
+    #hero-banner p.text-white {
+        font-family: 'Poppins', sans-serif; /* New font style */
+        font-size: 18px; /* CHANGED FONT SIZE */
+        color: #f0f0f0; /* New off-white color */
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: 20px;
+        margin-bottom: 30px;
+        line-height: 1.6;
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+    }
+    /* --- END OF HERO BANNER STYLES --- */
+
+    /* --- NEW STYLES FOR THE SERVICES SECTION --- */
+    #services {
+        background-color: #f8f9fa; /* Light background for the section */
+    }
+
+    .service-box {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-align: center;
+        margin-bottom: 30px;
+        height: 100%;
+    }
+
+    .service-box:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .service-box .pull-left {
+        float: none;
+        display: block;
+        margin: 0 auto 20px;
+    }
+
+    .service-box .pull-left i {
+        font-size: 48px;
+        color: #007bff; /* Vibrant blue icon color */
+    }
+    
+    .service-box .media-body {
+        display: block;
+    }
+
+    .service-box .media-heading {
+        font-size: 22px;
+        font-weight: 600;
+        color: #343a40;
+        margin-bottom: 15px;
+    }
+
+    .service-box p {
+        font-size: 16px;
+        color: #6c757d;
+        line-height: 1.6;
+    }
+    /* --- END OF NEW STYLES --- */
+    
+    /* --- GALLERY DESCRIPTION STYLE --- */
+    #portfolio .section-header p {
+        font-size: 18px; /* Increased font size */
+        color: #007bff;     /* Changed text color to the theme's primary blue */
+    }
+
+    /* --- GALLERY ZOOM EFFECT --- */
+    #portfolio .portfolio-item-inner {
+        overflow: hidden; /* This is crucial to contain the zoom effect */
+    }
+
+    #portfolio .portfolio-item-inner img {
+        transition: transform 0.4s ease; /* Smooth transition for the zoom */
+    }
+
+    #portfolio .portfolio-item-inner:hover img {
+        transform: scale(1.15); /* Zoom the image to 115% on hover */
+    }
+
+    /* --- HEALTHY REPORT DESCRIPTION STYLE --- */
+    #business-stats .section-header p {
+        font-size: 18px; /* Increased font size */
+        color: #28a745;   /* Changed text color to health-themed green */
+    }
+
+    /* --- ESTABLISHER SECTION STYLES --- */
+    #testimonial .section-header h2 {
+        font-family: 'Montserrat', sans-serif;
+        color: #FFD700; /* Theme gold color */
+    }
+
+    #testimonial .single-testimonial blockquote {
+        font-style: italic;
+        color: #cccccc; /* Lighter gray for quote */
+        border-left: 3px solid #FFD700; /* Gold accent border */
+    }
+
+    .establisher-img {
+        width: 90px;
+        height: 90px;
+        object-fit: cover; /* Prevents image from stretching */
+        border-radius: 50%; /* Makes the image circular */
+    }
+
+</style>
+
+<div id="home">
+    <section id="hero-banner">
+        <div class="banner-inner">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h2>Stronger than <b>EVER</b></h2>
+                        <p class="text-white">Lacking motivation to get back into the gym? Back in the gym already but
+                            feel stagnated? Or maybe you’re just looking for new inspiration for a the new year.
+                            Whatever your situation, Just..</p>
+                        <a class="btn btn-primary btn-lg" href='/add_plan'>Start Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services">
+        <div class="container">
+            <div class="row">
+                <div class="features">
+                    <div class="col-md-4 col-sm-6 wow fadeInUp" data-wow-duration="300ms" data-wow-delay="0ms">
+                        <div class="media service-box">
+                            <div class="pull-left">
+                                <i class="fa fa-futbol-o"></i>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">Aerobic</h4>
+                                <p>Join our high-energy group classes like Zumba, Step Aerobics, and Aqua Aerobics. These sessions are set to upbeat music, making your workout feel like a party, Dancing,jumping,etc.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 wow fadeInUp" data-wow-duration="300ms" data-wow-delay="100ms">
+                        <div class="media service-box">
+                            <div class="pull-left">
+                                <i class="fa fa-compass"></i>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">Cardio</h4>
+                                <p>Get your heart pumping and metabolism soaring with our state-of-the-art cardio equipment. Elevate your endurance, burn calories, and strengthen your heart to feel more energized every day.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 wow fadeInUp" data-wow-duration="300ms" data-wow-delay="200ms">
+                        <div class="media service-box">
+                            <div class="pull-left">
+                                <i class="fa fa-database"></i>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">Six Pack</h4>
+                                <p>The path to a strong, sculpted core is within reach. Our specialized Six-Pack Program is designed to go beyond crunches, focusing on comprehensive core strength, stability, and fat-burning techniques.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 wow fadeInUp" data-wow-duration="300ms" data-wow-delay="300ms">
+                        <div class="media service-box">
+                            <div class="pull-left">
+                                <i class="fa fa-bar-chart"></i>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">Classes</h4>
+                                <p>Our diverse class schedule is designed to keep your workouts fresh, exciting, and effective. From high-energy aerobics to calming yoga, there's a class for everyone.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 wow fadeInUp" data-wow-duration="300ms" data-wow-delay="400ms">
+                        <div class="media service-box">
+                            <div class="pull-left">
+                                <i class="fa fa-paper-plane-o"></i>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">Special Trainer</h4>
+                                <p>Our team of certified and passionate trainers are the heart of our gym. They are more than just instructors; they are mentors, motivators, and partners in your fitness journey.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 wow fadeInUp" data-wow-duration="300ms" data-wow-delay="500ms">
+                        <div class="media service-box">
+                            <div class="pull-left">
+                                <i class="fa fa-bullseye"></i>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">Health Sports</h4>
+                                <p>We believe that fitness is a lifestyle. Our gym is a hub for a wide range of health and sports activities that cater to all interests and skill levels. fitness is a lifestyle.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" style="background-color: #f8f9fa; color: #343a40; padding: 80px 0;">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 wow fadeInLeft">
+                    <img class="img-responsive" src="{% static 'images/about.png' %}" alt="Our Fitness Studio">
+                </div>
+                <div class="col-sm-6 wow fadeInRight">
+                    <h3 class="column-title" style="color: #28a745; font-weight: 700;">Our Fitness Studio</h3>
+                    <p>Welcome to Our Fitness Studio — your ultimate destination for health, strength, and wellness.</p>
+                    <p>We offer personalized training programs, modern equipment, and a supportive community to help you achieve your fitness goals.</p>
+                    <p>Whether you’re a beginner or a seasoned athlete, our expert trainers are here to guide you every step of the way. Join us and start your journey to a healthier, stronger you!</p>
+                    <ul class="listarrow" style="list-style: none; padding-left: 0; margin-top: 20px;">
+                        <li style="margin-bottom: 10px;"><i class="fa fa-angle-double-right" style="color: #28a745; margin-right: 8px;"></i>Aerobic</li>
+                        <li style="margin-bottom: 10px;"><i class="fa fa-angle-double-right" style="color: #28a745; margin-right: 8px;"></i>Cardio</li>
+                        <li style="margin-bottom: 10px;"><i class="fa fa-angle-double-right" style="color: #28a745; margin-right: 8px;"></i>Abdomen</li>
+                        <li style="margin-bottom: 10px;"><i class="fa fa-angle-double-right" style="color: #28a745; margin-right: 8px;"></i>Special Trainer</li>
+                        <li style="margin-bottom: 10px;"><i class="fa fa-angle-double-right" style="color: #28a745; margin-right: 8px;"></i>Round the clock</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="our-team">
+        <div class="container">
+            <div class="section-header" style="text-align: center;">
+                <h2 class="section-title wow fadeInDown"
+                    style="color: #007bff; font-size: 40px; font-weight: 600; text-transform: uppercase; margin-bottom: 10px;">
+                    OUR TRAINERS
+                </h2>
+                <div style="width: 100px; height: 3px; background-color: #007bff; margin: 10px auto 25px auto;"></div>
+                <p class="wow fadeInDown"
+                    style="font-size: 18px; color: #333; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+                    Meet the heart of our gym: our certified trainers. They're here to guide you, motivate you, and help you reach your goals with personalized plans and expert advice. Whether you're a beginner or an experienced athlete, our team is dedicated to helping you succeed.
+                </p>
+            </div>
+
+            <div class="row text-center">
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="team-member wow fadeInUp" data-wow-duration="400ms" data-wow-delay="0ms"
+                        style="position: relative; overflow: hidden; margin-bottom: 20px;">
+                        <div class="team-img">
+                            <img class="img-responsive" src="{% static 'images/team/Arjun Kumar.jpg' %}" alt="Arjun Kumar"
+                                style="width: 100%; height: 300px; object-fit: cover;">
+                        </div>
+                        <div class="team-info"
+                            style="position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(10, 10, 10, 0.7); color: #fff; padding: 10px 0;">
+                            <h3 style="font-size: 18px; margin: 0 0 5px 0; color: #fff; font-weight: 600;">Arjun Kumar
+                            </h3>
+                            <span style="font-size: 14px; color: #ccc;">The Strength Specialist</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="team-member wow fadeInUp" data-wow-duration="400ms" data-wow-delay="100ms"
+                        style="position: relative; overflow: hidden; margin-bottom: 20px;">
+                        <div class="team-img">
+                            <img class="img-responsive" src="{% static 'images/team/Priya Sharma.jpg' %}"
+                                alt="Priya Sharma" style="width: 100%; height: 300px; object-fit: cover;">
+                        </div>
+                        <div class="team-info"
+                            style="position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(10, 10, 10, 0.7); color: #fff; padding: 10px 0;">
+                            <h3 style="font-size: 18px; margin: 0 0 5px 0; color: #fff; font-weight: 600;">Priya Sharma
+                            </h3>
+                            <span style="font-size: 14px; color: #ccc;">The Wellness Motivator</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="team-member wow fadeInUp" data-wow-duration="400ms" data-wow-delay="200ms"
+                        style="position: relative; overflow: hidden; margin-bottom: 20px;">
+                        <div class="team-img">
+                            <img class="img-responsive" src="{% static 'images/team/Raj Mehta.jpg' %}" alt="Raj Mehta"
+                                style="width: 100%; height: 300px; object-fit: cover;">
+                        </div>
+                        <div class="team-info"
+                            style="position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(10, 10, 10, 0.7); color: #fff; padding: 10px 0;">
+                            <h3 style="font-size: 18px; margin: 0 0 5px 0; color: #fff; font-weight: 600;">Raj Mehta
+                            </h3>
+                            <span style="font-size: 14px; color: #ccc;">The Personalized Coach</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="team-member wow fadeInUp" data-wow-duration="400ms" data-wow-delay="300ms"
+                        style="position: relative; overflow: hidden; margin-bottom: 20px;">
+                        <div class="team-img">
+                            <img class="img-responsive" src="{% static 'images/team/Neha Joshi.jpg' %}" alt="Neha Joshi"
+                                style="width: 100%; height: 300px; object-fit: cover;">
+                        </div>
+                        <div class="team-info"
+                            style="position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(10, 10, 10, 0.7); color: #fff; padding: 10px 0;">
+                            <h3 style="font-size: 18px; margin: 0 0 5px 0; color: #fff; font-weight: 600;">Neha Joshi
+                            </h3>
+                            <span style="font-size: 14px; color: #ccc;">The Personalized Coach</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title wow fadeInDown">Gallery</h2>
+                <p class="wow fadeInDown">Step inside and see where your fitness journey begins.<br>Capturing the energy, dedication, and results of our members.<br>More than a gym, we're a community in motion.</p>
+            </div>
+  <div class="text-center">
+                <ul class="portfolio-filter">
+                    <li><a class="active" href="#" data-filter="*">All Works</a></li>
+                    <li><a href="#" data-filter=".designing">Designing</a></li>
+                    <li><a href="#" data-filter=".mobile">Mobile App</a></li>
+                    <li><a href="#" data-filter=".development">Development</a></li>
+                </ul>
+            </div>
+
+            <div class="portfolio-items">
+                <div class="portfolio-item designing">
+                    <div class="portfolio-item-inner">
+                        <img class="img-responsive" src="{% static 'images/portfolio/01.jpg' %}" alt="">
+                        <div class="portfolio-info">
+                            <a class="preview" href="{% static 'images/portfolio/01.jpg' %}" rel="prettyPhoto"><i
+                                    class="fa fa-eye"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item mobile development">
+                    <div class="portfolio-item-inner">
+                        <img class="img-responsive" src="{% static 'images/portfolio/02.jpg' %}" alt="">
+                        <div class="portfolio-info">
+                            <a class="preview" href="{% static 'images/portfolio/02.jpg' %}" rel="prettyPhoto"><i
+                                    class="fa fa-eye"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item designing">
+                    <div class="portfolio-item-inner">
+                        <img class="img-responsive" src="{% static 'images/portfolio/03.jpg' %}" alt="">
+                        <div class="portfolio-info">
+                            <a class="preview" href="{% static 'images/portfolio/03.jpg' %}" rel="prettyPhoto"><i
+                                    class="fa fa-eye"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item mobile">
+                    <div class="portfolio-item-inner">
+                        <img class="img-responsive" src="{% static 'images/portfolio/04.jpg' %}" alt="">
+                        <div class="portfolio-info">
+                            <a class="preview" href="{% static 'images/portfolio/04.jpg' %}" rel="prettyPhoto"><i
+                                    class="fa fa-eye"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item designing development">
+                    <div class="portfolio-item-inner">
+                        <img class="img-responsive" src="{% static 'images/portfolio/05.jpg' %}" alt="">
+                        <div class="portfolio-info">
+                            <a class="preview" href="{% static 'images/portfolio/05.jpg' %}" rel="prettyPhoto"><i
+                                    class="fa fa-eye"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item mobile">
+                    <div class="portfolio-item-inner">
+                        <img class="img-responsive" src="{% static 'images/portfolio/06.jpg' %}" alt="">
+                        <div class="portfolio-info">
+                            <a class="preview" href="{% static 'images/portfolio/06.jpg' %}" rel="prettyPhoto"><i
+                                    class="fa fa-eye"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item designing development">
+                    <div class="portfolio-item-inner">
+                        <img class="img-responsive" src="{% static 'images/portfolio/07.jpg' %}" alt="">
+                        <div class="portfolio-info">
+                            <a class="preview" href="{% static 'images/portfolio/07.jpg' %}" rel="prettyPhoto"><i
+                                    class="fa fa-eye"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item mobile">
+                    <div class="portfolio-item-inner">
+                        <img class="img-responsive" src="{% static 'images/portfolio/08.jpg' %}" alt="">
+                        <div class="portfolio-info">
+                            <a class="preview" href="{% static 'images/portfolio/08.jpg' %}" rel="prettyPhoto"><i
+                                    class="fa fa-eye"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="business-stats">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title wow fadeInDown">Healty Report</h2>
+                <p class="wow fadeInDown">A healthy lifestyle means eating balanced meals, exercising regularly, and
+                    getting proper rest.
+                    Maintaining mental well-being and routine health checkups ensures long-term fitness and overall
+                    wellness.</p>
+            </div>
+
+            <div class="row text-center">
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="wow fadeInUp" data-wow-duration="400ms" data-wow-delay="0ms">
+                        <div class="business-stats" data-digit="6850" data-duration="1000"></div>
+                        <strong>Clients</strong>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="wow fadeInUp" data-wow-duration="400ms" data-wow-delay="100ms">
+                        <div class="business-stats" data-digit="1465" data-duration="1000"></div>
+                        <strong>Trainer</strong>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="wow fadeInUp" data-wow-duration="400ms" data-wow-delay="200ms">
+                        <div class="business-stats" data-digit="4325" data-duration="1000"></div>
+                        <strong>Programs</strong>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="wow fadeInUp" data-wow-duration="400ms" data-wow-delay="300ms">
+                        <div class="business-stats" data-digit="2568" data-duration="1000"></div>
+                        <strong>Successes</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="testimonial-area" id="testimonial">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title wow fadeInDown">Fitness Center Project Establisher details</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="single-testimonial animate_fade_in" style="opacity: 1; right: 0px;">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <blockquote>| Aspiring Python Developer | BCA Student | Passionate about coding, data
+                                    science, and problem-solving. Always learning, building projects, and exploring
+                                    tech to create real-world impact.
+                                    Junagadh</blockquote>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <img src="{% static 'images/vikas.jpg' %}" alt="client" class="establisher-img">
+                            </div>
+                            <div class="col-xs-9 half-gutter">
+                                <br>
+                                <h5>VIKAS CHAUHAN</h5>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="single-testimonial animate_fade_in" style="opacity: 1; right: 0px;">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <blockquote>| Aspiring Python Developer | BCA Student | Passionate about coding, data
+                                    science, and problem-solving. Always learning, building projects, and exploring
+                                    tech to create real-world impact.
+                                    Junagadh</blockquote>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <img src="{% static 'images/milan.jpg' %}" alt="client" class="establisher-img">
+                            </div>
+                            <div class="col-xs-9 half-gutter">
+                                <br>
+                                <h5>MILAN RATHOD</h5>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="single-testimonial animate_fade_in" style="opacity: 1; right: 0px;">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <blockquote>| Aspiring Python Developer | BCA Student | Passionate about coding, data
+                                    science, and problem-solving. Always learning, building projects, and exploring
+                                    tech to create real-world impact.
+                                    Junagadh</blockquote>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <img src="{% static 'images/vishal.jpg' %}" alt="client" class="establisher-img">
+                            </div>
+                            <div class="col-xs-9 half-gutter">
+                                <br>
+                                <h5>VISHAL KINDARKHEDIYA</h5>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block footer %}
+<footer id="footer" class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <ul class="social-icons">
+                    <li><a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a></li>
+                    <li><a href="https://x.com/"><i class="fa fa-twitter"></i></a></li>
+                    <li><a href="https://www.linkedin.com/login"><i class="fa fa-linkedin"></i></a></li>
+                    <li><a href="https://www.youtube.com/"><i class="fa fa-youtube"></i></a></li>
+                    <li><a href="https://github.com/login"><i class="fa fa-github"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+{% endblock %}

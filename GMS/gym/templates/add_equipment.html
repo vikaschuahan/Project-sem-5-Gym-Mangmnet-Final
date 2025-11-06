@@ -1,0 +1,124 @@
+{% extends 'navigation.html' %}
+
+{% block body %}
+<div class="main-content d-flex align-items-center py-5">
+    <div class="container" style="max-width: 600px; background-color: #dff6ff; padding: 25px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+        <h3 class="text-center font-weight-bold mb-4" style="color: #2a2a2a;">➕ Add New Equipment</h3>
+        <form action="{% if equipment %}{% url 'edit_equipment' equipment.id %}{% else %}{% url 'add_equipment' %}{% endif %}" method="post">
+            {% csrf_token %}
+            
+            <label for="name"><b>Equipment Name <span style="color: red;">*</span></b></label>
+            <input type="text" name="name" id="name" class="form-control" placeholder="Enter equipment name" value="{{ equipment.name|default:'' }}" required>
+            
+            <label for="category" class="mt-3"><b>Category <span style="color: red;">*</span></b></label>
+            <select name="category" id="category" class="form-control" required>
+                <option value="" disabled {% if not equipment %}selected{% endif %}>Select category</option>
+                <option value="Cardio" {% if equipment and equipment.category == 'Cardio' %}selected{% endif %}>Cardio Machines</option>
+                <option value="Strength" {% if equipment and equipment.category == 'Strength' %}selected{% endif %}>Strength Equipment</option>
+                <option value="FreeWeights" {% if equipment and equipment.category == 'FreeWeights' %}selected{% endif %}>Free Weights</option>
+                <option value="Yoga" {% if equipment and equipment.category == 'Yoga' %}selected{% endif %}>Yoga & Stretching</option>
+                <option value="Accessories" {% if equipment and equipment.category == 'Accessories' %}selected{% endif %}>Accessories</option>
+            </select>
+            
+            <label for="quantity" class="mt-3"><b>Quantity <span style="color: red;">*</span></b></label>
+            <input type="number" name="quantity" id="quantity" class="form-control" min="1" placeholder="Enter quantity" value="{{ equipment.quantity|default:1 }}" required>
+            
+            <label for="date" class="mt-3"><b>Purchase Date <span style="color: red;">*</span></b></label>
+            <input type="date" name="date" id="date" class="form-control" value="{% if equipment and equipment.date %}{{ equipment.date|date:'Y-m-d' }}{% endif %}" required>
+            
+            <label for="condition" class="mt-3"><b>Condition <span style="color: red;">*</span></b></label>
+            <select name="condition" id="condition" class="form-control" required>
+                <option value="" disabled {% if not equipment %}selected{% endif %}>Select condition</option>
+                <option value="new" {% if equipment and equipment.condition == 'new' %}selected{% endif %}>New</option>
+                <option value="used" {% if equipment and equipment.condition == 'used' %}selected{% endif %}>Used</option>
+                <option value="refurbished" {% if equipment and equipment.condition == 'refurbished' %}selected{% endif %}>Refurbished</option>
+            </select>
+            
+            <label for="desc" class="mt-3"><b>Additional Notes</b></label>
+            <textarea name="desc" id="desc" class="form-control" rows="4" placeholder="Any additional information about the equipment">{{ equipment.description|default:'' }}</textarea>
+            
+            <br>
+         <input type="submit" value="{% if equipment %}Save Changes{% else %}Add Equipment{% endif %}" class="btn btn-primary btn-block" 
+             style="background: linear-gradient(to right, #6267f1, #8657e3); border: none; font-weight: bold; border-radius: 8px;">
+        </form>
+    </div>
+</div>
+
+{% if error == "no" %}
+<script>
+    alert('✅ Record Inserted Successfully');
+    window.location = "{% url 'view_equipment' %}";
+</script>
+{% endif %}
+{% if error == "yes" %}
+<script>
+    alert('❌ Something went wrong, Try Again');
+</script>
+{% endif %}
+{% endblock %}
+
+
+{% block css %}
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; /* Ensures the body takes up at least the full screen height */
+        background-color: #f4f7f6; /* A neutral background color */
+    }
+
+    .main-content {
+        flex: 1; /* This is the key: it makes the main content area grow to fill all available space */
+    }
+
+    .footer {
+        flex-shrink: 0; /* Prevents the footer from shrinking */
+        width: 100%;
+        background: #212529; /* Dark footer background */
+        color: white;
+        padding: 15px 0;
+    }
+
+    .footer .social-icons {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .footer .social-icons li a {
+        color: white;
+        font-size: 20px;
+        transition: color 0.3s ease;
+    }
+
+    .footer .social-icons li a:hover {
+        color: #6267f1; /* A matching highlight color */
+    }
+</style>
+{% endblock %}
+
+
+{% block footer %}
+<footer id="footer" class="footer">
+    <div class="container">
+        <div class="row justify-content-center">
+            <ul class="social-icons">
+                <li><a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a></li>
+                <li><a href="https://x.com/"><i class="fa fa-twitter"></i></a></li>
+                <li><a href="https://www.linkedin.com/login"><i class="fa fa-linkedin"></i></a></li>
+                <li><a href="https://www.youtube.com/"><i class="fa fa-youtube"></i></a></li>
+                <li><a href="https://github.com/login"><i class="fa fa-github"></i></a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+{% endblock %}

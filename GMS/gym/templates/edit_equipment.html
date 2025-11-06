@@ -1,0 +1,52 @@
+{% extends 'navigation.html' %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="card p-4">
+        <h3 class="text-center">Edit Equipment</h3>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">Equipment Name</label>
+                <input type="text" name="name" class="form-control" value="{{ equipment.name }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Category</label>
+                <input type="text" name="category" class="form-control" value="{{ equipment.category }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Quantity</label>
+                <input type="number" name="quantity" class="form-control" value="{{ equipment.quantity }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Price</label>
+                <input type="text" name="price" class="form-control" value="{{ equipment.price }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Unit</label>
+                <input type="text" name="unit" class="form-control" value="{{ equipment.unit }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Purchase Date</label>
+                <input type="date" name="date" class="form-control" value="{{ equipment.date }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Condition</label>
+                <select name="condition" class="form-control">
+                    <option value="new" {% if equipment.condition == 'new' %}selected{% endif %}>New</option>
+                    <option value="used" {% if equipment.condition == 'used' %}selected{% endif %}>Used</option>
+                    <option value="refurbished" {% if equipment.condition == 'refurbished' %}selected{% endif %}>Refurbished</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Description / Notes</label>
+                <textarea name="desc" class="form-control">{{ equipment.description }}</textarea>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success">Save Changes</button>
+                <a href="{% url 'view_equipment' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

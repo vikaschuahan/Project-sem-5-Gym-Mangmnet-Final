@@ -1,0 +1,80 @@
+{% extends 'navigation.html' %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="card p-4">
+        <h3 class="text-center">Edit Member</h3>
+        <form method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" name="name" class="form-control" value="{{ member.name }}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="emailid" class="form-control" value="{{ member.emailid }}" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Phone</label>
+                    <input type="tel" name="contact" class="form-control" value="{{ member.contact }}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Date of Birth</label>
+                    <input type="date" name="dob" class="form-control" value="{{ member.dob }}">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Membership Type</label>
+                <input type="text" name="membership_type" class="form-control" value="{{ member.membership_type }}">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Plan</label>
+                <select name="plan" class="form-control">
+                    <option value="">-- Keep current --</option>
+                    {% for p in plan %}
+                        {% if member.plan and member.plan.id == p.id %}
+                            <option value="{{ p.id }}" selected>{{ p.name }}</option>
+                        {% else %}
+                            <option value="{{ p.id }}">{{ p.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Join Date</label>
+                <input type="date" name="joindate" class="form-control" value="{% if member.joindate %}{{ member.joindate|date:'Y-m-d' }}{% endif %}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Expiry Date</label>
+                <input type="date" name="expdate" class="form-control" value="{% if member.expiredate %}{{ member.expiredate|date:'Y-m-d' }}{% endif %}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Initial Amount</label>
+                <input type="number" step="0.01" name="initialamount" class="form-control" value="{{ member.initialamount }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Address</label>
+                <textarea name="address" class="form-control">{{ member.address }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Emergency Contact</label>
+                <input type="text" name="emergency_contact" class="form-control" value="{{ member.emergency_contact }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Medical Conditions</label>
+                <textarea name="medical_conditions" class="form-control">{{ member.medical_conditions }}</textarea>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success">Save Changes</button>
+                <a href="{% url 'view_member' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

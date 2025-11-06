@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - FitLife Gym Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .logo-icon {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 20px;
+            color: white;
+        }
+        
+        .form-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 1000px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        @media (min-width: 768px) {
+            .form-container {
+                flex-direction: row;
+            }
+        }
+        
+        .form-left {
+            flex: 1;
+            padding: 40px;
+            background: white;
+        }
+        
+        .form-right {
+            flex: 1;
+            background: linear-gradient(135deg, #4ecdc4, #556270);
+            color: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .benefit-icon {
+            background: rgba(255, 255, 255, 0.2);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        
+        .form-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #2d3748;
+        }
+        
+        .form-subtitle {
+            color: #718096;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2d3748;
+        }
+        
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .checkbox-container input {
+            width: auto;
+            margin-right: 10px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #4ecdc4, #556270);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .divider {
+            margin: 25px 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .divider::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: #e2e8f0;
+        }
+        
+        .divider span {
+            background: white;
+            padding: 0 15px;
+            position: relative;
+            color: #718096;
+        }
+        
+        .social-login {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .social-btn {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .social-btn:hover {
+            background: #f7fafc;
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #718096;
+        }
+        
+        .circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            position: absolute;
+        }
+        
+        .circle-1 {
+            top: -30px;
+            right: -30px;
+        }
+        
+        .circle-2 {
+            bottom: -40px;
+            left: -40px;
+            width: 200px;
+            height: 200px;
+        }
+        
+        .membership-plans {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .plan-option {
+            flex: 1;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .plan-option.selected {
+            border-color: #4ecdc4;
+            background-color: rgba(78, 205, 196, 0.1);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #48bb78;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-left">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-dumbbell"></i>
+                </div>
+                <h2>FitLife Gym</h2>
+            </div>
+            
+            <h1 class="form-title">Create Your Account</h1>
+            <p class="form-subtitle">Join our fitness community and start your transformation journey</p>
+            
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" placeholder="Enter your full name"   >
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" placeholder="Enter your phone number" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Create a secure password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Select Membership Plan</label>
+                    <div class="membership-plans">
+                        <div class="plan-option" onclick="selectPlan(this)">
+                            <h3>Basic</h3>
+                            <p>$49/mo</p>
+                        </div>
+                        <div class="plan-option" onclick="selectPlan(this)">
+                            <h3>Premium</h3>
+                            <p>$79/mo</p>
+                        </div>
+                        <div class="plan-option" onclick="selectPlan(this)">
+                            <h3>Elite</h3>
+                            <p>$99/mo</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="checkbox-container">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms">I agree to the <a href="#" style="color: #4ecdc4;">Terms and Conditions</a> and <a href="#" style="color: #4ecdc4;">Privacy Policy</a></label>
+                </div>
+                
+                <button type="submit">
+                    
+                    <a href="/admin_login/"></a>Create Account</button>
+            </form>
+            
+            <div class="divider">
+                <span>Or continue with</span>
+            </div>
+            
+            <div class="social-login">
+                <div class="social-btn">
+                  <a href="https://google.com/"><i class="fab fa-google" style="color: #DB4437;"></i></a>
+                </div>
+                <div class="social-btn">
+                    <a href="https://facebook.com/"><i class="fab fa-facebook" style="color: #4267B2;"></i></a>
+                </div>
+                <div class="social-btn">
+                    <a href="https://apple.com/"><i class="fab fa-apple"></i></a>
+                </div>
+            </div>
+            
+            <div class="login-link">
+                Already have an account? <a href="/admin_login/" style="color: #4ecdc4; font-weight: 500;">Log In</a>
+            </div>
+        </div>
+        
+        <div class="form-right">
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"></div>
+            
+            <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 20px;">Why Join FitLife Gym?</h2>
+            <p style="margin-bottom: 40px; max-width: 300px;">Become part of a community that supports your fitness journey with state-of-the-art facilities and expert trainers.</p>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">
+                    <i class="fas fa-dumbbell"></i>
+                </div>
+                <div>
+                    <h3>Modern Equipment</h3>
+                    <p>Access to the latest fitness technology</p>
+                </div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div>
+                    <h3>Expert Trainers</h3>
+                    <p>Certified professionals to guide you</p>
+                </div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div>
+                    <h3>24/7 Access</h3>
+                    <p>Work out on your schedule</p>
+                </div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <div>
+                    <h3>Health Tracking</h3>
+                    <p>Monitor your progress with our app</p>
+                </div>
+            </div>
+            
+            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8553a53c-54fa-4f78-8f4e-f9630a26f364.png" alt="Modern gym facility with state-of-the-art equipment and a clean, spacious layout" style="width: 100%; max-width: 300px; border-radius: 10px; margin-top: 30px;">
+        </div>
+    </div>
+    
+    <div class="notification" id="successNotification">
+        <i class="fas fa-check-circle"></i> Registration successful! Welcome to FitLife Gym.
+    </div>
+
+    <script>
+        function selectPlan(element) {
+            // Remove selected class from all plans
+            const allPlans = document.querySelectorAll('.plan-option');
+            allPlans.forEach(plan => plan.classList.remove('selected'));
+            
+            // Add selected class to clicked plan
+            element.classList.add('selected');
+        }
+        
+        // Form submission handling
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simple form validation
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            // Show success notification
+            const notification = document.getElementById('successNotification');
+            notification.style.display = 'block';
+            
+            // Hide notification after 3 seconds
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+            
+            // Reset form
+            this.reset();
+            
+            // Reset plan selection
+            const allPlans = document.querySelectorAll('.plan-option');
+            allPlans.forEach(plan => plan.classList.remove('selected'));
+        });
+    </script>
+</body>
+</html>

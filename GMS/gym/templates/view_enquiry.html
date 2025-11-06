@@ -1,0 +1,113 @@
+{% extends 'navigation.html' %}
+
+{% block css %}
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: blue;
+        /* Establishes the main page layout */
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; 
+    }
+
+    /* This new class will wrap your main content */
+    .main-content {
+        flex: 1; /* This is the key: it makes this section grow to fill all available space */
+    }
+
+    .footer {
+        flex-shrink: 0; /* Prevents the footer from shrinking */
+        background-color: #212529; /* Added for better visibility */
+    }
+</style>
+{% endblock %}
+
+
+{% block body %}
+<div class="main-content py-5">
+    <div class="container" style="background:#f8faff; border-radius: 12px; padding: 20px;">
+        <h3 class="text-center font-weight-bold text-white mb-4" style="background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%); padding: 12px; border-radius: 8px;">
+            FitZone Gym - View Enquiries
+        </h3>
+        <button type="button" class="btn btn-primary mb-3" onclick="location.reload();">
+            <i class="fa fa-refresh" aria-hidden="true"></i> Refresh
+        </button>
+        <div class="table-responsive">
+            <table id="example" class="table table-hover custom-table" style="min-width: 900px;">
+                <thead class="table-header">
+                    <tr>
+                        <th>#</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Branch</th>
+                        <th>Enquiry Type</th>
+                        <th>Preferred Contact Date</th>
+                        <th>Status</th>
+                        <th>Additional Info</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in enq %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ i.name }}</td>
+                        <td><a href="mailto:{{ i.emailid }}" style="color:#5559e0;">{{ i.emailid }}</a></td>
+                        <td><a href="tel:{{ i.contact }}" style="color:#5559e0;">{{ i.contact }}</a></td>
+                        <td>{{ i.branch }}</td>
+                        <td>{{ i.enquiry_type }}</td>
+                        <td>{{ i.preferred_contact_date }}</td>
+                        <td>
+                            {% if i.status == "Pending" %}
+                                <span class="badge" style="background-color:#ffa500; color:white; padding:5px 10px; border-radius:15px;">Pending</span>
+                            {% elif i.status == "Processed" %}
+                                <span class="badge" style="background-color:#28a745; color:white; padding:5px 10px; border-radius:15px;">Processed</span>
+                            {% elif i.status == "Closed" %}
+                                <span class="badge" style="background-color:#6c757d; color:white; padding:5px 10px; border-radius:15px;">Closed</span>
+                            {% else %}
+                                <span>{{ i.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td style="max-width: 220px; white-space: normal;">{{ i.additional_info }}</td>
+                        <td>
+                            <a class="btn btn-warning btn-sm me-1" href="{% url 'edit_enquiry' i.id %}">Edit</a>
+                            <a class="btn btn-danger btn-sm" href="{% url 'delete_enquiry' i.id %}" onclick="return confirm('Are You Sure?')">Delete</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="10" class="text-center">No enquiries found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<footer id="footer" class="footer py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <ul class="social-icons list-inline">
+                    <li class="list-inline-item"><a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a></li>
+                    <li class="list-inline-item"><a href="https://x.com/"><i class="fa fa-twitter"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/login"><i class="fa fa-linkedin"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.youtube.com/"><i class="fa fa-youtube"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/login"><i class="fa fa-github"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+{% endblock %}

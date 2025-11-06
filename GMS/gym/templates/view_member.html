@@ -1,0 +1,116 @@
+{% extends 'navigation.html' %}
+
+{% block body %}
+<div class="main-content py-5">
+    <div class="container bg-white p-4 shadow-lg rounded-3" style="max-width: 1100px;">
+        <h3 class="text-center text-primary fw-bold mb-4">FitZone Gym - View Members</h3>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <input type="text" id="memberSearch" class="form-control me-2" style="max-width: 300px;" placeholder="Search members by name, email, or phone">
+            <button class="btn btn-primary" onclick="location.reload();"><i class="fa fa-refresh"></i> Refresh</button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover custom-table align-middle">
+                <thead class="table-header">
+                    <tr>
+                        <th>#</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Membership Type</th>
+                        <th>Join Date</th>
+                        <th>Status</th>
+                        <th>Notes</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in member %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ i.name }}</td>
+                        <td><a href="mailto:{{ i.emailid }}" class="text-decoration-none">{{ i.emailid }}</a></td>
+                        <td><a href="tel:{{ i.contact }}" class="text-decoration-none">{{ i.contact }}</a></td>
+                        <td>{{ i.plan }}</td>
+                        <td>{{ i.joindate }}</td>
+                        
+                        <td>
+                            {% if i.status == "Active" %}
+                                <span class="badge bg-success px-3 py-2">Active</span>
+                            {% else %}
+                                <span class="badge bg-danger px-3 py-2">Inactive</span>
+                            {% endif %}
+                        </td>
+
+                        <td>{{ i.notes|default:"-" }}</td>
+
+                        <td>
+                            <a class="btn btn-warning btn-sm me-1" href="{% url 'edit_member' i.id %}">Edit</a>
+                            <a class="btn btn-danger btn-sm" href="{% url 'delete_member' i.id %}" onclick="return confirm('Are You Sure?')">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block css %}
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); 
+    }
+
+    .main-content {
+        flex: 1 0 auto; 
+    }
+
+    #footer {
+        flex-shrink: 0;
+        background-color: #212529;
+    }
+
+    table {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    /* table header styling (shared) */
+    .custom-table { border-collapse: separate; border-spacing: 0; }
+    .custom-table thead .table-header { background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); color: #fff; }
+    .custom-table thead th { text-align: left; padding: 12px 16px; font-weight: 700; vertical-align: middle; border: 0; }
+    .custom-table thead th:first-child { width: 60px; text-align: center; }
+    .custom-table thead th:last-child { width: 120px; text-align: center; }
+    .custom-table tbody td { padding: 12px 16px; vertical-align: middle; }
+</style>
+{% endblock %}
+
+{% block footer %}
+<footer id="footer" class="footer py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <ul class="social-icons list-inline">
+                    <li class="list-inline-item"><a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a></li>
+                    <li class="list-inline-item"><a href="https://x.com/"><i class="fa fa-twitter"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/login"><i class="fa fa-linkedin"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.youtube.com/"><i class="fa fa-youtube"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/login"><i class="fa fa-github"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+{% endblock %}

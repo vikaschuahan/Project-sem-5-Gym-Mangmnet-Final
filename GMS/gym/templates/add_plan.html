@@ -1,0 +1,238 @@
+{% extends 'navigation.html' %}
+{% block body %}
+
+<style>
+/* Import a modern font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+/* --- Keyframe Animations --- */
+@keyframes gradient-animation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeInSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInFadeOut {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    15%, 85% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+
+/* --- General Body Styles --- */
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #e0e0e0;
+    background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1c1c1c);
+    background-size: 400% 400%;
+    animation: gradient-animation 15s ease infinite;
+    overflow-x: hidden;
+}
+
+/* --- Glassmorphism Form Container --- */
+.form-container {
+    width: 450px;
+    margin: 60px auto;
+    padding: 40px;
+    border-radius: 16px;
+    /* Glassmorphism Effect */
+    background: rgba(28, 28, 28, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 255, 178, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 255, 178, 0.3);
+    color: #00ffb2;
+    /* Entry Animation */
+    animation: fadeInSlideUp 0.8s ease-out forwards;
+}
+
+.form-title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 25px;
+    text-shadow:
+        0 0 7px #00ffb2,
+        0 0 10px #00ffb2,
+        0 0 21px #00ffb2;
+    /* Staggered Animation */
+    opacity: 0;
+    animation: fadeInSlideUp 0.6s 0.2s ease-out forwards;
+}
+
+label {
+    font-weight: 600;
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    color: #00ffb2;
+    /* Staggered Animation */
+    opacity: 0;
+    animation: fadeInSlideUp 0.6s 0.4s ease-out forwards;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid rgba(0, 255, 178, 0.5);
+    border-radius: 8px;
+    background-color: rgba(18, 18, 18, 0.8);
+    color: #e0e0e0;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    /* Staggered Animation */
+    opacity: 0;
+    animation: fadeInSlideUp 0.6s 0.6s ease-out forwards;
+}
+
+.form-input::placeholder {
+    color: #4a5c56;
+}
+
+.form-input:focus {
+    border-color: #00ffb2;
+    box-shadow: 0 0 12px rgba(0, 255, 178, 0.7);
+}
+
+/* --- Animated Buttons --- */
+.form-buttons {
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    /* Staggered Animation */
+    opacity: 0;
+    animation: fadeInSlideUp 0.6s 0.8s ease-out forwards;
+}
+
+.btn {
+    color: white;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-submit {
+    background-color: #ff6a27;
+    box-shadow: 0 0 10px rgba(255, 106, 39, 0.7);
+}
+
+.btn-submit:hover {
+    background-color: #e35a1c;
+    box-shadow: 0 0 15px rgba(227, 90, 28, 1);
+    transform: translateY(-3px); /* Button lifts on hover */
+}
+
+.btn-view {
+    background-color: #6fbc51;
+    box-shadow: 0 0 10px rgba(111, 188, 81, 0.7);
+}
+
+.btn-view:hover {
+    background-color: #5da741;
+    box-shadow: 0 0 15px rgba(93, 167, 65, 1);
+    transform: translateY(-3px); /* Button lifts on hover */
+}
+
+
+/* --- Animated Alert Message (Toast) --- */
+.alert-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+.alert {
+    padding: 15px 25px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    /* Animated entry and exit */
+    animation: slideInFadeOut 5s ease-in-out forwards;
+}
+
+.alert-success {
+    background-color: #4BB543;
+    color: white;
+}
+</style>
+
+<div class="form-container">
+    <h3 class="form-title">Add Plan</h3>
+    <form action="{% if plan %}{% url 'edit_plan' plan.id %}{% else %}{% url 'add_plan' %}{% endif %}" method="post">
+        {% csrf_token %}
+        <label>Name</label>
+        <input type="text" name="name" placeholder="Enter plan name" class="form-input" value="{{ plan.name|default:'' }}">
+
+        <label>Amount</label>
+    <input type="text" name="amount" placeholder="Enter amount in $" class="form-input" value="{{ plan.amount|default:'' }}">
+
+        <label>Duration</label>
+    <input type="text" name="duration" placeholder="Enter duration (e.g. 3 months)" class="form-input" value="{{ plan.duration|default:'' }}">
+
+        <div class="form-buttons">
+            <input type="submit" value="Submit" class="btn btn-submit">
+            <a href="{% url 'view_plan' %}" class="btn btn-view">View Plans</a>
+        </div>
+    </form>
+</div>
+
+{% if messages %}
+<div class="alert-container">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ "Record Inserted Successfully" }}
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}
+
+
+{% block footer %}
+<footer id="footer" class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <ul class="social-icons">
+                    <li><a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a></li>
+                    <li><a href="https://x.com/"><i class="fa fa-twitter"></i></a></li>
+                    <li><a href="https://www.linkedin.com/login"><i class="fa fa-linkedin"></i></a></li>
+                    <li><a href="https://www.youtube.com/"><i class="fa fa-youtube"></i></a></li>
+                    <li><a href="https://github.com/login"><i class="fa fa-github"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+{% endblock %}

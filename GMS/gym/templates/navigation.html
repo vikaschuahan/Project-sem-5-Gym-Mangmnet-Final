@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <title>Gym Management</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  
+    <!--font awesome cdns start here-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--font awesome cdns start here-->
+
+
+    <!-- login page link start here-->
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}" />
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <!--=============================================================================================== -->
+    <!-- login page link ends here-->
+
+    <!--Index page css start here-->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet"> -->
+    <link href="{% static 'css/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/prettyPhoto.css' %}" rel="stylesheet">
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    <link rel="shortcut icon" href="{% static 'images/ico/favicon.ico' %}">
+    <!--Index page css ends here-->
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css">
+    {% block css %}{% endblock css %}
+    <style>
+   </style>
+
+
+</head><nav class="navbar navbar-expand-md navbar-dark" style="background-color: #111b23; box-shadow: 0 0 15px #00ff99;">
+    <div class="container d-flex align-items-center">
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <!-- Heart icon with text -->
+            <span style="color:#00ff99; font-weight: bold; font-family: Arial, sans-serif;">
+                I <i class="fa fa-heart" style="color: #ff004b;"></i> GYM
+            </span>
+        </a>
+        <!-- HTML -->
+<nav class="navbar">
+  <div class="navbar-container">  
+    
+    <ul class="navbar-nav mr-auto" style="font-weight: bold;">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#abc">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="abc">
+            <ul class="nav-menu">
+                <li class="scroll active"><a href="{% url 'home' %}">Home</a></li>
+                <li class="scroll"><a href="/about">About</a></li>
+                <li class="scroll"><a href="/contact">Contact</a></li>
+            
+
+                {% if request.user.is_staff %}
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" id="enquiryDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#00ff99;">
+                      Enquiry
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="enquiryDropdown" style="background-color:#111b23;">
+                        <a class="dropdown-item" href="/add_enquiry" style="color:#00ff99;">Add Enquiry</a>
+                        <a class="dropdown-item" href="/view_enquiry" style="color:#00ff99;">View Enquiry</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" id="equipmentDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#00ff99;">
+                      Equipment
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="equipmentDropdown" style="background-color:#111b23;">
+                        <a class="dropdown-item" href="/add_equipment" style="color:#00ff99;">Add Equipment</a>
+                        <a class="dropdown-item" href="/view_equipment" style="color:#00ff99;">View Equipment</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" id="memberDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#00ff99;">
+                      Member
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="memberDropdown" style="background-color:#111b23;">
+                        <a class="dropdown-item" href="/add_member" style="color:#00ff99;">Add Member</a>
+                        <a class="dropdown-item" href="/view_member" style="color:#00ff99;">View Member</a>
+                    </div>
+                </li>
+               
+                
+            </ul>
+                
+    </ul>
+    <ul class="navbar-nav ml-auto"><div class="user-info">
+     <li class="scroll"><a href="/admin_login">Logout</a></li>
+                
+               </span>
+    </div>
+ 
+                {% endif %}
+            </ul>
+            
+        </div>
+    </div>
+</nav>
+    
+    
+<!-- CSS -->
+<style>
+  /* Navbar base */
+  .navbar {
+    background-color: #121a1e;
+    padding: 12px 30px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  .navbar-container {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Logo */
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #32cd32; /* Lime Green */
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .heart {
+    color: #ff3b3b;
+    font-size: 22px;
+  }
+
+  /* Navigation Menu */
+  .nav-menu {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-menu > li {
+    position: relative;
+  }
+
+  /* Links */
+  .nav-menu a {
+    color: #32cd32;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 8px 12px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  .nav-menu a:hover,
+  .nav-menu a:focus {
+    background-color: #32cd32;
+    color: #121a1e;
+  }
+
+  /* Dropdown Button */
+  .dropbtn {
+    cursor: pointer;
+  }
+
+  /* Dropdown content */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #1f2a2e;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(50, 205, 50, 0.3);
+    border-radius: 6px;
+    z-index: 1000;
+    top: 38px;
+    left: 0;
+  }
+
+  .dropdown-content a {
+    color: #32cd32;
+    padding: 10px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  .dropdown-content a:hover {
+    background-color: #32cd32;
+    color: #121a1e;
+  }
+
+  /* Show dropdown on hover */
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  /* User info*/
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: #32cd32;
+    font-weight: 600;
+  }
+
+  .logout {
+    color: #32cd32;
+    text-decoration: none;
+    padding: 8px 12px;
+    border: 1px solid #32cd32;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .logout:hover {
+    background-color: #32cd32;
+    color: #121a1e;
+  }
+
+  .user-name {
+    display: flex;
+    align-items: center;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .navbar-container {
+      flex-direction: column;
+      gap: 10px;
+    }
+    .nav-menu {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+  }
+</style>
+        <!-- Toggler/collapsibe Button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>   
+           
+        
+  
+<!--/nav-->
+
+<body>
+    {% block body %}
+
+    {% endblock %}
+</body>
+
+{% block footer%}
+{% endblock %}
+<!--/#footer-->
+<!-- Data table Cdn start here -->
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+            ]
+        });
+    });
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+<!-- Data table Cdn ends here-->
+
+<!--index page js link start here-->
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/mousescroll.js' %}"></script>
+<script src="{% static 'js/smoothscroll.js' %}"></script>
+<script src="{% static 'js/jquery.prettyPhoto.js' %}"></script>
+<script src="{% static 'js/jquery.isotope.min.js' %}"></script>
+<script src="{% static 'js/jquery.inview.min.js' %}"></script>
+<script src="{% static 'js/wow.min.js' %}"></script>
+<script src="{% static 'js/custom-scripts.js' %}"></script>
+<!--index page js link ends here-->
+
+
+<!--bootstrap js cdn start here-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!--bootstrap js cdn start here-->
+</html>

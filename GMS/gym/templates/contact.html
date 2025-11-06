@@ -1,0 +1,206 @@
+{% extends 'navigation.html' %}
+{% load static %}
+{% block title %}
+Contact Us - Fit India
+{% endblock %}
+
+{% block body %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+    /* --- General Styling & Whitespace Removal --- */
+    body {
+        margin: 0; /* Removes browser default spacing */
+        font-family: 'Poppins', sans-serif; /* A clean, modern font */
+        background-color: #f8f9fa; /* Lighter grey background */
+        color: #444;
+        line-height: 1.6;
+    }
+
+    /* --- Page Header --- */
+    .contact-header {
+        background: linear-gradient(135deg, #f32e2e, #e17c00);
+        padding: 80px 20px 120px 20px; /* More vertical space */
+        text-align: center;
+        color: #fff;
+        border-radius: 0 0 80px 80px; /* Softer curve */
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 1;
+    }
+    .contact-header h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin: 0 0 15px 0;
+    }
+    .contact-header p {
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+        opacity: 0.95;
+        color: #f0f0f0;
+    }
+
+    /* --- Main Contact Section --- */
+    .contact-section {
+        display: flex;
+        justify-content: center;
+        align-items: stretch; /* Makes cards equal height */
+        gap: 40px;
+        flex-wrap: wrap;
+        padding: 0 20px;
+        margin-top: -80px; /* Creates the overlap effect */
+        position: relative;
+        z-index: 2;
+    }
+
+    /* --- Contact Cards --- */
+    .contact-card {
+        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        padding: 35px;
+        flex: 1;
+        max-width: 520px; /* Prevents cards from stretching too wide */
+        min-width: 320px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
+    .contact-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+    }
+    .contact-card h3 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #ff0909; /* Changed color to match the red underline */
+        margin: 0 0 25px 0;
+        border-bottom: 2px solid #ff0909;
+        padding-bottom: 10px;
+    }
+
+    /* --- Info & Icons --- */
+    .info-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        font-size: 1rem;
+    }
+    .info-item i {
+        font-size: 20px;
+        color: #ff0b0b;
+        margin-right: 15px;
+        width: 25px;
+        text-align: center;
+    }
+    .info-item p {
+        margin: 0;
+    }
+    
+    /* --- Google Maps --- */
+    .map-container {
+        border-radius: 10px;
+        overflow: hidden; /* Clips the iframe corners */
+        margin-top: auto; /* Pushes map to the bottom of the card */
+    }
+    .map-container iframe {
+        border: 0;
+        width: 100%;
+        height: 250px;
+        display: block;
+    }
+</style>
+
+<div class="contact-header">
+    <h1>Contact Us</h1>
+    <p>Questions about our gym management solutions? We’re here to help you succeed!</p>
+</div>
+
+<div class="container contact-section">
+    <div class="contact-card">
+        <h3>Reach Out</h3>
+        <div class="info-item">
+            <i class="fa fa-map-marker"></i>
+            <p>Junagadh, Gujarat, India</p>
+        </div>
+        <div class="info-item">
+            <i class="fa fa-phone"></i>
+            <p>+91 93275-99254, </p>
+        </div>
+        
+        <div class="info-item">
+            <i class="fa fa-phone"></i>
+            <p>+91 79846-42053 </p>
+        </div>
+        <div class="info-item">
+            <i class="fa fa-envelope"></i>
+            <p>rathodmilan216@gmail.com</p>
+        </div>
+        <div class="info-item">
+            <i class="fa fa-clock-o"></i>
+            <p>Mon-Sat: 6:00 AM - 10:00 PM</p>
+        </div>
+        <div class="map-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d118859.95540751993!2d70.38927954335938!3d21.512610700000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3958018c6a512769%3A0x93303789d2145393!2sJunagadh%2C%20Gujarat!5e0!3m2!1sen!2sin!4v1728006451676!5m2!1sen!2sin" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block footer %}
+<style>
+    /* --- Footer Styling --- */
+    .footer {
+        background-color: #2c3e50; /* Dark blue-gray */
+        color: #ecf0f1;
+        padding: 40px 20px;
+        margin-top: 80px;
+        text-align: center;
+    }
+    .social-icons {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        align-content: center;
+    }
+    .social-icons li a {
+        color: #fff;
+        font-size: 20px;
+        display: flex; /* Helps center the icon */
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background-color: #34495e;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .social-icons li a:hover {
+        background-color: #ff6b6b; /* Use theme color on hover */
+        transform: translateY(-3px);
+    }
+</style>
+<footer id="footer" class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6" style="margin: 0 auto;">
+                <ul class="social-icons">
+                    <li><a href="https://www.facebook.com/" aria-label="Facebook"><i class="fa fa-facebook"></i></a></li>
+                    <li><a href="https://x.com/" aria-label="Twitter"><i class="fa fa-twitter"></i></a></li>
+                    <li><a href="https://www.linkedin.com/login" aria-label="LinkedIn"><i class="fa fa-linkedin"></i></a></li>
+                    <li><a href="https://www.youtube.com/" aria-label="YouTube"><i class="fa fa-youtube"></i></a></li>
+                    <li><a href="https://github.com/login" aria-label="GitHub"><i class="fa fa-github"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+{% endblock %}

@@ -1,0 +1,169 @@
+{% extends 'navigation.html' %}
+{% load static %}
+
+{% block body %}
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .hero-bg {
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                  url('{% static "images/about-1.png" %}');
+      background-size: cover;
+      background-position: center;
+    }
+    .fade-in { animation: fadeIn 1s ease-in; }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  </style>
+</head>
+<body class="bg-gray-100">
+ <br><br><br>
+
+  <header class="hero-bg text-white fade-in flex items-center justify-center min-h-[50vh] lg:min-h-[60vh]">
+    <div class="text-center p-4">
+      <h1 class="text-4xl md:text-6xl text-yellow-400 font-extrabold mb-4 tracking-tight drop-shadow-md">
+        About Elite Fitness
+      </h1>
+      <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto drop-shadow-sm">
+        Your ultimate partner in gym management and fitness excellence.
+      </p>
+      </div>
+  </header>
+
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <h2 class="text-4xl font-bold text-center mb-12">Our Story</h2>
+      <div class="flex flex-wrap items-center">
+        <div class="w-full md:w-1/2 p-4">
+          <img src="{% static 'images/about-2.png' %}" alt="A view of the gym floor" class="rounded-lg shadow-lg transition-transform duration-300 hover:scale-105">
+        </div>
+        <div class="w-full md:w-1/2 p-4 lg:pl-12">
+          <div class="text-lg text-gray-700 leading-relaxed space-y-6">
+            <p>
+              At FitPulse Gym, our journey began with a simple but powerful belief: fitness is for everyone. Founded in 2015, we set out to create a space where people of all ages and fitness levels could come together to achieve their health goals in a supportive and motivating environment.
+            </p>
+            <p>
+              What started as a small community gym has grown into a thriving fitness hub, thanks to our commitment to innovation, personalized training, and exceptional member experience. We understand that managing a gym is more than just equipment and classes — it’s about building relationships, tracking progress, and making visit seamless and rewarding.
+            </p>
+            <p>
+              That’s why we developed our comprehensive gym management platform — to empower gym owners and trainers with the tools they need to focus on what matters most: helping members transform their lives. From easy membership management and class scheduling to real-time performance tracking and billing automation, our system is designed to simplify operations and enhance engagement. At FitPulse Gym, we’re more than just software providers; we’re partners in your fitness journey. Together, we’re building stronger communities, one workout at a time.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-gray-200">
+    <div class="container mx-auto px-4">
+      <h2 class="text-4xl font-bold text-center mb-8">Meet Our Team</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+ 
+        <div class="relative overflow-hidden rounded-lg shadow-lg text-left group">
+          <img src="{% static 'images/team/Arjun Kumar.jpg' %}" alt="Arjun Kumar, Lead Trainer" class="w-full h-full object-cover aspect-square transition-transform duration-300 group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 w-full p-4">
+            <h3 class="text-white text-2xl font-bold">Arjun Kumar</h3>
+            <p class="text-white/90">Lead Trainer</p>
+          </div>
+        </div>
+ 
+        <div class="relative overflow-hidden rounded-lg shadow-lg text-left group">
+          <img src="{% static 'images/team/Neha Joshi.jpg' %}" alt="Neha Joshi, Nutrition Specialist" class="w-full h-full object-cover aspect-square transition-transform duration-300 group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 w-full p-4">
+            <h3 class="text-white text-2xl font-bold">Neha Joshi</h3>
+            <p class="text-white/90">Nutrition Specialist</p>
+          </div>
+        </div>
+ 
+        <div class="relative overflow-hidden rounded-lg shadow-lg text-left group">
+          <img src="{% static 'images/team/Raj Mehta.jpg' %}" alt="Raj Mehta, Operations Manager" class="w-full h-full object-cover aspect-square transition-transform duration-300 group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 w-full p-4">
+            <h3 class="text-white text-2xl font-bold">Raj Mehta</h3>
+            <p class="text-white/90">Operations Manager</p>
+          </div>
+        </div>
+ 
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <h2 class="text-4xl font-bold text-center mb-8">Our Facilities</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+ 
+        <div class="relative overflow-hidden rounded-lg shadow-lg group">
+          <img src="{% static 'images/about-6.png' %}" alt="Weight Training Area" class="w-full h-full object-cover aspect-[4/3] transition-transform duration-300 group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-4">
+            <h3 class="text-white text-xl font-semibold">Weight Training Area</h3>
+          </div>
+        </div>
+ 
+        <div class="relative overflow-hidden rounded-lg shadow-lg group">
+          <img src="{% static 'images/about-7.png' %}" alt="Cardio Lounge" class="w-full h-full object-cover aspect-[4/3] transition-transform duration-300 group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-4">
+            <h3 class="text-white text-xl font-semibold">Cardio Lounge</h3>
+          </div>
+        </div>
+ 
+        <div class="relative overflow-hidden rounded-lg shadow-lg group">
+          <img src="{% static 'images/about-8.png' %}" alt="Swimming Pool" class="w-full h-full object-cover aspect-[4/3] transition-transform duration-300 group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-4">
+            <h3 class="text-white text-xl font-semibold">Swimming Pool</h3>
+          </div>
+        </div>
+ 
+        <div class="relative overflow-hidden rounded-lg shadow-lg group">
+          <img src="{% static 'images/about-9.png' %}" alt="Yoga Studio" class="w-full h-full object-cover aspect-[4/3] transition-transform duration-300 group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-4">
+            <h3 class="text-white text-xl font-semibold">Yoga Studio</h3>
+          </div>
+        </div>
+ 
+        <div class="relative overflow-hidden rounded-lg shadow-lg group">
+          <img src="{% static 'images/about-10.png' %}" alt="Changing Rooms" class="w-full h-full object-cover aspect-[4/3] transition-transform duration-300 group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-4">
+            <h3 class="text-white text-xl font-semibold">Changing Rooms</h3>
+          </div>
+        </div>
+ 
+        <div class="relative overflow-hidden rounded-lg shadow-lg group">
+          <img src="{% static 'images/about-11.png' %}" alt="Spa & Sauna" class="w-full h-full object-cover aspect-[4/3] transition-transform duration-300 group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-4">
+            <h3 class="text-white text-xl font-semibold">Spa & Sauna</h3>
+          </div>
+        </div>
+ 
+      </div>
+    </div>
+  </section>
+
+<br><br>
+{% endblock %}
+
+
+{% block footer %}
+<footer id="footer" class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <ul class="social-icons">
+                    <li><a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a></li>
+                    <li><a href="https://x.com/"><i class="fa fa-twitter"></i></a></li>
+                    <li><a  href="https://www.linkedin.com/login"><i class="fa fa-linkedin"></i></a></li>
+                    <li><a href="https://www.youtube.com/"><i class="fa fa-youtube"></i></a></li>
+                    <li><a href="https://github.com/login"><i class="fa fa-github"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+{% endblock %}

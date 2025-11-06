@@ -1,0 +1,571 @@
+
+{% load static %}
+
+{% block body %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerFit Gym|Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            animation: gradientBG 15s ease infinite;
+            overflow: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            display: flex;
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.8s ease-out;
+            position: relative;
+        }
+
+        @keyframes slideUp {
+            from { 
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .left-panel {
+            flex: 1;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Z3ltJTIwd29ya291dHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .left-panel::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, rgba(255,255,255,0.1), rgba(255,255,255,0));
+            transform: rotate(45deg);
+            animation: shine 6s infinite linear;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .logo {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff6b6b;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .left-content {
+            max-width: 400px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .left-panel h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .left-panel p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .features {
+            list-style: none;
+            margin-top: 30px;
+            animation: fadeIn 1.4s ease-out;
+        }
+
+        .features li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s;
+        }
+
+        .features li:hover {
+            transform: translateX(10px);
+        }
+
+        .features i {
+            margin-right: 15px;
+            color: #ff6b6b;
+            font-size: 1.2rem;
+        }
+
+        .right-panel {
+            flex: 1;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .login-header h2 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: #777;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            animation: slideInRight 0.8s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from { 
+                transform: translateX(30px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #444;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            transition: color 0.3s;
+        }
+
+        .input-with-icon input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .input-with-icon input:focus {
+            border-color: #ff6b6b;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.2);
+        }
+
+        .input-with-icon input:focus + i {
+            color: #ff6b6b;
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .remember {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember input {
+            margin-right: 8px;
+            accent-color: #ff6b6b;
+        }
+
+        .forgot-password {
+            color: #ff6b6b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+            transform: translateY(-2px);
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, #ff6b6b, #ff8e53);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .login-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .login-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .login-button:hover::before {
+            left: 100%;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+            animation: fadeIn 1.4s ease-out;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: #ddd;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 15px;
+            color: #777;
+            position: relative;
+        }
+
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeIn 1.6s ease-out;
+        }
+
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .facebook {
+            background: #3b5998;
+        }
+
+        .google {
+            background: #dd4b39;
+        }
+
+        .twitter {
+            background: #1da1f2;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+            animation: fadeIn 1.8s ease-out;
+        }
+
+        .signup-link a {
+            color: #ff6b6b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+            transform: translateY(-2px);
+        }
+
+        .floating-icon {
+            position: absolute;
+            font-size: 2rem;
+            color: rgba(255, 107, 107, 0.2);
+            z-index: 0;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+
+        .icon-1 {
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .icon-2 {
+            top: 70%;
+            right: 5%;
+            animation-delay: 1s;
+        }
+
+        .icon-3 {
+            bottom: 10%;
+            left: 10%;
+            animation-delay: 2s;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                max-width: 500px;
+            }
+            
+            .left-panel {
+                padding: 30px;
+                text-align: center;
+            }
+            
+            .left-content {
+                max-width: 100%;
+            }
+            
+            .right-panel {
+                padding: 30px;
+            }
+
+            .floating-icon {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .left-panel h1 {
+                font-size: 2rem;
+            }
+            
+            .remember-forgot {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .social-login {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <div class="logo">PowerFit</div>
+            <div class="left-content">
+                <h1>Transform Your Body, Transform Your Life</h1>
+                <p>Join thousands of members achieving their fitness goals with our state-of-the-art facilities and expert trainers.</p>
+                <ul class="features">
+                    <li><i class="fas fa-dumbbell"></i> 24/7 Access to Premium Equipment</li>
+                    <li><i class="fas fa-users"></i> Expert Personal Trainers</li>
+                    <li><i class="fas fa-heartbeat"></i> Custom Workout Plans</li>
+                    <li><i class="fas fa-swimming-pool"></i> Pool & Spa Facilities</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="right-panel">
+            <i class="fas fa-dumbbell floating-icon icon-1"></i>
+            <i class="fas fa-running floating-icon icon-2"></i>
+            <i class="fas fa-heartbeat floating-icon icon-3"></i>
+            <div class="floating-icon icon-4"><i class="fas fa-yoga"></i></div>
+            <div class="login-header">
+                <h2>Member Login</h2>
+                <p>Welcome back! Please login to your account</p>
+            </div>
+            
+            <form action="{% url 'login' %}" method="post" novalidate>
+                {% csrf_token %}
+
+                {# Django messages framework (e.g. invalid login) #}
+                {% if messages %}
+                    <div style="margin-bottom:12px;">
+                        {% for message in messages %}
+                            <div style="padding:10px;border-radius:6px;background:#f8d7da;color:#721c24;border:1px solid #f5c6cb;margin-bottom:6px;">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {# Non-field errors from the authentication form #}
+                {% if form.non_field_errors %}
+                    <div style="padding:10px;border-radius:6px;background:#f8d7da;color:#721c24;border:1px solid #f5c6cb;margin-bottom:12px;">{{ form.non_field_errors|striptags }}</div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="id_username">Email / Username</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="text" id="id_username" name="username" placeholder="Enter your username" value="{{ request.POST.username|default:'' }}">
+                    </div>
+                    {% if form.username.errors %}
+                        <div style="color:#721c24;margin-top:6px;">{{ form.username.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_password">Password</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="id_password" name="password" placeholder="Enter your password" required>
+                    </div>
+                    {% if form.password.errors %}
+                        <div style="color:#721c24;margin-top:6px;">{{ form.password.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="remember-forgot">
+                    <div class="remember">
+                        <input type="checkbox" id="remember">
+                        <label for="remember">Remember me</label>
+                    </div>
+                    <a href="/forgot_password/" class="forgot-password">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="login-button" href="/">Login to Account</button>
+            </form>
+            
+            <div class="divider">
+                <span>Or login with</span>
+            </div>
+            
+            <div class="social-login">
+                <div class="social-btn facebook">
+                    <a href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
+                </div>
+                <div class="social-btn google">
+                    <a href="https://google.com/"><i class="fab fa-google"></i></a>
+                </div>
+                <div class="social-btn twitter">
+                    <a href="https://x.com/"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            
+            <div class="signup-link">
+                Don't have an account? <a href="/register/">Sign up now</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add simple animation to form elements on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const formGroups = document.querySelectorAll('.form-group');
+            
+            formGroups.forEach((group, index) => {
+                group.style.animationDelay = `${index * 0.1}s`;
+            });
+            
+            // Add input animation on focus
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('focused');
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.classList.remove('focused');
+                });
+            });
+        });
+    </script>
+
+{% endblock%}

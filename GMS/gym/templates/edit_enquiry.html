@@ -1,0 +1,60 @@
+{% extends 'navigation.html' %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="card p-4">
+        <h3 class="text-center">Edit Enquiry</h3>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="name" class="form-control" value="{{ enq.name }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="emailid" class="form-control" value="{{ enq.emailid }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Phone</label>
+                <input type="tel" name="contact" class="form-control" value="{{ enq.contact }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Age</label>
+                <input type="number" name="age" class="form-control" value="{{ enq.age }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Gender</label>
+                <input type="text" name="gender" class="form-control" value="{{ enq.gender }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Branch</label>
+                <input type="text" name="branch" class="form-control" value="{{ enq.branch }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Enquiry Type</label>
+                <input type="text" name="enquiry_type" class="form-control" value="{{ enq.enquiry_type }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Preferred Contact Date</label>
+                <input type="date" name="contact_date" class="form-control" value="{{ enq.preferred_contact_date }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Status</label>
+                <select name="status" class="form-control">
+                    <option value="Pending" {% if enq.status == 'Pending' %}selected{% endif %}>Pending</option>
+                    <option value="Processed" {% if enq.status == 'Processed' %}selected{% endif %}>Processed</option>
+                    <option value="Closed" {% if enq.status == 'Closed' %}selected{% endif %}>Closed</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Additional Info</label>
+                <textarea name="additional_info" class="form-control">{{ enq.additional_info }}</textarea>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success">Save Changes</button>
+                <a href="{% url 'view_enquiry' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
