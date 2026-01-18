@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I ❤️ GYM - Fitness Management System</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;900&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+        
+        body {
+            font-family: 'Raleway', sans-serif;
+            font-weight: 400;
+            color: #282828;
+            line-height: 26px;
+            padding: 0;
+            margin: 0;
+        }
+        
+        /* Navbar Styles */
+        nav.navbar {
+            background-color: #111b23 !important;
+            box-shadow: 0 0 15px #00ff99;
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            color: #00ff99 !important;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+        }
+        
+        .navbar-brand i.fa-heart {
+            color: #ff004b;
+        }
+        
+        .nav-link {
+            color: rgb(42, 224, 97) !important;
+            border-radius: 10px;
+            margin: 0 5px;
+        }
+        
+        .nav-link:hover {
+            background-color: lightblue !important;
+            color: black !important;
+            border-radius: 10px;
+        }
+        
+        /* Hero Banner */
+        #hero-banner {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                        url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 150px 0;
+            text-align: center;
+            color: white;
+        }
+        
+        #hero-banner h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 72px;
+            font-weight: 500;
+            color: #FFD700;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+            margin-bottom: 20px;
+        }
+        
+        #hero-banner p {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            color: #f0f0f0;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+        }
+        
+        .btn-primary {
+            background: #CD4F00;
+            border: none;
+            padding: 12px 40px;
+            font-size: 18px;
+            border-radius: 5px;
+        }
+        
+        .btn-primary:hover {
+            background: #FF8A41;
+        }
+        
+        /* Services Section */
+        #services {
+            background-color: #f8f9fa;
+            padding: 80px 0;
+        }
+        
+        .service-box {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+            margin-bottom: 30px;
+            height: 100%;
+        }
+        
+        .service-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        .service-box i {
+            font-size: 48px;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        
+        .service-box h4 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #343a40;
+            margin-bottom: 15px;
+        }
+        
+        .service-box p {
+            font-size: 16px;
+            color: #6c757d;
+            line-height: 1.6;
+        }
+        
+        /* Section Headers */
+        .section-header {
+            margin-bottom: 50px;
+            text-align: center;
+        }
+        
+        .section-title {
+            font-size: 44px;
+            color: #F9690E;
+            position: relative;
+            padding-bottom: 20px;
+            margin: 0 0 20px;
+        }
+        
+        .section-title:before {
+            content: "";
+            position: absolute;
+            width: 30px;
+            height: 10px;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgb(249, 105, 14);
+            border-radius: 50%;
+        }
+        
+        /* About Section */
+        #about {
+            background-color: #f8f9fa;
+            color: #343a40;
+            padding: 80px 0;
+        }
+        
+        #about img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        
+        #about h3 {
+            color: #28a745;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        #about ul li {
+            margin-bottom: 10px;
+            list-style: none;
+        }
+        
+        #about ul li i {
+            color: #28a745;
+            margin-right: 8px;
+        }
+        
+        /* Team Section */
+        #our-team {
+            padding: 80px 0;
+        }
+        
+        .team-member {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 30px;
+            border-radius: 10px;
+        }
+        
+        .team-member img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        
+        .team-member:hover img {
+            transform: scale(1.1);
+        }
+        
+        .team-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.7);
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        
+        .team-info h3 {
+            font-size: 18px;
+            margin: 0 0 5px 0;
+            color: #fff;
+            font-weight: 600;
+        }
+        
+        .team-info span {
+            font-size: 14px;
+            color: #ccc;
+        }
+        
+        /* Gallery Section */
+        #portfolio {
+            padding: 80px 0;
+            background: #fff;
+        }
+        
+        .portfolio-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .portfolio-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        
+        .portfolio-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        
+        .portfolio-item:hover img {
+            transform: scale(1.15);
+        }
+        
+        /* Stats Section */
+        #business-stats {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 80px 0;
+            color: white;
+            text-align: center;
+        }
+        
+        #business-stats .section-title {
+            color: white;
+        }
+        
+        #business-stats .section-title:before {
+            background: white;
+        }
+        
+        .business-stats {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        #business-stats strong {
+            font-size: 20px;
+            display: block;
+            margin-top: 10px;
+        }
+        
+        /* Footer */
+        #footer {
+            background-color: #212529;
+            padding: 30px 0;
+            text-align: center;
+        }
+        
+        .social-icons {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .social-icons li {
+            margin: 0 10px;
+        }
+        
+        .social-icons a {
+            color: #fff;
+            font-size: 24px;
+            transition: color 0.3s;
+        }
+        
+        .social-icons a:hover {
+            color: #00ff99;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            #hero-banner h2 {
+                font-size: 42px;
+            }
+            
+            .section-title {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                I <i class="fa fa-heart"></i> GYM
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#our-team">Trainers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#portfolio">Gallery</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#footer">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <section id="hero-banner">
+        <div class="container">
+            <h2>Stronger than <b>EVER</b></h2>
+            <p>Lacking motivation to get back into the gym? Back in the gym already but feel stagnated? Or maybe you're just looking for new inspiration for the new year. Whatever your situation, Just..</p>
+            <a class="btn btn-primary btn-lg" href="#services">Start Now</a>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Services</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="service-box">
+                        <i class="fa fa-futbol-o"></i>
+                        <h4>Aerobic</h4>
+                        <p>Join our high-energy group classes like Zumba, Step Aerobics, and Aqua Aerobics. These sessions are set to upbeat music, making your workout feel like a party!</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-box">
+                        <i class="fa fa-compass"></i>
+                        <h4>Cardio</h4>
+                        <p>Get your heart pumping and metabolism soaring with our state-of-the-art cardio equipment. Elevate your endurance, burn calories, and strengthen your heart.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-box">
+                        <i class="fa fa-database"></i>
+                        <h4>Six Pack</h4>
+                        <p>The path to a strong, sculpted core is within reach. Our specialized Six-Pack Program is designed to go beyond crunches, focusing on comprehensive core strength.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-box">
+                        <i class="fa fa-bar-chart"></i>
+                        <h4>Classes</h4>
+                        <p>Our diverse class schedule is designed to keep your workouts fresh, exciting, and effective. From high-energy aerobics to calming yoga, there's a class for everyone.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-box">
+                        <i class="fa fa-paper-plane-o"></i>
+                        <h4>Special Trainer</h4>
+                        <p>Our team of certified and passionate trainers are the heart of our gym. They are more than just instructors; they are mentors, motivators, and partners in your journey.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-box">
+                        <i class="fa fa-bullseye"></i>
+                        <h4>Health Sports</h4>
+                        <p>We believe that fitness is a lifestyle. Our gym is a hub for a wide range of health and sports activities that cater to all interests and skill levels.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <img src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?auto=format&fit=crop&w=600&q=80" alt="Our Fitness Studio">
+                </div>
+                <div class="col-md-6">
+                    <h3>Our Fitness Studio</h3>
+                    <p>Welcome to Our Fitness Studio — your ultimate destination for health, strength, and wellness.</p>
+                    <p>We offer personalized training programs, modern equipment, and a supportive community to help you achieve your fitness goals.</p>
+                    <p>Whether you're a beginner or a seasoned athlete, our expert trainers are here to guide you every step of the way. Join us and start your journey to a healthier, stronger you!</p>
+                    <ul>
+                        <li><i class="fa fa-angle-double-right"></i>Aerobic</li>
+                        <li><i class="fa fa-angle-double-right"></i>Cardio</li>
+                        <li><i class="fa fa-angle-double-right"></i>Abdomen</li>
+                        <li><i class="fa fa-angle-double-right"></i>Special Trainer</li>
+                        <li><i class="fa fa-angle-double-right"></i>Round the clock</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trainers Section -->
+    <section id="our-team">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">OUR TRAINERS</h2>
+                <p>Meet the heart of our gym: our certified trainers. They're here to guide you, motivate you, and help you reach your goals with personalized plans and expert advice.</p>
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-sm-6">
+                    <div class="team-member">
+                        <img src="https://images.unsplash.com/photo-1567013127542-490d757e51fc?auto=format&fit=crop&w=400&q=80" alt="Arjun Kumar">
+                        <div class="team-info">
+                            <h3>Arjun Kumar</h3>
+                            <span>The Strength Specialist</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="team-member">
+                        <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&w=400&q=80" alt="Priya Sharma">
+                        <div class="team-info">
+                            <h3>Priya Sharma</h3>
+                            <span>The Wellness Motivator</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="team-member">
+                        <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=400&q=80" alt="Raj Mehta">
+                        <div class="team-info">
+                            <h3>Raj Mehta</h3>
+                            <span>The Personalized Coach</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="team-member">
+                        <img src="https://images.unsplash.com/photo-1588286840104-8957b019727f?auto=format&fit=crop&w=400&q=80" alt="Neha Joshi">
+                        <div class="team-info">
+                            <h3>Neha Joshi</h3>
+                            <span>The Yoga Expert</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="portfolio">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Gallery</h2>
+                <p>Step inside and see where your fitness journey begins. Capturing the energy, dedication, and results of our members. More than a gym, we're a community!</p>
+            </div>
+            <div class="portfolio-items">
+                <div class="portfolio-item">
+                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=600&q=80" alt="Gallery 1">
+                </div>
+                <div class="portfolio-item">
+                    <img src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?auto=format&fit=crop&w=600&q=80" alt="Gallery 2">
+                </div>
+                <div class="portfolio-item">
+                    <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=600&q=80" alt="Gallery 3">
+                </div>
+                <div class="portfolio-item">
+                    <img src="https://images.unsplash.com/photo-1558017487-06bf9f82613a?auto=format&fit=crop&w=600&q=80" alt="Gallery 4">
+                </div>
+                <div class="portfolio-item">
+                    <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=600&q=80" alt="Gallery 5">
+                </div>
+                <div class="portfolio-item">
+                    <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=600&q=80" alt="Gallery 6">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section id="business-stats">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Health Report</h2>
+                <p>A healthy lifestyle means eating balanced meals, exercising regularly, and getting proper rest. Maintaining mental well-being and routine health checkups ensures long-term fitness and overall wellness.</p>
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-sm-6">
+                    <div class="business-stats">6850</div>
+                    <strong>Clients</strong>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="business-stats">1465</div>
+                    <strong>Trainers</strong>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="business-stats">4325</div>
+                    <strong>Programs</strong>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="business-stats">2568</div>
+                    <strong>Successes</strong>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <div class="container">
+            <ul class="social-icons">
+                <li><a href="https://www.facebook.com/" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                <li><a href="https://x.com/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                <li><a href="https://www.linkedin.com/" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                <li><a href="https://www.youtube.com/" target="_blank"><i class="fa fa-youtube"></i></a></li>
+                <li><a href="https://github.com/" target="_blank"><i class="fa fa-github"></i></a></li>
+            </ul>
+            <p style="color: #fff; margin-top: 20px;">&copy; 2026 I ❤️ GYM. Created by Vikas Chauhan, Milan Rathod & Vishal Kindarkhediya</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
