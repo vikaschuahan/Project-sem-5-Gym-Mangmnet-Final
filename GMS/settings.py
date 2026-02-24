@@ -25,7 +25,7 @@ SECRET_KEY = '%$$-76y4tl7sbv*e$acozc=$wjeua9d8g0l%y$&afj@1zo@f^+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*.kuberns.cloud']
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Application definition
