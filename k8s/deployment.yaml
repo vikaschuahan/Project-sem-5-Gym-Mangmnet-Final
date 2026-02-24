@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gym-web
+  namespace: gym-management
+  labels:
+    app: gym-web
+spec:
+  replicas: 2                        # 2 pods for availability
+  selector:
+    matchLabels:
+      app: gym-web
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: gym-web
+    spec:
+      containers:
+        - name: gym-web
+          # Replace YOUR_GITHUB_USERNAME with your actual GitHub username
+          image: ghcr.io/YOUR_GITHUB_USERNAME/gym-management:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: gym-config
+          env:
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: gym-secret
+                  key: SECRET_KEY
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: gym-secret
+                  key: DATABASE_URL
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          volumeMounts:
+            - name: staticfiles
+              mountPath: /app/staticfiles
+            - name: mediafiles
+              mountPath: /app/mediafiles
+      volumes:
+        - name: staticfiles
+          emptyDir: {}
+        - name: mediafiles
+          emptyDir: {}
+      imagePullSecrets:
+        - name: ghcr-secret       # Created by GitHub Actions (see workflow)

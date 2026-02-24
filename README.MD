@@ -533,3 +533,63 @@ python manage.py runserver
 ---
 
 **Last Updated:** November 2025 🚀
+
+---
+
+## 🐳 Docker & ☸️ Kubernetes Deployment
+
+### Docker Compose (local — PostgreSQL)
+
+```bash
+docker compose up --build
+# App: http://localhost
+```
+
+### GitHub Actions CI/CD → Kubernetes
+
+Every push to `main` automatically:
+1. Runs Django tests
+2. Builds & pushes Docker image to **GitHub Container Registry** (`ghcr.io`)
+3. Deploys to your Kubernetes cluster
+
+#### One-time setup
+
+**Add these GitHub Secrets** (Settings → Secrets → Actions):
+
+| Secret | Value |
+|--------|-------|
+| `KUBE_CONFIG` | `cat ~/.kube/config \| base64 -w 0` |
+| `SECRET_KEY` | 50+ char random string |
+| `DATABASE_URL` | `postgres://user:pass@host:5432/db` |
+
+**Install NGINX Ingress on your cluster:**
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
+```
+
+#### Manual Kubernetes deploy
+
+```bash
+kubectl apply -f k8s/namespace.yaml
+kubectl apply -f k8s/configmap.yaml
+kubectl apply -f k8s/secret.yaml      # Update base64 values first!
+kubectl apply -f k8s/postgres.yaml
+kubectl apply -f k8s/deployment.yaml  # Update image name first
+kubectl apply -f k8s/service.yaml
+kubectl apply -f k8s/ingress.yaml
+```
+
+**Edit `k8s/ingress.yaml`** — replace `gym.yourdomain.com` with your domain or IP.
+
+### New Files Added
+
+| File | Purpose |
+|------|---------|
+| `Dockerfile` | Multi-stage Docker build |
+| `entrypoint.sh` | Migrate → collectstatic → gunicorn |
+| `docker-compose.yml` | Local dev with PostgreSQL + Nginx |
+| `nginx.conf` | Nginx reverse proxy config |
+| `.env.example` | Environment variable template |
+| `.dockerignore` | Speeds up Docker builds |
+| `k8s/` | All Kubernetes manifests |
+| `.github/workflows/deploy.yml` | CI/CD pipeline |

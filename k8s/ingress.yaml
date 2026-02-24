@@ -1,0 +1,31 @@
+# Requires: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
+# Replace gym.yourdomain.com with your actual domain or IP.
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gym-ingress
+  namespace: gym-management
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-body-size: "20m"
+    # Uncomment below to enable HTTPS via cert-manager
+    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: gym.yourdomain.com      # ← change to your domain or IP
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gym-web-service
+                port:
+                  number: 80
+  # Uncomment to enable TLS
+  # tls:
+  #   - hosts:
+  #       - gym.yourdomain.com
+  #     secretName: gym-tls-secret
