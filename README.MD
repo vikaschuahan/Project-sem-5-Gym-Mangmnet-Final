@@ -1,8 +1,27 @@
 # 🏋️ Gym Management System - Django Project
 
 ![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
-![Django](https://img.shields.io/badge/Django-4.0+-green.svg)
+![Django](https://img.shields.io/badge/Django-5.1+-green.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/vikaschuahan/Project-sem-5-Gym-Mangmnet-Final)
+
+---
+
+## 🚀 Live Demo
+
+Deploy this project for free on **Render.com**:
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/vikaschuahan/Project-sem-5-Gym-Mangmnet-Final)
+
+### 📦 Deploy to Render in 5 Steps
+
+1. Go to [https://render.com](https://render.com) and sign up (free)
+2. Click **"New +"** → **"Web Service"**
+3. Connect your GitHub account and select this repository
+4. Render will auto-detect settings from `render.yaml`
+5. Click **"Create Web Service"** — your app will be live in minutes!
+
+> **Your app URL will be:** `https://gym-management-system.onrender.com`
 
 ---
 

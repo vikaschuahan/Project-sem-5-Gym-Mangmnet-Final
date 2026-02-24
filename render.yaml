@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: gym-management-system
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn GMS.wsgi:application"
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: "gym-management-system.onrender.com"
