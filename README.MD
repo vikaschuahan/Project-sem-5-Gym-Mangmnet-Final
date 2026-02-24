@@ -392,6 +392,90 @@ python manage.py startapp <app_name>
 
 ---
 
+## 🚀 Deployment
+
+This project is ready to deploy to platforms like **Heroku**, **Railway**, or **Render**.
+
+### ⚙️ Environment Variables
+
+Before deploying, set the following environment variables on your hosting platform:
+
+| Variable | Description | Example |
+|---|---|---|
+| `SECRET_KEY` | Django secret key (keep it secret!) | `your-random-secret-key` |
+| `DEBUG` | Enable debug mode (`True` only for development) | `False` |
+| `ALLOWED_HOSTS` | Comma-separated list of allowed hostnames | `mygymapp.herokuapp.com` |
+
+> **Generate a new SECRET_KEY:**
+> ```bash
+> python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+> ```
+
+### 🟣 Deploy to Heroku
+
+```bash
+# 1. Install Heroku CLI and log in
+heroku login
+
+# 2. Create a Heroku app
+heroku create your-gym-app-name
+
+# 3. Set environment variables
+heroku config:set SECRET_KEY="your-secret-key"
+heroku config:set DEBUG="False"
+heroku config:set ALLOWED_HOSTS="your-gym-app-name.herokuapp.com"
+
+# 4. Push and deploy
+git push heroku main
+
+# 5. Run database migrations
+heroku run python manage.py migrate
+
+# 6. Create superuser
+heroku run python manage.py createsuperuser
+```
+
+### 🟦 Deploy to Railway
+
+1. Push your code to GitHub
+2. Go to [railway.app](https://railway.app) and create a new project from your GitHub repo
+3. Add the environment variables (`SECRET_KEY`, `DEBUG`, `ALLOWED_HOSTS`) in the Railway dashboard
+4. Railway will automatically detect the `Procfile` and deploy
+
+### 🟩 Deploy to Render
+
+1. Push your code to GitHub
+2. Go to [render.com](https://render.com) and create a **Web Service** from your GitHub repo
+3. Set **Build Command**: `pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate`
+4. Set **Start Command**: `gunicorn GMS.wsgi --log-file -`
+5. Add environment variables in the Render dashboard
+
+### 🐳 Deploy with Docker (Optional)
+
+You can also containerise the app. Create a `Dockerfile` in the project root:
+
+```dockerfile
+FROM python:3.11-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+RUN python manage.py collectstatic --noinput
+EXPOSE 8000
+CMD ["gunicorn", "GMS.wsgi", "--bind", "0.0.0.0:8000", "--log-file", "-"]
+```
+
+### 📝 Post-Deployment Checklist
+
+- [ ] Set `SECRET_KEY` to a strong, unique value
+- [ ] Set `DEBUG=False`
+- [ ] Set `ALLOWED_HOSTS` to your domain
+- [ ] Run `python manage.py migrate`
+- [ ] Run `python manage.py createsuperuser`
+- [ ] Verify static files are served correctly
+
+---
+
 ## 🐛 Troubleshooting
 
 ### Database Issues
