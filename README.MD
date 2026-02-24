@@ -8,7 +8,7 @@
 
 ## 📋 Project Overview
 
-**Gym Management System** is a comprehensive web-based application built with Django that streamlines gym operations and member management. This powerful system helps gym owners and staff manage memberships, equipment, member enquiries, and workout plans efficiently.
+**Gym Management System** is a comprehensive web-based application built with Django that streamlines gym operations and member management. This powerful system helps gym owners and staff manage memberships, equip ment, member enquiries, and workout plans efficiently.
 
 ### ✨ Key Features
 
