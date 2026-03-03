@@ -7,11 +7,10 @@ from gym.views import (
     Add_Equipment, View_Equipment, Delete_Equipment, Edit_Equipment,
     Add_Plan, View_Plan, Delete_Plan, Edit_Plan,
     Add_Member, View_Member, Delete_Member, Edit_Member,
+    Add_Trainer, View_Trainer, Delete_Trainer, Edit_Trainer,
     Export_Enquiry_CSV, Export_Equipment_CSV, Export_Member_CSV,
 )
 from django.contrib.auth import views as auth_views # pyright: ignore[reportMissingModuleSource]
-# In GMS/GMS/urls.py
-from gym.views import forgot_password
 
 urlpatterns = [
     # ... other urls
@@ -52,6 +51,11 @@ urlpatterns = [
     path('view_member/', View_Member, name='view_member'),
     path('delete_member/<int:pid>/', Delete_Member, name='delete_member'),
     path('edit_member/<int:pid>/', Edit_Member, name='edit_member'),
+
+    path('add_trainer/', Add_Trainer, name='add_trainer'),
+    path('view_trainer/', View_Trainer, name='view_trainer'),
+    path('delete_trainer/<int:pid>/', Delete_Trainer, name='delete_trainer'),
+    path('edit_trainer/<int:pid>/', Edit_Trainer, name='edit_trainer'),
 
     # CSV Export
     path('export_enquiry_csv/', Export_Enquiry_CSV, name='export_enquiry_csv'),

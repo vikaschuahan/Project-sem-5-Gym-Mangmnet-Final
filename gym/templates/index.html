@@ -4,217 +4,311 @@
 {% block css %}
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
-/* ── General ─────────────────────────────── */
-body { font-family: 'Poppins', 'Segoe UI', sans-serif; }
+    /* ── General ─────────────────────────────── */
+    body {
+        font-family: 'Poppins', 'Segoe UI', sans-serif;
+    }
 
-/* ── Hero ────────────────────────────────── */
-#hero-banner {
-    background: linear-gradient(rgba(0,0,0,0.62), rgba(0,0,0,0.62)),
-                url("{% static 'images/banner/banner.jpg' %}") center/cover no-repeat;
-    min-height: 88vh;
-    display: flex;
-    align-items: center;
-}
-#hero-banner h1 {
-    font-size: clamp(2.4rem, 7vw, 5rem);
-    font-weight: 900;
-    color: #FFD700;
-    text-transform: uppercase;
-    text-shadow: 2px 3px 10px rgba(0,0,0,0.6);
-    line-height: 1.1;
-}
-#hero-banner p {
-    font-size: 1.15rem;
-    color: #e8e8e8;
-    max-width: 580px;
-    line-height: 1.7;
-    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
-}
+    /* ── Hero ────────────────────────────────── */
+    #hero-banner {
+        background: linear-gradient(rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0.62)),
+        url("{% static 'images/banner/banner.jpg' %}") center/cover no-repeat;
+        min-height: 88vh;
+        display: flex;
+        align-items: center;
+    }
 
-/* ── Stats cards ─────────────────────────── */
-.stat-card {
-    border: none;
-    border-radius: 14px;
-    color: #fff;
-    padding: 28px 20px;
-    text-align: center;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.13);
-    transition: transform 0.25s ease;
-}
-.stat-card:hover { transform: translateY(-6px); }
-.stat-card .stat-num {
-    font-size: 2.6rem;
-    font-weight: 800;
-    display: block;
-    line-height: 1;
-}
-.stat-card .stat-label {
-    font-size: 0.95rem;
-    font-weight: 500;
-    opacity: 0.88;
-    margin-top: 6px;
-    display: block;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-.bg-grad-blue   { background: linear-gradient(135deg,#4776E6,#8E54E9); }
-.bg-grad-green  { background: linear-gradient(135deg,#11998e,#38ef7d); }
-.bg-grad-orange { background: linear-gradient(135deg,#f7971e,#ffd200); }
-.bg-grad-red    { background: linear-gradient(135deg,#cb2d3e,#ef473a); }
+    #hero-banner h1 {
+        font-size: clamp(2.4rem, 7vw, 5rem);
+        font-weight: 900;
+        color: #FFD700;
+        text-transform: uppercase;
+        text-shadow: 2px 3px 10px rgba(0, 0, 0, 0.6);
+        line-height: 1.1;
+    }
 
-/* ── Service boxes ───────────────────────── */
-.service-box {
-    background: #fff;
-    padding: 32px 24px;
-    border-radius: 12px;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.07);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-align: center;
-    height: 100%;
-}
-.service-box:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 10px 28px rgba(0,0,0,0.12);
-}
-.service-box .svc-icon {
-    font-size: 2.8rem;
-    color: #4776E6;
-    margin-bottom: 16px;
-    display: block;
-}
-.service-box h4 {
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: #1e2749;
-    margin-bottom: 10px;
-}
-.service-box p { font-size: 0.93rem; color: #6c757d; line-height: 1.65; margin: 0; }
+    #hero-banner p {
+        font-size: 1.15rem;
+        color: #e8e8e8;
+        max-width: 580px;
+        line-height: 1.7;
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+    }
 
-/* ── Team cards ──────────────────────────── */
-.team-card {
-    position: relative;
-    overflow: hidden;
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.13);
-    cursor: default;
-}
-.team-card img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.4s ease;
-}
-.team-card:hover img { transform: scale(1.08); }
-.team-card .team-overlay {
-    position: absolute;
-    bottom: 0; left: 0;
-    width: 100%;
-    background: linear-gradient(to top, rgba(10,10,10,0.82), transparent);
-    padding: 20px 14px 12px;
-    color: #fff;
-}
-.team-card .team-overlay h5 { margin:0; font-size:1rem; font-weight:700; }
-.team-card .team-overlay span { font-size:0.82rem; opacity:0.82; }
+    /* ── Stats cards ─────────────────────────── */
+    .stat-card {
+        border: none;
+        border-radius: 14px;
+        color: #fff;
+        padding: 28px 20px;
+        text-align: center;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.13);
+        transition: transform 0.25s ease;
+    }
 
-/* ── Gallery ─────────────────────────────── */
-.gallery-item {
-    position: relative;
-    overflow: hidden;
-    border-radius: 8px;
-    margin-bottom: 24px;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.1);
-}
-.gallery-item img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.4s ease;
-}
-.gallery-item:hover img { transform: scale(1.12); }
-.gallery-item .gallery-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.38);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-.gallery-item:hover .gallery-overlay { opacity: 1; }
-.gallery-overlay a { color: #fff; font-size: 2rem; }
+    .stat-card:hover {
+        transform: translateY(-6px);
+    }
 
-/* ── Counter strip ───────────────────────── */
-#counter-strip {
-    background: linear-gradient(135deg, #1e3c72, #2a5298);
-    padding: 60px 0;
-    color: #fff;
-}
-.counter-item .counter-num {
-    font-size: 3rem;
-    font-weight: 900;
-    color: #FFD700;
-    display: block;
-    line-height: 1;
-}
-.counter-item strong {
-    font-size: 0.92rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    opacity: 0.85;
-}
+    .stat-card .stat-num {
+        font-size: 2.6rem;
+        font-weight: 800;
+        display: block;
+        line-height: 1;
+    }
 
-/* ── Testimonials ────────────────────────── */
-#testimonial { background: #1a1f2e; padding: 70px 0; }
-#testimonial .section-title { color: #FFD700; }
-.test-card {
-    background: #252d3d;
-    border-radius: 12px;
-    padding: 28px;
-    height: 100%;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-}
-.test-card blockquote {
-    font-style: italic;
-    color: #c8cdd8;
-    border-left: 3px solid #FFD700;
-    padding-left: 14px;
-    margin-bottom: 20px;
-    font-size: 0.92rem;
-    line-height: 1.7;
-}
-.test-card img {
-    width: 56px; height: 56px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 14px;
-    border: 2px solid #FFD700;
-}
-.test-card h6 { color: #fff; font-weight: 700; margin: 0; }
-.test-card small { color: #8e9ab5; }
+    .stat-card .stat-label {
+        font-size: 0.95rem;
+        font-weight: 500;
+        opacity: 0.88;
+        margin-top: 6px;
+        display: block;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
 
-/* ── Section headers ─────────────────────── */
-.section-head { text-align: center; margin-bottom: 50px; }
-.section-head h2 {
-    font-size: 2.1rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-    color: #1e2749;
-}
-.section-head .divider {
-    width: 70px; height: 4px;
-    background: linear-gradient(90deg,#4776E6,#8E54E9);
-    border-radius: 2px;
-    margin: 10px auto 18px;
-}
-.section-head p { color: #6c757d; max-width: 650px; margin: 0 auto; font-size: 0.97rem; }
+    .bg-grad-blue {
+        background: linear-gradient(135deg, #4776E6, #8E54E9);
+    }
 
-/* dark section header override */
-.section-head-light h2 { color: #f0f4ff; }
-.section-head-light p  { color: #8e9ab5; }
+    .bg-grad-green {
+        background: linear-gradient(135deg, #11998e, #38ef7d);
+    }
+
+    .bg-grad-orange {
+        background: linear-gradient(135deg, #f7971e, #ffd200);
+    }
+
+    .bg-grad-red {
+        background: linear-gradient(135deg, #cb2d3e, #ef473a);
+    }
+
+    /* ── Service boxes ───────────────────────── */
+    .service-box {
+        background: #fff;
+        padding: 32px 24px;
+        border-radius: 12px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-align: center;
+        height: 100%;
+    }
+
+    .service-box:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+    }
+
+    .service-box .svc-icon {
+        font-size: 2.8rem;
+        color: #4776E6;
+        margin-bottom: 16px;
+        display: block;
+    }
+
+    .service-box h4 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #1e2749;
+        margin-bottom: 10px;
+    }
+
+    .service-box p {
+        font-size: 0.93rem;
+        color: #6c757d;
+        line-height: 1.65;
+        margin: 0;
+    }
+
+    /* ── Team cards ──────────────────────────── */
+    .team-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.13);
+        cursor: default;
+    }
+
+    .team-card img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.4s ease;
+    }
+
+    .team-card:hover img {
+        transform: scale(1.08);
+    }
+
+    .team-card .team-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(to top, rgba(10, 10, 10, 0.82), transparent);
+        padding: 20px 14px 12px;
+        color: #fff;
+    }
+
+    .team-card .team-overlay h5 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 700;
+    }
+
+    .team-card .team-overlay span {
+        font-size: 0.82rem;
+        opacity: 0.82;
+    }
+
+    /* ── Gallery ─────────────────────────────── */
+    .gallery-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+        margin-bottom: 24px;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .gallery-item img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.4s ease;
+    }
+
+    .gallery-item:hover img {
+        transform: scale(1.12);
+    }
+
+    .gallery-item .gallery-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.38);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .gallery-item:hover .gallery-overlay {
+        opacity: 1;
+    }
+
+    .gallery-overlay a {
+        color: #fff;
+        font-size: 2rem;
+    }
+
+    /* ── Counter strip ───────────────────────── */
+    #counter-strip {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        padding: 60px 0;
+        color: #fff;
+    }
+
+    .counter-item .counter-num {
+        font-size: 3rem;
+        font-weight: 900;
+        color: #FFD700;
+        display: block;
+        line-height: 1;
+    }
+
+    .counter-item strong {
+        font-size: 0.92rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        opacity: 0.85;
+    }
+
+    /* ── Testimonials ────────────────────────── */
+    #testimonial {
+        background: #1a1f2e;
+        padding: 70px 0;
+    }
+
+    #testimonial .section-title {
+        color: #FFD700;
+    }
+
+    .test-card {
+        background: #252d3d;
+        border-radius: 12px;
+        padding: 28px;
+        height: 100%;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .test-card blockquote {
+        font-style: italic;
+        color: #c8cdd8;
+        border-left: 3px solid #FFD700;
+        padding-left: 14px;
+        margin-bottom: 20px;
+        font-size: 0.92rem;
+        line-height: 1.7;
+    }
+
+    .test-card img {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 14px;
+        border: 2px solid #FFD700;
+    }
+
+    .test-card h6 {
+        color: #fff;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .test-card small {
+        color: #8e9ab5;
+    }
+
+    /* ── Section headers ─────────────────────── */
+    .section-head {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .section-head h2 {
+        font-size: 2.1rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        color: #1e2749;
+    }
+
+    .section-head .divider {
+        width: 70px;
+        height: 4px;
+        background: linear-gradient(90deg, #4776E6, #8E54E9);
+        border-radius: 2px;
+        margin: 10px auto 18px;
+    }
+
+    .section-head p {
+        color: #6c757d;
+        max-width: 650px;
+        margin: 0 auto;
+        font-size: 0.97rem;
+    }
+
+    /* dark section header override */
+    .section-head-light h2 {
+        color: #f0f4ff;
+    }
+
+    .section-head-light p {
+        color: #8e9ab5;
+    }
 </style>
 {% endblock %}
 
@@ -274,14 +368,27 @@ body { font-family: 'Poppins', 'Segoe UI', sans-serif; }
                     <span class="stat-label">Plans</span>
                 </div>
             </div>
+            <div class="col-6 col-md-3 mb-3">
+                <div class="stat-card" style="background: linear-gradient(135deg,#f953c6,#b91d73);">
+                    <i class="fa fa-user-secret fa-2x mb-2"></i>
+                    <span class="stat-num">{{ total_trainers }}</span>
+                    <span class="stat-label">Trainers</span>
+                </div>
+            </div>
         </div>
 
         <!-- Quick links row -->
         <div class="text-center mt-1 mb-2">
-            <a href="/view_member/"    class="btn btn-sm btn-primary mx-1 my-1"><i class="fa fa-users mr-1"></i>View Members</a>
-            <a href="/view_equipment/" class="btn btn-sm btn-success mx-1 my-1"><i class="fa fa-cogs mr-1"></i>View Equipment</a>
-            <a href="/view_enquiry/"   class="btn btn-sm btn-warning mx-1 my-1"><i class="fa fa-envelope mr-1"></i>View Enquiries</a>
-            <a href="/view_plan/"      class="btn btn-sm btn-danger mx-1 my-1"><i class="fa fa-list-alt mr-1"></i>View Plans</a>
+            <a href="/view_member/" class="btn btn-sm btn-primary mx-1 my-1"><i class="fa fa-users mr-1"></i>View
+                Members</a>
+            <a href="/view_equipment/" class="btn btn-sm btn-success mx-1 my-1"><i class="fa fa-cogs mr-1"></i>View
+                Equipment</a>
+            <a href="/view_enquiry/" class="btn btn-sm btn-warning mx-1 my-1"><i class="fa fa-envelope mr-1"></i>View
+                Enquiries</a>
+            <a href="/view_plan/" class="btn btn-sm btn-danger mx-1 my-1"><i class="fa fa-list-alt mr-1"></i>View
+                Plans</a>
+            <a href="/view_trainer/" class="btn btn-sm mx-1 my-1" style="background:#b91d73;color:#fff;"><i
+                    class="fa fa-user-secret mr-1"></i>View Trainers</a>
         </div>
     </div>
 </section>
@@ -300,42 +407,48 @@ body { font-family: 'Poppins', 'Segoe UI', sans-serif; }
                 <div class="service-box">
                     <span class="svc-icon"><i class="fa fa-futbol-o"></i></span>
                     <h4>Aerobic</h4>
-                    <p>High-energy group classes like Zumba, Step Aerobics, and Aqua Aerobics set to upbeat music — workout that feels like a party.</p>
+                    <p>High-energy group classes like Zumba, Step Aerobics, and Aqua Aerobics set to upbeat music —
+                        workout that feels like a party.</p>
                 </div>
             </div>
             <div class="col-md-4 col-sm-6 mb-4">
                 <div class="service-box">
                     <span class="svc-icon"><i class="fa fa-heartbeat"></i></span>
                     <h4>Cardio</h4>
-                    <p>State-of-the-art cardio equipment to elevate your endurance, burn calories, and strengthen your heart every single day.</p>
+                    <p>State-of-the-art cardio equipment to elevate your endurance, burn calories, and strengthen your
+                        heart every single day.</p>
                 </div>
             </div>
             <div class="col-md-4 col-sm-6 mb-4">
                 <div class="service-box">
                     <span class="svc-icon"><i class="fa fa-fire"></i></span>
                     <h4>Six Pack</h4>
-                    <p>Comprehensive core strength, stability and fat-burning techniques to carve out the physique you've always wanted.</p>
+                    <p>Comprehensive core strength, stability and fat-burning techniques to carve out the physique
+                        you've always wanted.</p>
                 </div>
             </div>
             <div class="col-md-4 col-sm-6 mb-4">
                 <div class="service-box">
                     <span class="svc-icon"><i class="fa fa-calendar"></i></span>
                     <h4>Classes</h4>
-                    <p>A diverse class schedule to keep your workouts fresh — from high-energy aerobics to calming yoga for every level.</p>
+                    <p>A diverse class schedule to keep your workouts fresh — from high-energy aerobics to calming yoga
+                        for every level.</p>
                 </div>
             </div>
             <div class="col-md-4 col-sm-6 mb-4">
                 <div class="service-box">
                     <span class="svc-icon"><i class="fa fa-user-secret"></i></span>
                     <h4>Personal Trainer</h4>
-                    <p>Certified mentors and motivators who craft personalized plans and push you to break your own records.</p>
+                    <p>Certified mentors and motivators who craft personalized plans and push you to break your own
+                        records.</p>
                 </div>
             </div>
             <div class="col-md-4 col-sm-6 mb-4">
                 <div class="service-box">
                     <span class="svc-icon"><i class="fa fa-trophy"></i></span>
                     <h4>Health Sports</h4>
-                    <p>A hub for wide-ranging health and sports activities catering to all interests and skill levels — fitness is a lifestyle.</p>
+                    <p>A hub for wide-ranging health and sports activities catering to all interests and skill levels —
+                        fitness is a lifestyle.</p>
                 </div>
             </div>
         </div>
@@ -352,13 +465,20 @@ body { font-family: 'Poppins', 'Segoe UI', sans-serif; }
             <div class="col-12 col-md-7">
                 <h2 class="font-weight-bold" style="color:#28a745;">Our Fitness Studio</h2>
                 <div style="width:60px;height:4px;background:#28a745;border-radius:2px;margin:10px 0 18px;"></div>
-                <p class="text-muted">Welcome to Our Fitness Studio — your ultimate destination for health, strength, and wellness. We offer personalized training programs, modern equipment, and a supportive community.</p>
-                <p class="text-muted">Whether you're a beginner or a seasoned athlete, our expert trainers guide you every step of the way.</p>
+                <p class="text-muted">Welcome to Our Fitness Studio — your ultimate destination for health, strength,
+                    and wellness. We offer personalized training programs, modern equipment, and a supportive community.
+                </p>
+                <p class="text-muted">Whether you're a beginner or a seasoned athlete, our expert trainers guide you
+                    every step of the way.</p>
                 <ul class="list-unstyled mt-3">
-                    <li class="mb-2"><i class="fa fa-angle-double-right text-success mr-2"></i>Aerobic &amp; Cardio Training</li>
-                    <li class="mb-2"><i class="fa fa-angle-double-right text-success mr-2"></i>Core &amp; Strength Programs</li>
-                    <li class="mb-2"><i class="fa fa-angle-double-right text-success mr-2"></i>Certified Personal Trainers</li>
-                    <li class="mb-2"><i class="fa fa-angle-double-right text-success mr-2"></i>Round-the-Clock Access</li>
+                    <li class="mb-2"><i class="fa fa-angle-double-right text-success mr-2"></i>Aerobic &amp; Cardio
+                        Training</li>
+                    <li class="mb-2"><i class="fa fa-angle-double-right text-success mr-2"></i>Core &amp; Strength
+                        Programs</li>
+                    <li class="mb-2"><i class="fa fa-angle-double-right text-success mr-2"></i>Certified Personal
+                        Trainers</li>
+                    <li class="mb-2"><i class="fa fa-angle-double-right text-success mr-2"></i>Round-the-Clock Access
+                    </li>
                 </ul>
                 <a href="/about/" class="btn btn-success mt-2 px-4">Read More</a>
             </div>
@@ -421,17 +541,58 @@ body { font-family: 'Poppins', 'Segoe UI', sans-serif; }
         <div class="section-head">
             <h2>Gallery</h2>
             <div class="divider"></div>
-            <p>Step inside and see where your fitness journey begins — capturing the energy and dedication of our community.</p>
+            <p>Step inside and see where your fitness journey begins — capturing the energy and dedication of our
+                community.</p>
         </div>
         <div class="row">
-            <div class="col-6 col-md-3"><div class="gallery-item"><img src="{% static 'images/portfolio/01.jpg' %}" alt="Gallery 1"><div class="gallery-overlay"><a href="{% static 'images/portfolio/01.jpg' %}" rel="prettyPhoto"><i class="fa fa-eye"></i></a></div></div></div>
-            <div class="col-6 col-md-3"><div class="gallery-item"><img src="{% static 'images/portfolio/02.jpg' %}" alt="Gallery 2"><div class="gallery-overlay"><a href="{% static 'images/portfolio/02.jpg' %}" rel="prettyPhoto"><i class="fa fa-eye"></i></a></div></div></div>
-            <div class="col-6 col-md-3"><div class="gallery-item"><img src="{% static 'images/portfolio/03.jpg' %}" alt="Gallery 3"><div class="gallery-overlay"><a href="{% static 'images/portfolio/03.jpg' %}" rel="prettyPhoto"><i class="fa fa-eye"></i></a></div></div></div>
-            <div class="col-6 col-md-3"><div class="gallery-item"><img src="{% static 'images/portfolio/04.jpg' %}" alt="Gallery 4"><div class="gallery-overlay"><a href="{% static 'images/portfolio/04.jpg' %}" rel="prettyPhoto"><i class="fa fa-eye"></i></a></div></div></div>
-            <div class="col-6 col-md-3"><div class="gallery-item"><img src="{% static 'images/portfolio/05.jpg' %}" alt="Gallery 5"><div class="gallery-overlay"><a href="{% static 'images/portfolio/05.jpg' %}" rel="prettyPhoto"><i class="fa fa-eye"></i></a></div></div></div>
-            <div class="col-6 col-md-3"><div class="gallery-item"><img src="{% static 'images/portfolio/06.jpg' %}" alt="Gallery 6"><div class="gallery-overlay"><a href="{% static 'images/portfolio/06.jpg' %}" rel="prettyPhoto"><i class="fa fa-eye"></i></a></div></div></div>
-            <div class="col-6 col-md-3"><div class="gallery-item"><img src="{% static 'images/portfolio/07.jpg' %}" alt="Gallery 7"><div class="gallery-overlay"><a href="{% static 'images/portfolio/07.jpg' %}" rel="prettyPhoto"><i class="fa fa-eye"></i></a></div></div></div>
-            <div class="col-6 col-md-3"><div class="gallery-item"><img src="{% static 'images/portfolio/08.jpg' %}" alt="Gallery 8"><div class="gallery-overlay"><a href="{% static 'images/portfolio/08.jpg' %}" rel="prettyPhoto"><i class="fa fa-eye"></i></a></div></div></div>
+            <div class="col-6 col-md-3">
+                <div class="gallery-item"><img src="{% static 'images/portfolio/01.jpg' %}" alt="Gallery 1">
+                    <div class="gallery-overlay"><a href="{% static 'images/portfolio/01.jpg' %}" rel="prettyPhoto"><i
+                                class="fa fa-eye"></i></a></div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="gallery-item"><img src="{% static 'images/portfolio/02.jpg' %}" alt="Gallery 2">
+                    <div class="gallery-overlay"><a href="{% static 'images/portfolio/02.jpg' %}" rel="prettyPhoto"><i
+                                class="fa fa-eye"></i></a></div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="gallery-item"><img src="{% static 'images/portfolio/03.jpg' %}" alt="Gallery 3">
+                    <div class="gallery-overlay"><a href="{% static 'images/portfolio/03.jpg' %}" rel="prettyPhoto"><i
+                                class="fa fa-eye"></i></a></div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="gallery-item"><img src="{% static 'images/portfolio/04.jpg' %}" alt="Gallery 4">
+                    <div class="gallery-overlay"><a href="{% static 'images/portfolio/04.jpg' %}" rel="prettyPhoto"><i
+                                class="fa fa-eye"></i></a></div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="gallery-item"><img src="{% static 'images/portfolio/05.jpg' %}" alt="Gallery 5">
+                    <div class="gallery-overlay"><a href="{% static 'images/portfolio/05.jpg' %}" rel="prettyPhoto"><i
+                                class="fa fa-eye"></i></a></div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="gallery-item"><img src="{% static 'images/portfolio/06.jpg' %}" alt="Gallery 6">
+                    <div class="gallery-overlay"><a href="{% static 'images/portfolio/06.jpg' %}" rel="prettyPhoto"><i
+                                class="fa fa-eye"></i></a></div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="gallery-item"><img src="{% static 'images/portfolio/07.jpg' %}" alt="Gallery 7">
+                    <div class="gallery-overlay"><a href="{% static 'images/portfolio/07.jpg' %}" rel="prettyPhoto"><i
+                                class="fa fa-eye"></i></a></div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="gallery-item"><img src="{% static 'images/portfolio/08.jpg' %}" alt="Gallery 8">
+                    <div class="gallery-overlay"><a href="{% static 'images/portfolio/08.jpg' %}" rel="prettyPhoto"><i
+                                class="fa fa-eye"></i></a></div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -471,7 +632,9 @@ body { font-family: 'Poppins', 'Segoe UI', sans-serif; }
         <div class="row">
             <div class="col-12 col-md-4 mb-4">
                 <div class="test-card">
-                    <blockquote>Aspiring Python Developer | BCA Student | Passionate about coding, data science, and problem-solving. Always learning, building projects, and exploring tech to create real-world impact.</blockquote>
+                    <blockquote>Aspiring Python Developer | BCA Student | Passionate about coding, data science, and
+                        problem-solving. Always learning, building projects, and exploring tech to create real-world
+                        impact.</blockquote>
                     <div class="d-flex align-items-center">
                         <img src="{% static 'images/vikas.jpg' %}" alt="Vikas Chauhan">
                         <div>
@@ -483,7 +646,9 @@ body { font-family: 'Poppins', 'Segoe UI', sans-serif; }
             </div>
             <div class="col-12 col-md-4 mb-4">
                 <div class="test-card">
-                    <blockquote>Aspiring Python Developer | BCA Student | Passionate about coding, data science, and problem-solving. Always learning, building projects, and exploring tech to create real-world impact.</blockquote>
+                    <blockquote>Aspiring Python Developer | BCA Student | Passionate about coding, data science, and
+                        problem-solving. Always learning, building projects, and exploring tech to create real-world
+                        impact.</blockquote>
                     <div class="d-flex align-items-center">
                         <img src="{% static 'images/milan.jpg' %}" alt="Milan Rathod">
                         <div>
@@ -495,7 +660,9 @@ body { font-family: 'Poppins', 'Segoe UI', sans-serif; }
             </div>
             <div class="col-12 col-md-4 mb-4">
                 <div class="test-card">
-                    <blockquote>Aspiring Python Developer | BCA Student | Passionate about coding, data science, and problem-solving. Always learning, building projects, and exploring tech to create real-world impact.</blockquote>
+                    <blockquote>Aspiring Python Developer | BCA Student | Passionate about coding, data science, and
+                        problem-solving. Always learning, building projects, and exploring tech to create real-world
+                        impact.</blockquote>
                     <div class="d-flex align-items-center">
                         <img src="{% static 'images/vishal.jpg' %}" alt="Vishal Kindarkhediya">
                         <div>

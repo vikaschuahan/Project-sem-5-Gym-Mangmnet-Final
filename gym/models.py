@@ -1,5 +1,12 @@
 from django.db import models # pyright: ignore[reportMissingModuleSource]
 
+GENDER_CHOICES = (
+    ('Male', 'Male'),
+    ('Female', 'Female'),
+    ('Other', 'Other'),
+)
+
+
 # Enquiry model
 class Enquiry(models.Model):
     name = models.CharField(max_length=60)
@@ -59,6 +66,37 @@ class Member(models.Model):
     joindate = models.DateField()
     expiredate = models.DateField()
     initialamount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    def __str__(self):
+        return self.name
+
+
+# Trainer Model
+class Trainer(models.Model):
+    name = models.CharField(max_length=50)
+    contact = models.CharField(max_length=15)
+    emailid = models.EmailField(max_length=50)
+    dob = models.DateField(null=True, blank=True)
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, default='Male')
+    join_date = models.DateField()
+    salary = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    
+    SHIFT_CHOICES = (
+        ('Morning', 'Morning'),
+        ('Evening', 'Evening'),
+        ('Full Day', 'Full Day'),
+    )
+    shift = models.CharField(max_length=20, choices=SHIFT_CHOICES, default='Morning')
+    
+    SPECIALTY_CHOICES = (
+        ('Yoga', 'Yoga'),
+        ('CrossFit', 'CrossFit'),
+        ('Bodybuilding', 'Bodybuilding'),
+        ('Weightlifting', 'Weightlifting'),
+        ('Cardio', 'Cardio'),
+        ('None', 'None'),
+    )
+    specialty = models.CharField(max_length=50, choices=SPECIALTY_CHOICES, default='None')
 
     def __str__(self):
         return self.name

@@ -1,0 +1,179 @@
+{% extends 'navigation.html' %}
+{% load static %}
+
+{% block css %}
+<style>
+    .form-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 6px 30px rgba(0, 0, 0, 0.12);
+        overflow: hidden;
+        max-width: 720px;
+        width: 100%;
+    }
+
+    .form-header {
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        color: #fff;
+        text-align: center;
+        padding: 22px 20px;
+        font-size: 1.4rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+
+    .form-body {
+        padding: 30px 35px;
+        background: #f0f6ff;
+    }
+
+    .form-body label {
+        font-weight: 600;
+        font-size: 0.92rem;
+        color: #333;
+        margin-bottom: 4px;
+    }
+
+    .form-body .form-control {
+        border: 1.5px solid #c7d1e3;
+        border-radius: 8px;
+        padding: 9px 14px;
+        font-size: 0.95rem;
+        transition: border-color 0.25s;
+    }
+
+    .form-body .form-control:focus {
+        border-color: #6a11cb;
+        box-shadow: 0 0 0 0.15rem rgba(106, 17, 203, 0.15);
+    }
+
+    .req {
+        color: #e53935;
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 0;
+        font-weight: 700;
+        font-size: 1rem;
+        width: 100%;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+
+    .btn-submit:hover {
+        opacity: 0.9;
+        color: #fff;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container d-flex justify-content-center py-4">
+    <div class="form-card">
+        <div class="form-header">
+            <i class="fa fa-user-plus"></i>
+            {% if trainer %}Edit Trainer{% else %}Add New Trainer{% endif %}
+        </div>
+        <div class="form-body">
+            <form
+                action="{% if trainer %}{% url 'edit_trainer' trainer.id %}{% else %}{% url 'add_trainer' %}{% endif %}"
+                method="post">
+                {% csrf_token %}
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Full Name <span class="req">*</span></label>
+                        <input type="text" name="name" class="form-control" placeholder="Enter full name"
+                            value="{{ trainer.name|default:'' }}" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Email Address <span class="req">*</span></label>
+                        <input type="email" name="emailid" class="form-control" placeholder="Enter email"
+                            value="{{ trainer.emailid|default:'' }}" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Phone Number <span class="req">*</span></label>
+                        <input type="tel" name="contact" class="form-control" placeholder="Enter phone"
+                            value="{{ trainer.contact|default:'' }}" maxlength="15" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Date of Birth</label>
+                        <input type="date" name="dob" class="form-control"
+                            value="{% if trainer and trainer.dob %}{{ trainer.dob|date:'Y-m-d' }}{% endif %}">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Gender <span class="req">*</span></label>
+                        <select name="gender" class="form-control" required>
+                            <option value="Male" {% if trainer.gender == 'Male' %}selected{% endif %}>Male</option>
+                            <option value="Female" {% if trainer.gender == 'Female' %}selected{% endif %}>Female
+                            </option>
+                            <option value="Other" {% if trainer.gender == 'Other' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Join Date <span class="req">*</span></label>
+                        <input type="date" name="join_date" class="form-control"
+                            value="{% if trainer and trainer.join_date %}{{ trainer.join_date|date:'Y-m-d' }}{% endif %}"
+                            required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label>Salary (Rs.)</label>
+                        <input type="number" name="salary" class="form-control" min="0" step="0.01"
+                            value="{{ trainer.salary|default:'' }}" placeholder="e.g. 15000">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Shift <span class="req">*</span></label>
+                        <select name="shift" class="form-control" required>
+                            <option value="Morning" {% if trainer.shift == 'Morning' %}selected{% endif %}>Morning
+                            </option>
+                            <option value="Evening" {% if trainer.shift == 'Evening' %}selected{% endif %}>Evening
+                            </option>
+                            <option value="Full Day" {% if trainer.shift == 'Full Day' %}selected{% endif %}>Full Day
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Specialty</label>
+                        <select name="specialty" class="form-control">
+                            <option value="None" {% if trainer.specialty == 'None' %}selected{% endif %}>None</option>
+                            <option value="Yoga" {% if trainer.specialty == 'Yoga' %}selected{% endif %}>Yoga</option>
+                            <option value="CrossFit" {% if trainer.specialty == 'CrossFit' %}selected{% endif %}>
+                                CrossFit</option>
+                            <option value="Bodybuilding"
+                                {% if trainer.specialty == 'Bodybuilding' %}selected{% endif %}>Bodybuilding</option>
+                            <option value="Weightlifting"
+                                {% if trainer.specialty == 'Weightlifting' %}selected{% endif %}>Weightlifting</option>
+                            <option value="Cardio" {% if trainer.specialty == 'Cardio' %}selected{% endif %}>Cardio
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit mt-2">
+                    {% if trainer %}<i class="fa fa-save"></i> Save Changes{% else %}<i class="fa fa-plus"></i> Add
+                    Trainer{% endif %}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if error == "no" %}
+<script>alert('Trainer Saved Successfully'); window.location = "{% url 'view_trainer' %}";</script>
+{% elif error == "yes" %}
+<script>alert('Something went wrong. Please fill all required fields and try again.');</script>
+{% endif %}
+{% endblock %}

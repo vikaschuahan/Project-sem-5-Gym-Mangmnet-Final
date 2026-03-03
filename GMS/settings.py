@@ -122,13 +122,19 @@ USE_TZ = True
 # The URL to access the static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 
+# Directories to look for static files in development
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'gym', 'static'),
+]
+
 # Directory where collectstatic will gather all static files for production
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# WhiteNoise storage for compressed, cached static files in production
+# WhiteNoise storage - use ManifestStaticFilesStorage only when DEBUG is off (production)
+# In development, just use the default storage backend
 STORAGES = {
     'staticfiles': {
-        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
     },
 }
 

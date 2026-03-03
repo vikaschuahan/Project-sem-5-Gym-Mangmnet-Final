@@ -37,6 +37,7 @@ def Home(request):
         'total_equipment': Equipment.objects.count(),
         'total_enquiries': Enquiry.objects.count(),
         'total_plans': Plan.objects.count(),
+        'total_trainers': Trainer.objects.count(),
     }
     return render(request, 'index.html', context)
 
@@ -452,3 +453,79 @@ def Export_Member_CSV(request):
         writer.writerow([idx, m.name, m.emailid, m.contact, m.plan,
                          m.joindate, m.expiredate, status])
     return response
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Trainer Views
+# ──────────────────────────────────────────────────────────────────────────────
+
+def Add_Trainer(request):
+    error = ""
+    if not request.user.is_staff:
+        return redirect('login')
+    if request.method == 'POST':
+        n = request.POST.get('name', '').strip()
+        c = request.POST.get('contact', '').strip()
+        e = request.POST.get('emailid', '').strip()
+        dob = request.POST.get('dob', '').strip()
+        gender = request.POST.get('gender', 'Male').strip()
+        join_date = request.POST.get('join_date', '').strip()
+        salary = request.POST.get('salary', '0').strip()
+        shift = request.POST.get('shift', 'Morning').strip()
+        specialty = request.POST.get('specialty', 'None').strip()
+        
+        if n and c and e and join_date:
+            try:
+                Trainer.objects.create(
+                    name=n,
+                    contact=c,
+                    emailid=e,
+                    dob=dob if dob else None,
+                    gender=gender,
+                    join_date=join_date,
+                    salary=float(salary) if salary else 0,
+                    shift=shift,
+                    specialty=specialty
+                )
+                error = "no"
+            except Exception as ex:
+                print("Trainer creation error:", ex)
+                error = "yes"
+        else:
+            error = "yes"
+    d = {'error': error}
+    return render(request, 'add_trainer.html', d)
+
+def View_Trainer(request):
+    trainer = Trainer.objects.all()
+    d = {'trainer': trainer}
+    return render(request, 'view_trainer.html', d)
+
+def Delete_Trainer(request, pid):
+    trainer = Trainer.objects.get(id=pid)
+    trainer.delete()
+    return redirect('view_trainer')
+
+def Edit_Trainer(request, pid):
+    trainer = get_object_or_404(Trainer, id=pid)
+    if request.method == 'POST':
+        trainer.name = request.POST.get('name', trainer.name).strip()
+        trainer.contact = request.POST.get('contact', trainer.contact).strip()
+        trainer.emailid = request.POST.get('emailid', trainer.emailid).strip()
+        dob = request.POST.get('dob', '')
+        if dob:
+            trainer.dob = dob
+        trainer.gender = request.POST.get('gender', trainer.gender).strip()
+        join_date = request.POST.get('join_date', '')
+        if join_date:
+            trainer.join_date = join_date
+        try:
+            trainer.salary = float(request.POST.get('salary', trainer.salary))
+        except Exception:
+            pass
+        trainer.shift = request.POST.get('shift', trainer.shift).strip()
+        trainer.specialty = request.POST.get('specialty', trainer.specialty).strip()
+        trainer.save()
+        return redirect('view_trainer')
+    
+    d = {'trainer': trainer}
+    return render(request, 'edit_trainer.html', d)

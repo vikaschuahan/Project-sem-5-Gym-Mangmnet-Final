@@ -1,148 +1,265 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-<head>
-    {% load static %}
-    <title>Gym Management</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap 4.5.2 -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <head>
+        {% load static %}
+        <title>Gym Management</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Font Awesome 4 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <!-- Bootstrap 4.5.2 -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-    <!-- DataTables -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css">
+        <!-- Font Awesome 4 -->
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css">
 
-    <!-- App-level shared overrides -->
-    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.ico' %}">
 
-    <!-- Per-page CSS block -->
-    {% block css %}{% endblock css %}
-</head>
-<body>
-
-    <!-- ===== Single Bootstrap Navbar ===== -->
-    <nav class="navbar navbar-expand-lg app-navbar">
-        <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}">
-                I <i class="fa fa-heart" style="color:#ff004b;"></i> GYM
-            </a>
-            <button class="navbar-toggler" type="button"
-                    data-toggle="collapse" data-target="#mainNavbar"
-                    aria-controls="mainNavbar" aria-expanded="false"
-                    aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="mainNavbar">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/about/">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/contact/">Contact</a>
-                    </li>
-                    {% if request.user.is_staff %}
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" id="enquiryDropdown"
-                           role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Enquiry
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="enquiryDropdown">
-                            <a class="dropdown-item" href="/add_enquiry/">Add Enquiry</a>
-                            <a class="dropdown-item" href="/view_enquiry/">View Enquiry</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" id="equipmentDropdown"
-                           role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Equipment
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="equipmentDropdown">
-                            <a class="dropdown-item" href="/add_equipment/">Add Equipment</a>
-                            <a class="dropdown-item" href="/view_equipment/">View Equipment</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" id="memberDropdown"
-                           role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Member
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="memberDropdown">
-                            <a class="dropdown-item" href="/add_member/">Add Member</a>
-                            <a class="dropdown-item" href="/view_member/">View Member</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" id="planDropdown"
-                           role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Plans
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="planDropdown">
-                            <a class="dropdown-item" href="/add_plan/">Add Plan</a>
-                            <a class="dropdown-item" href="/view_plan/">View Plan</a>
-                        </div>
-                    </li>
-                    {% endif %}
-                </ul>
-                <ul class="navbar-nav ml-auto">
-                    {% if request.user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}">
-                            <i class="fa fa-sign-out"></i> Logout
-                        </a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    {% if messages %}
-    <div class="container mt-2">
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    <main>
-        {% block body %}{% endblock body %}
-    </main>
-
-    {% include 'footer.html' %}
-
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            if ($('#example').length) {
-                $('#example').DataTable({
-                    dom: 'Bfrtip',
-                    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
-                });
+        <!-- App-level shared overrides (inlined to avoid static file 404) -->
+        <style>
+            /* Page background & typography */
+            body {
+                background: #f5f7fb;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             }
-        });
-    </script>
-</body>
+
+            /* ----- Navbar ----- */
+            .app-navbar {
+                background-color: #111b23;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+            }
+
+            .app-navbar .navbar-brand {
+                color: #00ff99 !important;
+                font-weight: 700;
+                font-size: 1.2rem;
+                letter-spacing: 0.5px;
+            }
+
+            .app-navbar .nav-link {
+                color: #32cd32 !important;
+                font-weight: 600;
+                transition: background-color 0.25s ease, color 0.25s ease;
+                border-radius: 4px;
+                padding: 6px 12px !important;
+            }
+
+            .app-navbar .nav-link:hover,
+            .app-navbar .nav-link:focus {
+                background-color: #32cd32 !important;
+                color: #121a1e !important;
+            }
+
+            .app-navbar .dropdown-menu {
+                background-color: #1f2a2e;
+                border: 1px solid #32cd32;
+                border-radius: 6px;
+                min-width: 160px;
+                box-shadow: 0 8px 16px rgba(50, 205, 50, 0.25);
+            }
+
+            .app-navbar .dropdown-item {
+                color: #32cd32 !important;
+                font-weight: 600;
+                padding: 8px 16px;
+            }
+
+            .app-navbar .dropdown-item:hover,
+            .app-navbar .dropdown-item:focus {
+                background-color: #32cd32 !important;
+                color: #121a1e !important;
+            }
+
+            .app-navbar .navbar-toggler {
+                border-color: #32cd32;
+            }
+
+            .app-navbar .navbar-toggler-icon {
+                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='%2332cd32' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+            }
+
+            /* ----- Footer ----- */
+            .app-footer {
+                background-color: #1a1f2e;
+                color: #adb5bd;
+                padding: 18px 0;
+                margin-top: 40px;
+            }
+
+            .app-footer .social-icons {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                display: flex;
+                gap: 14px;
+            }
+
+            .app-footer .social-icons li a {
+                color: #adb5bd;
+                font-size: 18px;
+                transition: color 0.2s;
+            }
+
+            .app-footer .social-icons li a:hover {
+                color: #32cd32;
+            }
+
+            /* ----- Layout ----- */
+            main {
+                min-height: calc(100vh - 130px);
+            }
+
+            .app-card {
+                border: none;
+                border-radius: 10px;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+            }
+
+            .table-header th {
+                background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+                color: #fff;
+                font-weight: 600;
+                border: none;
+            }
+        </style>
+
+        <!-- Per-page CSS block -->
+        {% block css %}{% endblock css %}
+    </head>
+
+    <body>
+
+        <!-- ===== Single Bootstrap Navbar ===== -->
+        <nav class="navbar navbar-expand-lg app-navbar">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'home' %}">
+                    I <i class="fa fa-heart" style="color:#ff004b;"></i> GYM
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbar"
+                    aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'home' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/about/">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/contact/">Contact</a>
+                        </li>
+                        {% if request.user.is_staff %}
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" id="enquiryDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Enquiry
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="enquiryDropdown">
+                                <a class="dropdown-item" href="/add_enquiry/">Add Enquiry</a>
+                                <a class="dropdown-item" href="/view_enquiry/">View Enquiry</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" id="equipmentDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Equipment
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="equipmentDropdown">
+                                <a class="dropdown-item" href="/add_equipment/">Add Equipment</a>
+                                <a class="dropdown-item" href="/view_equipment/">View Equipment</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" id="memberDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Member
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="memberDropdown">
+                                <a class="dropdown-item" href="/add_member/">Add Member</a>
+                                <a class="dropdown-item" href="/view_member/">View Member</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" id="trainerDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Trainer
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="trainerDropdown">
+                                <a class="dropdown-item" href="/add_trainer/">Add Trainer</a>
+                                <a class="dropdown-item" href="/view_trainer/">View Trainer</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" id="planDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Plans
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="planDropdown">
+                                <a class="dropdown-item" href="/add_plan/">Add Plan</a>
+                                <a class="dropdown-item" href="/view_plan/">View Plan</a>
+                            </div>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    <ul class="navbar-nav ml-auto">
+                        {% if request.user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">
+                                <i class="fa fa-sign-out"></i> Logout
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        {% if messages %}
+        <div class="container mt-2">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <main>
+            {% block body %}{% endblock body %}
+        </main>
+
+        {% include 'footer.html' %}
+
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                if ($('#example').length) {
+                    $('#example').DataTable({
+                        dom: 'Bfrtip',
+                        buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
+                    });
+                }
+            });
+        </script>
+    </body>
+
 </html>
