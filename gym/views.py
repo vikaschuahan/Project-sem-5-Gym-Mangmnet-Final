@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404 # pyright: ignore[reportMissingModuleSource]
-from django.http import HttpResponseRedirect # pyright: ignore[reportMissingModuleSource]
+from django.http import HttpResponseRedirect, HttpResponse # pyright: ignore[reportMissingModuleSource]
 from django.contrib import messages # pyright: ignore[reportMissingModuleSource] # pyright: ignore[reportMissingModuleSource]
+import csv
 
 from django.contrib.auth.models import User # pyright: ignore[reportMissingModuleSource]
 from django.contrib.auth import authenticate, logout, login # pyright: ignore[reportMissingModuleSource]
@@ -31,7 +32,13 @@ def admin_login_view(request):
 def Home(request):
     if not request.user.is_staff:
         return redirect('login')
-    return render(request, 'index.html')
+    context = {
+        'total_members': Member.objects.count(),
+        'total_equipment': Equipment.objects.count(),
+        'total_enquiries': Enquiry.objects.count(),
+        'total_plans': Plan.objects.count(),
+    }
+    return render(request, 'index.html', context)
 
 
 def About(request):
@@ -277,6 +284,7 @@ def Add_Member(request):
         c = request.POST.get('contact', '').strip()
         e = request.POST.get('emailid', '').strip()
         dob = request.POST.get('dob', '').strip()
+        gender = request.POST.get('gender', '').strip()
         membership_type = request.POST.get('membership_type', 'basic').strip()
         address = request.POST.get('address', '').strip()
         emergency_contact = request.POST.get('emergency_contact', '').strip()
@@ -307,7 +315,7 @@ def Add_Member(request):
                     emailid=e,
                     age=age,
                     dob=dob if dob else None,
-                    gender="",
+                    gender=gender,
                     membership_type=membership_type,
                     address=address,
                     emergency_contact=emergency_contact,
@@ -371,6 +379,7 @@ def Edit_Member(request, pid):
             except Exception:
                 pass
         member.membership_type = request.POST.get('membership_type', member.membership_type).strip()
+        member.gender = request.POST.get('gender', member.gender).strip()
         plan_id = request.POST.get('plan')
         if plan_id:
             try:
@@ -396,3 +405,50 @@ def Edit_Member(request, pid):
     # render the add member template pre-filled for editing
     d = {'member': member, 'plan': plan1}
     return render(request, 'add_member.html', d)
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# CSV Export Views
+# ──────────────────────────────────────────────────────────────────────────────
+
+def Export_Enquiry_CSV(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="enquiries.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['#', 'Full Name', 'Email', 'Phone', 'Branch', 'Enquiry Type',
+                     'Preferred Contact Date', 'Status', 'Additional Info'])
+    for idx, enq in enumerate(Enquiry.objects.all(), start=1):
+        writer.writerow([idx, enq.name, enq.emailid, enq.contact, enq.branch,
+                         enq.enquiry_type, enq.preferred_contact_date,
+                         enq.status, enq.additional_info])
+    return response
+
+
+def Export_Equipment_CSV(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="equipment.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['#', 'Equipment Name', 'Category', 'Quantity',
+                     'Purchase Date', 'Condition', 'Notes'])
+    for idx, equ in enumerate(Equipment.objects.all(), start=1):
+        writer.writerow([idx, equ.name, equ.category, equ.quantity,
+                         equ.date, equ.condition, equ.description])
+    return response
+
+
+def Export_Member_CSV(request):
+    import datetime
+    today = datetime.date.today()
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="members.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['#', 'Full Name', 'Email', 'Phone', 'Membership Type',
+                     'Join Date', 'Expire Date', 'Status'])
+    for idx, m in enumerate(Member.objects.all(), start=1):
+        try:
+            status = "Active" if m.expiredate and m.expiredate >= today else "Inactive"
+        except Exception:
+            status = "Inactive"
+        writer.writerow([idx, m.name, m.emailid, m.contact, m.plan,
+                         m.joindate, m.expiredate, status])
+    return response

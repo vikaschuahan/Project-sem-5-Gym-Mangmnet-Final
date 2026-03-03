@@ -1,0 +1,112 @@
+/* ============================================================
+   app.css  –  FitZone Gym Management shared overrides
+   Bootstrap 4.5.2 base assumed
+   ============================================================ */
+
+/* ----- Page background & typography ----------------------- */
+body {
+    background: #f5f7fb;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ----- Navbar --------------------------------------------- */
+.app-navbar {
+    background-color: #111b23;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+}
+
+.app-navbar .navbar-brand {
+    color: #00ff99 !important;
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 0.5px;
+}
+
+.app-navbar .nav-link {
+    color: #32cd32 !important;
+    font-weight: 600;
+    transition: background-color 0.25s ease, color 0.25s ease;
+    border-radius: 4px;
+    padding: 6px 12px !important;
+}
+
+.app-navbar .nav-link:hover,
+.app-navbar .nav-link:focus {
+    background-color: #32cd32 !important;
+    color: #121a1e !important;
+}
+
+.app-navbar .dropdown-menu {
+    background-color: #1f2a2e;
+    border: 1px solid #32cd32;
+    border-radius: 6px;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(50, 205, 50, 0.25);
+}
+
+.app-navbar .dropdown-item {
+    color: #32cd32 !important;
+    font-weight: 600;
+    padding: 8px 16px;
+}
+
+.app-navbar .dropdown-item:hover,
+.app-navbar .dropdown-item:focus {
+    background-color: #32cd32 !important;
+    color: #121a1e !important;
+}
+
+.app-navbar .navbar-toggler {
+    border-color: #32cd32;
+}
+
+.app-navbar .navbar-toggler-icon {
+    /* Make the hamburger lines appear green */
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='%2332cd32' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* ----- Common card look ----------------------------------- */
+.app-card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+}
+
+/* ----- Table header styling ------------------------------- */
+.table-header th {
+    background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+    color: #ffffff;
+    font-weight: 600;
+    border: none;
+}
+
+/* ----- Footer --------------------------------------------- */
+.app-footer {
+    background-color: #1a1f2e;
+    color: #adb5bd;
+    padding: 18px 0;
+    margin-top: 40px;
+}
+
+.app-footer .social-icons {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 14px;
+}
+
+.app-footer .social-icons li a {
+    color: #adb5bd;
+    font-size: 18px;
+    transition: color 0.2s;
+}
+
+.app-footer .social-icons li a:hover {
+    color: #32cd32;
+}
+
+/* ----- Main page spacing ---------------------------------- */
+main {
+    min-height: calc(100vh - 130px);
+}
