@@ -68,12 +68,60 @@ def Login(request):
     d = {'error': error}
     return render(request, 'login.html', d)
 def register_view(request):
+    errors = {}
+    form_data = {}
     if request.method == 'POST':
-        # Process registration form data
-        # ... (add user creation logic here)
-        return redirect('login')  # Redirect to login after registration
-    else:
-        return render(request, 'register.html')
+        full_name   = request.POST.get('full_name', '').strip()
+        username    = request.POST.get('username', '').strip()
+        email       = request.POST.get('email', '').strip()
+        password    = request.POST.get('password', '')
+        confirm_pw  = request.POST.get('confirm_password', '')
+
+        # Preserve form data for re-display
+        form_data = {
+            'full_name': full_name,
+            'username': username,
+            'email': email,
+        }
+
+        # ── Validation ──────────────────────────────────────────
+        if not full_name:
+            errors['full_name'] = 'Full name is required.'
+        if not username:
+            errors['username'] = 'Username is required.'
+        elif User.objects.filter(username=username).exists():
+            errors['username'] = 'This username is already taken.'
+        if not email:
+            errors['email'] = 'Email address is required.'
+        elif User.objects.filter(email=email).exists():
+            errors['email'] = 'An account with this email already exists.'
+        if not password:
+            errors['password'] = 'Password is required.'
+        elif len(password) < 8:
+            errors['password'] = 'Password must be at least 8 characters.'
+        if not confirm_pw:
+            errors['confirm_password'] = 'Please confirm your password.'
+        elif password and password != confirm_pw:
+            errors['confirm_password'] = 'Passwords do not match.'
+
+        if not errors:
+            # Split full name into first/last
+            name_parts = full_name.split(' ', 1)
+            first_name = name_parts[0]
+            last_name  = name_parts[1] if len(name_parts) > 1 else ''
+
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password,
+                first_name=first_name,
+                last_name=last_name,
+                is_staff=True,   # grant admin portal access
+            )
+            messages.success(request, f'Account created successfully! Welcome, {first_name}. You can now sign in.')
+            return redirect('login')
+
+    return render(request, 'register.html', {'errors': errors, 'form_data': form_data})
 def forgot_password(request):
     if request.method == "POST":
         email = request.POST.get("email")
