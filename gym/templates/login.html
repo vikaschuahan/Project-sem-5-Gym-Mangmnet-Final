@@ -1,571 +1,616 @@
-
 {% load static %}
 
-{% block body %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PowerFit Gym|Login</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<!DOCTYPE html>
+<html lang="en">
 
-        body {
-            background: linear-gradient(-45deg, #1a2a6c, #b21f1f, #fdbb2d);
-            background-size: 400% 400%;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
-            padding: 20px;
-            animation: gradientBG 15s ease infinite;
-            overflow: hidden;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .container {
-            display: flex;
-            max-width: 1000px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-            animation: slideUp 0.8s ease-out;
-            position: relative;
-        }
-
-        @keyframes slideUp {
-            from { 
-                transform: translateY(50px);
-                opacity: 0;
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>FitZone Gym | Admin Login</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+            rel="stylesheet">
+        <style>
+            *,
+            *::before,
+            *::after {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
             }
-            to { 
-                transform: translateY(0);
-                opacity: 1;
+
+            body {
+                font-family: 'Poppins', sans-serif;
+                background: #0b0f1a;
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+                position: relative;
             }
-        }
 
-        .left-panel {
-            flex: 1;
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                        url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Z3ltJTIwd29ya291dHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .left-panel::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(to bottom right, rgba(255,255,255,0.1), rgba(255,255,255,0));
-            transform: rotate(45deg);
-            animation: shine 6s infinite linear;
-        }
-
-        @keyframes shine {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) rotate(45deg); }
-        }
-
-        .logo {
-            position: absolute;
-            top: 30px;
-            left: 30px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #ff6b6b;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .left-content {
-            max-width: 400px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .left-panel h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: #ff6b6b;
-            animation: fadeIn 1s ease-out;
-        }
-
-        .left-panel p {
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            line-height: 1.6;
-            animation: fadeIn 1.2s ease-out;
-        }
-
-        .features {
-            list-style: none;
-            margin-top: 30px;
-            animation: fadeIn 1.4s ease-out;
-        }
-
-        .features li {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            transition: transform 0.3s;
-        }
-
-        .features li:hover {
-            transform: translateX(10px);
-        }
-
-        .features i {
-            margin-right: 15px;
-            color: #ff6b6b;
-            font-size: 1.2rem;
-        }
-
-        .right-panel {
-            flex: 1;
-            padding: 50px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-        }
-
-        .login-header {
-            text-align: center;
-            margin-bottom: 40px;
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        .login-header h2 {
-            font-size: 2rem;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .login-header p {
-            color: #777;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            animation: slideInRight 0.8s ease-out;
-        }
-
-        @keyframes slideInRight {
-            from { 
-                transform: translateX(30px);
-                opacity: 0;
+            /* Animated background particles */
+            .bg-orb {
+                position: fixed;
+                border-radius: 50%;
+                filter: blur(90px);
+                opacity: 0.25;
+                animation: orbFloat 12s ease-in-out infinite;
+                pointer-events: none;
             }
-            to { 
-                transform: translateX(0);
-                opacity: 1;
+
+            .orb1 {
+                width: 500px;
+                height: 500px;
+                background: #32cd32;
+                top: -150px;
+                left: -150px;
+                animation-delay: 0s;
             }
-        }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #444;
-        }
+            .orb2 {
+                width: 400px;
+                height: 400px;
+                background: #1a6b1a;
+                bottom: -100px;
+                right: -100px;
+                animation-delay: 4s;
+            }
 
-        .input-with-icon {
-            position: relative;
-        }
+            .orb3 {
+                width: 300px;
+                height: 300px;
+                background: #00ff99;
+                top: 50%;
+                left: 55%;
+                animation-delay: 8s;
+            }
 
-        .input-with-icon i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #999;
-            transition: color 0.3s;
-        }
+            @keyframes orbFloat {
 
-        .input-with-icon input {
-            width: 100%;
-            padding: 15px 15px 15px 45px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
+                0%,
+                100% {
+                    transform: translate(0, 0) scale(1);
+                }
 
-        .input-with-icon input:focus {
-            border-color: #ff6b6b;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.2);
-        }
+                33% {
+                    transform: translate(30px, -30px) scale(1.05);
+                }
 
-        .input-with-icon input:focus + i {
-            color: #ff6b6b;
-        }
+                66% {
+                    transform: translate(-20px, 20px) scale(0.95);
+                }
+            }
 
-        .remember-forgot {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            animation: fadeIn 1s ease-out;
-        }
+            /* Card */
+            .login-wrapper {
+                display: flex;
+                width: 960px;
+                max-width: 96vw;
+                min-height: 560px;
+                border-radius: 24px;
+                overflow: hidden;
+                box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(50, 205, 50, 0.15);
+                position: relative;
+                z-index: 10;
+                animation: cardIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+            }
 
-        .remember {
-            display: flex;
-            align-items: center;
-        }
+            @keyframes cardIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px) scale(0.97);
+                }
 
-        .remember input {
-            margin-right: 8px;
-            accent-color: #ff6b6b;
-        }
+                to {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+            }
 
-        .forgot-password {
-            color: #ff6b6b;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .forgot-password:hover {
-            text-decoration: underline;
-            transform: translateY(-2px);
-        }
-
-        .login-button {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(to right, #ff6b6b, #ff8e53);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-            animation: fadeIn 1.2s ease-out;
-        }
-
-        .login-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: 0.5s;
-        }
-
-        .login-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.4);
-        }
-
-        .login-button:hover::before {
-            left: 100%;
-        }
-
-        .divider {
-            text-align: center;
-            margin: 30px 0;
-            position: relative;
-            animation: fadeIn 1.4s ease-out;
-        }
-
-        .divider::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            width: 100%;
-            height: 1px;
-            background: #ddd;
-        }
-
-        .divider span {
-            background: white;
-            padding: 0 15px;
-            color: #777;
-            position: relative;
-        }
-
-        .social-login {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-            animation: fadeIn 1.6s ease-out;
-        }
-
-        .social-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .social-btn:hover {
-            transform: translateY(-5px) scale(1.1);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .facebook {
-            background: #3b5998;
-        }
-
-        .google {
-            background: #dd4b39;
-        }
-
-        .twitter {
-            background: #1da1f2;
-        }
-
-        .signup-link {
-            text-align: center;
-            margin-top: 20px;
-            color: #777;
-            animation: fadeIn 1.8s ease-out;
-        }
-
-        .signup-link a {
-            color: #ff6b6b;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .signup-link a:hover {
-            text-decoration: underline;
-            transform: translateY(-2px);
-        }
-
-        .floating-icon {
-            position: absolute;
-            font-size: 2rem;
-            color: rgba(255, 107, 107, 0.2);
-            z-index: 0;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(10deg); }
-            100% { transform: translateY(0) rotate(0deg); }
-        }
-
-        .icon-1 {
-            top: 10%;
-            left: 5%;
-            animation-delay: 0s;
-        }
-
-        .icon-2 {
-            top: 70%;
-            right: 5%;
-            animation-delay: 1s;
-        }
-
-        .icon-3 {
-            bottom: 10%;
-            left: 10%;
-            animation-delay: 2s;
-        }
-
-        @media (max-width: 900px) {
-            .container {
+            /* Left panel */
+            .panel-left {
+                flex: 1.15;
+                background: linear-gradient(160deg, #0d1f0d 0%, #111b23 100%);
+                padding: 56px 48px;
+                display: flex;
                 flex-direction: column;
-                max-width: 500px;
+                justify-content: center;
+                position: relative;
+                overflow: hidden;
             }
-            
-            .left-panel {
-                padding: 30px;
+
+            .panel-left::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=60') center/cover;
+                opacity: 0.12;
+            }
+
+            .brand {
+                position: relative;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 44px;
+            }
+
+            .brand-icon {
+                width: 44px;
+                height: 44px;
+                background: linear-gradient(135deg, #32cd32, #00ff99);
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.3rem;
+                color: #0d1f0d;
+                font-weight: 900;
+            }
+
+            .brand-name {
+                font-size: 1.4rem;
+                font-weight: 800;
+                color: #fff;
+                letter-spacing: 0.5px;
+            }
+
+            .brand-name span {
+                color: #32cd32;
+            }
+
+            .panel-left h1 {
+                position: relative;
+                font-size: 2.4rem;
+                font-weight: 800;
+                color: #fff;
+                line-height: 1.2;
+                margin-bottom: 16px;
+            }
+
+            .panel-left h1 span {
+                color: #32cd32;
+            }
+
+            .panel-left p {
+                position: relative;
+                color: rgba(255, 255, 255, 0.65);
+                font-size: 0.95rem;
+                line-height: 1.7;
+                margin-bottom: 36px;
+            }
+
+            .feature-list {
+                position: relative;
+                list-style: none;
+            }
+
+            .feature-list li {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                padding: 10px 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+                color: rgba(255, 255, 255, 0.8);
+                font-size: 0.9rem;
+                transition: color 0.2s;
+            }
+
+            .feature-list li:last-child {
+                border-bottom: none;
+            }
+
+            .feature-list li i {
+                color: #32cd32;
+                width: 18px;
                 text-align: center;
             }
-            
-            .left-content {
-                max-width: 100%;
-            }
-            
-            .right-panel {
-                padding: 30px;
+
+            .stats-row {
+                position: relative;
+                display: flex;
+                gap: 24px;
+                margin-top: 36px;
+                padding-top: 28px;
+                border-top: 1px solid rgba(255, 255, 255, 0.08);
             }
 
-            .floating-icon {
-                display: none;
+            .stat-item {
+                text-align: left;
             }
-        }
 
-        @media (max-width: 480px) {
-            .left-panel h1 {
-                font-size: 2rem;
+            .stat-item .num {
+                font-size: 1.6rem;
+                font-weight: 800;
+                color: #32cd32;
             }
-            
-            .remember-forgot {
+
+            .stat-item .lbl {
+                font-size: 0.72rem;
+                color: rgba(255, 255, 255, 0.5);
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+
+            /* Right panel */
+            .panel-right {
+                flex: 1;
+                background: #12181f;
+                padding: 56px 48px;
+                display: flex;
                 flex-direction: column;
-                align-items: flex-start;
+                justify-content: center;
+            }
+
+            .login-title {
+                margin-bottom: 36px;
+            }
+
+            .login-title .badge {
+                display: inline-block;
+                background: rgba(50, 205, 50, 0.12);
+                color: #32cd32;
+                border: 1px solid rgba(50, 205, 50, 0.25);
+                border-radius: 20px;
+                padding: 4px 14px;
+                font-size: 0.75rem;
+                font-weight: 600;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                margin-bottom: 14px;
+            }
+
+            .login-title h2 {
+                font-size: 1.9rem;
+                font-weight: 800;
+                color: #fff;
+                margin-bottom: 6px;
+            }
+
+            .login-title p {
+                color: rgba(255, 255, 255, 0.45);
+                font-size: 0.9rem;
+            }
+
+            /* Error alert */
+            .error-alert {
+                background: rgba(220, 53, 69, 0.12);
+                border: 1px solid rgba(220, 53, 69, 0.35);
+                border-radius: 10px;
+                padding: 12px 16px;
+                margin-bottom: 20px;
+                color: #ff6b7a;
+                font-size: 0.88rem;
+                display: flex;
+                align-items: center;
                 gap: 10px;
             }
-            
-            .social-login {
-                flex-wrap: wrap;
+
+            /* Form fields */
+            .field {
+                margin-bottom: 20px;
             }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="left-panel">
-            <div class="logo">PowerFit</div>
-            <div class="left-content">
-                <h1>Transform Your Body, Transform Your Life</h1>
-                <p>Join thousands of members achieving their fitness goals with our state-of-the-art facilities and expert trainers.</p>
-                <ul class="features">
-                    <li><i class="fas fa-dumbbell"></i> 24/7 Access to Premium Equipment</li>
-                    <li><i class="fas fa-users"></i> Expert Personal Trainers</li>
-                    <li><i class="fas fa-heartbeat"></i> Custom Workout Plans</li>
-                    <li><i class="fas fa-swimming-pool"></i> Pool & Spa Facilities</li>
+
+            .field label {
+                display: block;
+                color: rgba(255, 255, 255, 0.7);
+                font-size: 0.82rem;
+                font-weight: 600;
+                margin-bottom: 8px;
+                text-transform: uppercase;
+                letter-spacing: 0.6px;
+            }
+
+            .input-wrap {
+                position: relative;
+            }
+
+            .input-wrap i {
+                position: absolute;
+                left: 16px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: rgba(255, 255, 255, 0.3);
+                font-size: 0.9rem;
+                transition: color 0.25s;
+                pointer-events: none;
+            }
+
+            .input-wrap input {
+                width: 100%;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1.5px solid rgba(255, 255, 255, 0.1);
+                border-radius: 12px;
+                padding: 14px 16px 14px 44px;
+                color: #fff;
+                font-size: 0.95rem;
+                font-family: 'Poppins', sans-serif;
+                outline: none;
+                transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+            }
+
+            .input-wrap input::placeholder {
+                color: rgba(255, 255, 255, 0.25);
+            }
+
+            .input-wrap input:focus {
+                border-color: #32cd32;
+                background: rgba(50, 205, 50, 0.06);
+                box-shadow: 0 0 0 3px rgba(50, 205, 50, 0.12);
+            }
+
+            .input-wrap input:focus~i,
+            .input-wrap:focus-within i {
+                color: #32cd32;
+            }
+
+            /* Password toggle */
+            .toggle-pw {
+                position: absolute;
+                right: 14px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: rgba(255, 255, 255, 0.3);
+                cursor: pointer;
+                font-size: 0.9rem;
+                transition: color 0.2s;
+            }
+
+            .toggle-pw:hover {
+                color: #32cd32;
+            }
+
+            .row-options {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 28px;
+                margin-top: -4px;
+            }
+
+            .remember {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                color: rgba(255, 255, 255, 0.5);
+                font-size: 0.83rem;
+                cursor: pointer;
+            }
+
+            .remember input[type="checkbox"] {
+                accent-color: #32cd32;
+                width: 15px;
+                height: 15px;
+                cursor: pointer;
+            }
+
+            .forgot {
+                color: #32cd32;
+                font-size: 0.83rem;
+                text-decoration: none;
+                font-weight: 600;
+                transition: opacity 0.2s;
+            }
+
+            .forgot:hover {
+                opacity: 0.75;
+                text-decoration: underline;
+            }
+
+            .btn-login {
+                width: 100%;
+                padding: 15px;
+                background: linear-gradient(135deg, #1a6b1a, #32cd32);
+                border: none;
+                border-radius: 12px;
+                color: #0d1f0d;
+                font-size: 1rem;
+                font-weight: 700;
+                cursor: pointer;
+                letter-spacing: 0.5px;
+                transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+                font-family: 'Poppins', sans-serif;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .btn-login::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+                transform: translateX(-100%);
+                transition: transform 0.5s;
+            }
+
+            .btn-login:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 32px rgba(50, 205, 50, 0.35);
+            }
+
+            .btn-login:hover::after {
+                transform: translateX(100%);
+            }
+
+            .btn-login:active {
+                transform: translateY(0);
+            }
+
+            .divider {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin: 24px 0;
+                color: rgba(255, 255, 255, 0.2);
+                font-size: 0.8rem;
+            }
+
+            .divider::before,
+            .divider::after {
+                content: '';
+                flex: 1;
+                height: 1px;
+                background: rgba(255, 255, 255, 0.1);
+            }
+
+            .footer-note {
+                text-align: center;
+                color: rgba(255, 255, 255, 0.35);
+                font-size: 0.82rem;
+                margin-top: 12px;
+            }
+
+            .footer-note a {
+                color: #32cd32;
+                text-decoration: none;
+                font-weight: 600;
+            }
+
+            .footer-note a:hover {
+                text-decoration: underline;
+            }
+
+            @media (max-width: 750px) {
+                .login-wrapper {
+                    flex-direction: column;
+                }
+
+                .panel-left {
+                    padding: 36px 28px;
+                }
+
+                .panel-right {
+                    padding: 36px 28px;
+                }
+
+                .stats-row {
+                    gap: 16px;
+                }
+
+                .panel-left h1 {
+                    font-size: 1.8rem;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- Ambient orbs -->
+        <div class="bg-orb orb1"></div>
+        <div class="bg-orb orb2"></div>
+        <div class="bg-orb orb3"></div>
+
+        <div class="login-wrapper">
+            <!-- Left branding panel -->
+            <div class="panel-left">
+                <div class="brand">
+                    <div class="brand-icon"><i class="fa fa-dumbbell"></i></div>
+                    <span class="brand-name">Fit<span>Zone</span></span>
+                </div>
+
+                <h1>Power Your <span>Gym</span> Management</h1>
+                <p>The all-in-one dashboard to manage members, trainers, equipment, and memberships with ease.</p>
+
+                <ul class="feature-list">
+                    <li><i class="fa fa-users"></i> Member & Trainer Management</li>
+                    <li><i class="fa fa-id-card"></i> Membership Plans & Billing</li>
+                    <li><i class="fa fa-cogs"></i> Equipment Inventory Tracking</li>
+                    <li><i class="fa fa-chart-bar"></i> Enquiry & Conversion Reports</li>
+                    <li><i class="fa fa-shield-alt"></i> Secure Staff Portal</li>
                 </ul>
-            </div>
-        </div>
-        
-        <div class="right-panel">
-            <i class="fas fa-dumbbell floating-icon icon-1"></i>
-            <i class="fas fa-running floating-icon icon-2"></i>
-            <i class="fas fa-heartbeat floating-icon icon-3"></i>
-            <div class="floating-icon icon-4"><i class="fas fa-yoga"></i></div>
-            <div class="login-header">
-                <h2>Member Login</h2>
-                <p>Welcome back! Please login to your account</p>
-            </div>
-            
-            <form action="{% url 'login' %}" method="post" novalidate>
-                {% csrf_token %}
 
-                {# Django messages framework (e.g. invalid login) #}
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <div class="num">500+</div>
+                        <div class="lbl">Members</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="num">50+</div>
+                        <div class="lbl">Trainers</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="num">100%</div>
+                        <div class="lbl">Secure</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right login panel -->
+            <div class="panel-right">
+                <div class="login-title">
+                    <div class="badge">🔐 Staff Access</div>
+                    <h2>Welcome Back</h2>
+                    <p>Sign in to your admin account to continue</p>
+                </div>
+
                 {% if messages %}
-                    <div style="margin-bottom:12px;">
-                        {% for message in messages %}
-                            <div style="padding:10px;border-radius:6px;background:#f8d7da;color:#721c24;border:1px solid #f5c6cb;margin-bottom:6px;">{{ message }}</div>
-                        {% endfor %}
-                    </div>
+                {% for message in messages %}
+                <div class="error-alert"><i class="fa fa-exclamation-circle"></i> {{ message }}</div>
+                {% endfor %}
                 {% endif %}
 
-                {# Non-field errors from the authentication form #}
                 {% if form.non_field_errors %}
-                    <div style="padding:10px;border-radius:6px;background:#f8d7da;color:#721c24;border:1px solid #f5c6cb;margin-bottom:12px;">{{ form.non_field_errors|striptags }}</div>
+                <div class="error-alert"><i class="fa fa-exclamation-circle"></i> {{ form.non_field_errors|striptags }}
+                </div>
                 {% endif %}
 
-                <div class="form-group">
-                    <label for="id_username">Email / Username</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-envelope"></i>
-                        <input type="text" id="id_username" name="username" placeholder="Enter your username" value="{{ request.POST.username|default:'' }}">
-                    </div>
-                    {% if form.username.errors %}
-                        <div style="color:#721c24;margin-top:6px;">{{ form.username.errors|striptags }}</div>
-                    {% endif %}
-                </div>
+                <form action="{% url 'login' %}" method="post" novalidate>
+                    {% csrf_token %}
 
-                <div class="form-group">
-                    <label for="id_password">Password</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="id_password" name="password" placeholder="Enter your password" required>
+                    <div class="field">
+                        <label for="id_username">Username</label>
+                        <div class="input-wrap">
+                            <input type="text" id="id_username" name="username" placeholder="Enter your username"
+                                value="{{ request.POST.username|default:'' }}" autocomplete="username">
+                            <i class="fa fa-user"></i>
+                        </div>
                     </div>
-                    {% if form.password.errors %}
-                        <div style="color:#721c24;margin-top:6px;">{{ form.password.errors|striptags }}</div>
-                    {% endif %}
-                </div>
-                
-                <div class="remember-forgot">
-                    <div class="remember">
-                        <input type="checkbox" id="remember">
-                        <label for="remember">Remember me</label>
+
+                    <div class="field">
+                        <label for="id_password">Password</label>
+                        <div class="input-wrap">
+                            <input type="password" id="id_password" name="password" placeholder="Enter your password"
+                                autocomplete="current-password">
+                            <i class="fa fa-lock"></i>
+                            <span class="toggle-pw" id="togglePw" title="Show/Hide Password">
+                                <i class="fa fa-eye" id="eyeIcon"></i>
+                            </span>
+                        </div>
                     </div>
-                    <a href="/forgot_password/" class="forgot-password">Forgot Password?</a>
+
+                    <div class="row-options">
+                        <label class="remember">
+                            <input type="checkbox" id="rememberMe"> Remember me
+                        </label>
+                        <a href="/forgot_password/" class="forgot">Forgot Password?</a>
+                    </div>
+
+                    <button type="submit" class="btn-login">
+                        <i class="fa fa-sign-in-alt"></i> &nbsp; Sign In to Dashboard
+                    </button>
+                </form>
+
+                <div class="divider">or</div>
+
+                <div class="footer-note">
+                    Not registered? <a href="/register/">Create an account</a>
                 </div>
-                
-                <button type="submit" class="login-button" href="/">Login to Account</button>
-            </form>
-            
-            <div class="divider">
-                <span>Or login with</span>
-            </div>
-            
-            <div class="social-login">
-                <div class="social-btn facebook">
-                    <a href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
-                </div>
-                <div class="social-btn google">
-                    <a href="https://google.com/"><i class="fab fa-google"></i></a>
-                </div>
-                <div class="social-btn twitter">
-                    <a href="https://x.com/"><i class="fab fa-twitter"></i></a>
-                </div>
-            </div>
-            
-            <div class="signup-link">
-                Don't have an account? <a href="/register/">Sign up now</a>
             </div>
         </div>
-    </div>
 
-    <script>
-        // Add simple animation to form elements on load
-        document.addEventListener('DOMContentLoaded', function() {
-            const formGroups = document.querySelectorAll('.form-group');
-            
-            formGroups.forEach((group, index) => {
-                group.style.animationDelay = `${index * 0.1}s`;
+        <script>
+            // Toggle password visibility
+            const togglePw = document.getElementById('togglePw');
+            const pwInput = document.getElementById('id_password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            togglePw.addEventListener('click', () => {
+                const show = pwInput.type === 'password';
+                pwInput.type = show ? 'text' : 'password';
+                eyeIcon.className = show ? 'fa fa-eye-slash' : 'fa fa-eye';
             });
-            
-            // Add input animation on focus
-            const inputs = document.querySelectorAll('input');
-            inputs.forEach(input => {
-                input.addEventListener('focus', function() {
-                    this.parentElement.classList.add('focused');
-                });
-                
-                input.addEventListener('blur', function() {
-                    this.parentElement.classList.remove('focused');
-                });
-            });
-        });
-    </script>
+        </script>
+    </body>
 
-{% endblock%}
+</html>

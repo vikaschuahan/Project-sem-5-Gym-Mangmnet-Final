@@ -212,9 +212,13 @@
                     <ul class="navbar-nav ml-auto">
                         {% if request.user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'logout' %}">
-                                <i class="fa fa-sign-out"></i> Logout
-                            </a>
+                            <form method="post" action="{% url 'logout' %}" style="display:inline; margin:0;">
+                                {% csrf_token %}
+                                <button type="submit" class="nav-link btn btn-link"
+                                    style="background:none;border:none;cursor:pointer;padding:6px 12px;font-weight:600;color:#32cd32 !important;">
+                                    <i class="fa fa-sign-out"></i> Logout
+                                </button>
+                            </form>
                         </li>
                         {% endif %}
                     </ul>
@@ -260,6 +264,7 @@
                 }
             });
         </script>
+        {% block js %}{% endblock %}
     </body>
 
 </html>
