@@ -450,6 +450,189 @@ heroku run python manage.py createsuperuser
 4. Set **Start Command**: `gunicorn GMS.wsgi --log-file -`
 5. Add environment variables in the Render dashboard
 
+### 🐍 Deploy to PythonAnywhere
+
+PythonAnywhere provides a free tier that is well-suited for small Django applications.
+Follow the steps below to host the Gym Management System there.
+
+---
+
+#### Prerequisites
+
+- A free (or paid) [PythonAnywhere](https://www.pythonanywhere.com) account
+- Your code pushed to GitHub (or uploaded as a ZIP)
+
+---
+
+#### Step 1 – Open a Bash console on PythonAnywhere
+
+1. Log in to PythonAnywhere.
+2. Go to **Dashboard → Consoles → Bash** and start a new Bash console.
+
+---
+
+#### Step 2 – Clone (or upload) the repository
+
+```bash
+# Option A – clone directly from GitHub (recommended)
+git clone https://github.com/vikaschuahan/Project-sem-5-Gym-Mangmnet-Final.git
+
+# Option B – if you uploaded a ZIP via the Files tab
+unzip Project-sem-5-Gym-Mangmnet-Final.zip
+```
+
+---
+
+#### Step 3 – Create a virtual environment and install dependencies
+
+PythonAnywhere supports Python 3.10+. Adjust the version flag if needed.
+
+```bash
+cd Project-sem-5-Gym-Mangmnet-Final
+
+# Create a virtual environment (use the Python version you want)
+python3.10 -m venv venv
+
+# Activate it
+source venv/bin/activate
+
+# Install all required packages
+pip install -r requirements.txt
+```
+
+> **Tip:** Use `python3.10` (or `python3.11`) explicitly because the default
+> `python` on PythonAnywhere may point to Python 2.
+
+---
+
+#### Step 4 – Generate a secure SECRET_KEY
+
+```bash
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+```
+
+Copy the output – you will need it in the next step.
+
+---
+
+#### Step 5 – Set environment variables
+
+PythonAnywhere lets you set environment variables in the **Web tab → Environment variables** panel (recommended), or you can export them directly in the WSGI file (see Step 7).
+
+Minimum required variables:
+
+| Variable | Value |
+|---|---|
+| `SECRET_KEY` | Long random string from Step 4 |
+| `DEBUG` | `False` |
+| `ALLOWED_HOSTS` | `yourusername.pythonanywhere.com` |
+
+---
+
+#### Step 6 – Run database migrations and collect static files
+
+```bash
+# Apply all migrations
+python manage.py migrate
+
+# Gather static files into staticfiles/
+python manage.py collectstatic --noinput
+
+# Create the admin superuser
+python manage.py createsuperuser
+```
+
+---
+
+#### Step 7 – Create a new Web app and configure the WSGI file
+
+1. In the PythonAnywhere **Web** tab click **"Add a new web app"**.
+2. Choose **Manual configuration** (not the Django quick-start wizard).
+3. Select the same Python version you used in Step 3.
+4. Once the app is created, click **"WSGI configuration file"** to open it.
+5. **Delete all existing content** and paste the contents of
+   `pythonanywhere_wsgi.py` (provided in this repo), then update the two
+   placeholders:
+
+```python
+import os
+import sys
+
+# Replace 'yourusername' with your PythonAnywhere username
+path = '/home/yourusername/Project-sem-5-Gym-Mangmnet-Final'
+if path not in sys.path:
+    sys.path.insert(0, path)
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'GMS.settings'
+
+# Paste your generated SECRET_KEY here, or set via the Web tab panel
+os.environ.setdefault('SECRET_KEY', 'your-secret-key-here')
+os.environ.setdefault('DEBUG', 'False')
+os.environ.setdefault('ALLOWED_HOSTS', 'yourusername.pythonanywhere.com')
+
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
+```
+
+6. Save the file.
+
+---
+
+#### Step 8 – Configure the virtual environment path
+
+In the **Web tab** under **"Virtualenv"**, enter the full path:
+
+```
+/home/yourusername/Project-sem-5-Gym-Mangmnet-Final/venv
+```
+
+---
+
+#### Step 9 – Configure static files
+
+In the **Web tab** under **"Static files"**:
+
+| URL | Directory |
+|---|---|
+| `/static/` | `/home/yourusername/Project-sem-5-Gym-Mangmnet-Final/staticfiles` |
+| `/media/` | `/home/yourusername/Project-sem-5-Gym-Mangmnet-Final/media` |
+
+---
+
+#### Step 10 – Reload and test
+
+1. Click the green **"Reload"** button at the top of the Web tab.
+2. Visit `https://yourusername.pythonanywhere.com/` – you should see the gym landing page.
+3. Visit `https://yourusername.pythonanywhere.com/admin/` to log in to the admin panel.
+
+---
+
+#### 🚨 PythonAnywhere Error Handling & Troubleshooting
+
+| Symptom | Likely Cause | Fix |
+|---|---|---|
+| **500 Internal Server Error** | Uncaught Python exception | Check the **Error log** in the Web tab |
+| **"DisallowedHost" error** | Your domain is not in `ALLOWED_HOSTS` | Add `yourusername.pythonanywhere.com` to the `ALLOWED_HOSTS` env var |
+| **Static files not loading (CSS/JS missing)** | `collectstatic` not run or wrong path | Run `python manage.py collectstatic --noinput` and verify the Static Files mapping in the Web tab |
+| **"No module named 'GMS'"** | Wrong `path` in WSGI file | Make sure `path` points to the folder that *contains* `manage.py` |
+| **"No module named 'django'"** | Virtual environment not activated / wrong path | Verify the **Virtualenv** path in the Web tab; re-run `pip install -r requirements.txt` inside the venv |
+| **Media files (uploads) not showing** | Missing media static mapping | Add `/media/` → `…/media` in the Static Files section of the Web tab |
+| **Database errors after update** | Pending migrations | Run `python manage.py migrate` in a Bash console, then reload |
+| **"OperationalError: no such table"** | Migrations never ran | Run `python manage.py migrate` |
+| **Reloading does not pick up code changes** | Old `.pyc` cache | Delete `__pycache__` folders (`find . -name '__pycache__' -exec rm -rf {} +`) then reload |
+| **Free account "sleeping" site** | PythonAnywhere free tier limitation | Log in and click **"Run until 3 months from today"** in the Web tab, or upgrade to a paid plan |
+
+**Reading the error logs**
+
+PythonAnywhere provides three log files (visible in the Web tab):
+- **Access log** – every HTTP request
+- **Error log** – Python tracebacks and Django errors ← *start here*
+- **Server log** – low-level WSGI server messages
+
+Always check the **Error log** first when something goes wrong.
+
+---
+
 ### 🐳 Deploy with Docker (Optional)
 
 You can also containerise the app. Create a `Dockerfile` in the project root:
