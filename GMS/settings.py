@@ -138,14 +138,19 @@ STATICFILES_DIRS = [
 # Directory where collectstatic will gather all static files for production
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# WhiteNoise compression only in production (DEBUG=False).
-# In development, use Django's default storage so images load without collectstatic.
-if not DEBUG:
-    STORAGES = {
-        'staticfiles': {
-            'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
-        },
-    }
+# Use WhiteNoise in production, fallback to Django default in dev.
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage" if not DEBUG else "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
+# Force WhiteNoise to find files directly from static folders — bulletproofs the deployment
+WHITENOISE_USE_FINDERS = True
+
 
 # Media files (uploaded content)
 MEDIA_URL = '/media/'
