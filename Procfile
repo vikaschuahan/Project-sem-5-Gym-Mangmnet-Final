@@ -1,1 +1,1 @@
-web: gunicorn GMS.wsgi --log-file -
+web: gunicorn GMS.wsgi --bind 0.0.0.0:$PORT --log-file -
