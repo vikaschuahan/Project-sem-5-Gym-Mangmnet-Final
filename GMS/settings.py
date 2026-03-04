@@ -28,6 +28,11 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = [h.strip() for h in os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')]
 
+# Required in Django 4.0+ — trust the Railway domain for CSRF (form logins etc.)
+CSRF_TRUSTED_ORIGINS = [f'https://{h}' for h in ALLOWED_HOSTS if h not in ('127.0.0.1', 'localhost')]
+CSRF_TRUSTED_ORIGINS += ['http://127.0.0.1', 'http://localhost']
+
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Application definition
 
