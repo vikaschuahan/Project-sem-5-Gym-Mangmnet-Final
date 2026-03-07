@@ -1,141 +1,174 @@
-{% extends 'navigation.html' %}
+﻿{% extends 'navigation.html' %}
 {% load static %}
 
-{% block body %}
-<div class="container d-flex justify-content-center align-items-center" style="margin-top: 40px; margin-bottom: 40px;">
-    <div class="card shadow-lg border-0" style="width: 100%; max-width: 700px; border-radius: 15px; overflow: hidden;">
-        
-        <!-- Card Header Image -->
-        <img src="{% static 'images/about-1.png' %}" class="card-img-top" alt="Gym Banner" style="height: 180px; object-fit: cover;">
+{% block css %}
+<style>
+    .form-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 6px 30px rgba(0,0,0,0.12);
+        overflow: hidden;
+        max-width: 720px;
+        width: 100%;
+    }
+    .form-header {
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        color: #fff;
+        text-align: center;
+        padding: 22px 20px;
+        font-size: 1.4rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+    .form-body {
+        padding: 30px 35px;
+        background: #f0f6ff;
+    }
+    .form-body label {
+        font-weight: 600;
+        font-size: 0.92rem;
+        color: #333;
+        margin-bottom: 4px;
+    }
+    .form-body .form-control {
+        border: 1.5px solid #c7d1e3;
+        border-radius: 8px;
+        padding: 9px 14px;
+        font-size: 0.95rem;
+        transition: border-color 0.25s;
+    }
+    .form-body .form-control:focus {
+        border-color: #6a11cb;
+        box-shadow: 0 0 0 0.15rem rgba(106,17,203,0.15);
+    }
+    .req { color: #e53935; }
+    .btn-submit {
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 0;
+        font-weight: 700;
+        font-size: 1rem;
+        width: 100%;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+    .btn-submit:hover { opacity: 0.9; color: #fff; }
+</style>
+{% endblock %}
 
-        <!-- Form Section -->
-        <div class="card-body" style="background: #e6f7ff;">
-            <h3 class="text-center font-weight-bold mb-4" style="color: #2a2a2a;">Add New Member</h3>
-            
-            <form action="{% if member %}{% url 'edit_member' member.id %}{% else %}{% url 'add_member' %}{% endif %}" method="post" enctype="multipart/form-data">
+{% block body %}
+<div class="container d-flex justify-content-center py-4">
+    <div class="form-card">
+        <div class="form-header">
+            <i class="fa fa-user-plus"></i>
+            {% if member %}Edit Member{% else %}Add New Member{% endif %}
+        </div>
+        <div class="form-body">
+            <form action="{% if member %}{% url 'edit_member' member.id %}{% else %}{% url 'add_member' %}{% endif %}" method="post">
                 {% csrf_token %}
 
-                <!-- Full Name & Email -->
-                <div class="row">
+                <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label><b>Full Name <span style="color: red;">*</span></b></label>
+                        <label>Full Name <span class="req">*</span></label>
                         <input type="text" name="name" class="form-control" placeholder="Enter full name" value="{{ member.name|default:'' }}" required>
                     </div>
                     <div class="form-group col-md-6">
-                        <label><b>Email Address <span style="color: red;">*</span></b></label>
+                        <label>Email Address <span class="req">*</span></label>
                         <input type="email" name="emailid" class="form-control" placeholder="Enter email" value="{{ member.emailid|default:'' }}" required>
                     </div>
                 </div>
 
-                <!-- Phone & DOB -->
-                <div class="row">
+                <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label><b>Phone Number <span style="color: red;">*</span></b></label>
-                        <input type="tel" name="contact" class="form-control" placeholder="Enter phone number" value="{{ member.contact|default:'' }}" required>
+                        <label>Phone Number <span class="req">*</span></label>
+                        <input type="tel" name="contact" class="form-control" placeholder="Enter phone" value="{{ member.contact|default:'' }}" maxlength="15" required>
                     </div>
                     <div class="form-group col-md-6">
-                        <label><b>Date of Birth <span style="color: red;">*</span></b></label>
+                        <label>Date of Birth <span class="req">*</span></label>
                         <input type="date" name="dob" class="form-control" value="{% if member and member.dob %}{{ member.dob|date:'Y-m-d' }}{% endif %}" required>
                     </div>
                 </div>
 
-                <!-- Membership Type -->
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Gender <span class="req">*</span></label>
+                        <select name="gender" class="form-control" required>
+                            <option value="" disabled {% if not member %}selected{% endif %}>Select gender</option>
+                            <option value="Male"   {% if member.gender == 'Male' %}selected{% endif %}>Male</option>
+                            <option value="Female" {% if member.gender == 'Female' %}selected{% endif %}>Female</option>
+                            <option value="Other"  {% if member.gender == 'Other' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Membership Type <span class="req">*</span></label>
+                        <select name="membership_type" class="form-control" required>
+                            <option value="" disabled {% if not member %}selected{% endif %}>Select type</option>
+                            <option value="basic"   {% if member.membership_type == 'basic' %}selected{% endif %}>Basic</option>
+                            <option value="premium" {% if member.membership_type == 'premium' %}selected{% endif %}>Premium</option>
+                            <option value="vip"     {% if member.membership_type == 'vip' %}selected{% endif %}>VIP</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="form-group">
-    <label><b>Membership Type <span style="color: red;">*</span></b></label>
-    <select name="membership_type" class="form-control" required>
-        <option value="" disabled {% if not member %}selected{% endif %}>Select membership type</option>
-        <option value="basic" {% if member and member.membership_type == 'basic' %}selected{% endif %}>Basic</option>
-        <option value="premium" {% if member and member.membership_type == 'premium' %}selected{% endif %}>Premium</option>
-        <option value="vip" {% if member and member.membership_type == 'vip' %}selected{% endif %}>VIP</option>
-    </select>
-</div>
-                <!-- Plan -->
-                <div class="form-group">
-                    <label><b>Plan</b></label>
+                    <label>Plan</label>
                     <select name="plan" class="form-control">
-                        <option value="">-- Keep current --</option>
+                        <option value="">-- Select Plan --</option>
                         {% for p in plan %}
                             {% if member and member.plan and member.plan.id == p.id %}
-                                <option value="{{ p.id }}" selected>{{ p.name }}</option>
+                                <option value="{{ p.id }}" selected>{{ p.name }} ({{ p.duration }} days - Rs.{{ p.amount }})</option>
                             {% else %}
-                                <option value="{{ p.id }}">{{ p.name }}</option>
+                                <option value="{{ p.id }}">{{ p.name }} ({{ p.duration }} days - Rs.{{ p.amount }})</option>
                             {% endif %}
                         {% endfor %}
                     </select>
                 </div>
 
-                <!-- Join Date -->
-                <div class="form-group">
-                    <label><b>Join Date <span style="color: red;">*</span></b></label>
-                    <input type="date" name="joindate" class="form-control" value="{% if member and member.joindate %}{{ member.joindate|date:'Y-m-d' }}{% endif %}" required>
-                </div>
-                <!-- Expiry Date -->
-                <div class="form-group">
-                    <label><b>Membership Expiry Date <span style="color: red;">*</span></b></label>
-                    <input type="date" name="expdate" class="form-control" value="{% if member and member.expiredate %}{{ member.expiredate|date:'Y-m-d' }}{% endif %}" required>
-                </div>
-                <!-- Initial Amount -->
-                <div class="form-group">
-                    <label><b>Initial Amount <span style="color: red;">*</span></b></label>
-                    <input type="number" name="initialamount" class="form-control" min="0" step="0.01" placeholder="Enter initial amount" value="{{ member.initialamount|default:'' }}" required>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Join Date <span class="req">*</span></label>
+                        <input type="date" name="joindate" class="form-control" value="{% if member and member.joindate %}{{ member.joindate|date:'Y-m-d' }}{% endif %}" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Expiry Date <span class="req">*</span></label>
+                        <input type="date" name="expdate" class="form-control" value="{% if member and member.expiredate %}{{ member.expiredate|date:'Y-m-d' }}{% endif %}" required>
+                    </div>
                 </div>
 
-                <!-- Address -->
                 <div class="form-group">
-                    <label><b>Address</b></label>
+                    <label>Initial Amount (Rs.) <span class="req">*</span></label>
+                    <input type="number" name="initialamount" class="form-control" min="0" step="0.01" placeholder="e.g. 5000" value="{{ member.initialamount|default:'' }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Address</label>
                     <textarea name="address" class="form-control" rows="2" placeholder="Enter address">{{ member.address|default:'' }}</textarea>
                 </div>
 
-                <!-- Emergency Contact -->
-                <div class="form-group">
-                    <label><b>Emergency Contact</b></label>
-                    <input type="text" name="emergency_contact" class="form-control" placeholder="Name and phone" value="{{ member.emergency_contact|default:'' }}">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Emergency Contact</label>
+                        <input type="text" name="emergency_contact" class="form-control" placeholder="Name & phone" value="{{ member.emergency_contact|default:'' }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Medical Conditions</label>
+                        <input type="text" name="medical_conditions" class="form-control" placeholder="Allergies, conditions..." value="{{ member.medical_conditions|default:'' }}">
+                    </div>
                 </div>
 
-                <!-- Medical Conditions -->
-                <div class="form-group">
-                    <label><b>Medical Conditions</b></label>
-                    <textarea name="medical_conditions" class="form-control" rows="2" placeholder="Any medical conditions or allergies">{{ member.medical_conditions|default:'' }}</textarea>
-                </div>
-
-                <!-- Submit Button -->
-                <button type="submit" class="btn btn-block text-white font-weight-bold" 
-                        style="background: linear-gradient(to right, #6a11cb, #2575fc); border-radius: 8px;">
-                    {% if member %}Save Changes{% else %}➕ Add Member{% endif %}
+                <button type="submit" class="btn-submit mt-2">
+                    {% if member %}<i class="fa fa-save"></i> Save Changes{% else %}<i class="fa fa-plus"></i> Add Member{% endif %}
                 </button>
             </form>
         </div>
     </div>
 </div>
 
-<!-- Success / Error Alerts -->
-{% if error|default:'' == "no" %}
-<script>
-    alert('✅ Record Inserted Successfully');
-    window.location = "{% url 'view_member' %}";
-</script>
+{% if error == "no" %}
+<script>alert('Record Inserted Successfully'); window.location="{% url 'view_member' %}";</script>
+{% elif error == "yes" %}
+<script>alert('Something went wrong. Please fill all required fields and try again.');</script>
 {% endif %}
-{% if error|default:'' == "yes" %}
-<script>
-    alert('❌ Something went wrong, Try Again');
-</script>
-{% endif %}
-{% endblock %}
-
-{% block footer %}<footer id="footer" class="footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-6">
-                <ul class="social-icons list-inline">
-                    <li class="list-inline-item"><a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a></li>
-                    <li class="list-inline-item"><a href="https://x.com/"><i class="fa fa-twitter"></i></a></li>
-                    <li class="list-inline-item"><a href="https://www.linkedin.com/login"><i class="fa fa-linkedin"></i></a></li>
-                    <li class="list-inline-item"><a href="https://www.youtube.com/"><i class="fa fa-youtube"></i></a></li>
-                    <li class="list-inline-item"><a href="https://github.com/login"><i class="fa fa-github"></i></a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    
-</footer>
 {% endblock %}

@@ -1,169 +1,1001 @@
-{% extends 'navigation.html' %}
+﻿{% extends 'navigation.html' %}
 {% load static %}
 
-{% block body %}
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    .hero-bg {
-      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-                  url('{% static "images/about-1.png" %}');
-      background-size: cover;
-      background-position: center;
-    }
-    .fade-in { animation: fadeIn 1s ease-in; }
-    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-  </style>
-</head>
-<body class="bg-gray-100">
- <br><br><br>
+{% block css %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+  rel="stylesheet">
+<style>
+  body {
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+  }
 
-  <header class="hero-bg text-white fade-in flex items-center justify-center min-h-[50vh] lg:min-h-[60vh]">
-    <div class="text-center p-4">
-      <h1 class="text-4xl md:text-6xl text-yellow-400 font-extrabold mb-4 tracking-tight drop-shadow-md">
-        About Elite Fitness
-      </h1>
-      <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto drop-shadow-sm">
-        Your ultimate partner in gym management and fitness excellence.
-      </p>
-      </div>
-  </header>
+  /* ── Section utilities ──────────────────────────────────── */
+  .section-title {
+    text-align: center;
+    margin-bottom: 52px;
+  }
 
-  <section class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-      <h2 class="text-4xl font-bold text-center mb-12">Our Story</h2>
-      <div class="flex flex-wrap items-center">
-        <div class="w-full md:w-1/2 p-4">
-          <img src="{% static 'images/about-2.png' %}" alt="A view of the gym floor" class="rounded-lg shadow-lg transition-transform duration-300 hover:scale-105">
-        </div>
-        <div class="w-full md:w-1/2 p-4 lg:pl-12">
-          <div class="text-lg text-gray-700 leading-relaxed space-y-6">
-            <p>
-              At FitPulse Gym, our journey began with a simple but powerful belief: fitness is for everyone. Founded in 2015, we set out to create a space where people of all ages and fitness levels could come together to achieve their health goals in a supportive and motivating environment.
-            </p>
-            <p>
-              What started as a small community gym has grown into a thriving fitness hub, thanks to our commitment to innovation, personalized training, and exceptional member experience. We understand that managing a gym is more than just equipment and classes — it’s about building relationships, tracking progress, and making visit seamless and rewarding.
-            </p>
-            <p>
-              That’s why we developed our comprehensive gym management platform — to empower gym owners and trainers with the tools they need to focus on what matters most: helping members transform their lives. From easy membership management and class scheduling to real-time performance tracking and billing automation, our system is designed to simplify operations and enhance engagement. At FitPulse Gym, we’re more than just software providers; we’re partners in your fitness journey. Together, we’re building stronger communities, one workout at a time.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  .section-title .tag {
+    display: inline-block;
+    background: rgba(50, 205, 50, 0.10);
+    color: #28a745;
+    border: 1px solid rgba(50, 205, 50, 0.25);
+    border-radius: 20px;
+    padding: 3px 14px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
 
-  <section class="py-16 bg-gray-200">
-    <div class="container mx-auto px-4">
-      <h2 class="text-4xl font-bold text-center mb-8">Meet Our Team</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
- 
-        <div class="relative overflow-hidden rounded-lg shadow-lg text-left group">
-          <img src="{% static 'images/team/Arjun Kumar.jpg' %}" alt="Arjun Kumar, Lead Trainer" class="w-full h-full object-cover aspect-square transition-transform duration-300 group-hover:scale-110">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 w-full p-4">
-            <h3 class="text-white text-2xl font-bold">Arjun Kumar</h3>
-            <p class="text-white/90">Lead Trainer</p>
-          </div>
-        </div>
- 
-        <div class="relative overflow-hidden rounded-lg shadow-lg text-left group">
-          <img src="{% static 'images/team/Neha Joshi.jpg' %}" alt="Neha Joshi, Nutrition Specialist" class="w-full h-full object-cover aspect-square transition-transform duration-300 group-hover:scale-110">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 w-full p-4">
-            <h3 class="text-white text-2xl font-bold">Neha Joshi</h3>
-            <p class="text-white/90">Nutrition Specialist</p>
-          </div>
-        </div>
- 
-        <div class="relative overflow-hidden rounded-lg shadow-lg text-left group">
-          <img src="{% static 'images/team/Raj Mehta.jpg' %}" alt="Raj Mehta, Operations Manager" class="w-full h-full object-cover aspect-square transition-transform duration-300 group-hover:scale-110">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 w-full p-4">
-            <h3 class="text-white text-2xl font-bold">Raj Mehta</h3>
-            <p class="text-white/90">Operations Manager</p>
-          </div>
-        </div>
- 
-      </div>
-    </div>
-  </section>
+  .section-title h2 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #1a2237;
+    margin-bottom: 12px;
+  }
 
-  <section class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-      <h2 class="text-4xl font-bold text-center mb-8">Our Facilities</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
- 
-        <div class="relative overflow-hidden rounded-lg shadow-lg group">
-          <img src="{% static 'images/about-6.png' %}" alt="Weight Training Area" class="w-full h-full object-cover aspect-[4/3] transition-transform duration-300 group-hover:scale-110">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 p-4">
-            <h3 class="text-white text-xl font-semibold">Weight Training Area</h3>
-          </div>
-        </div>
- 
-        <div class="relative overflow-hidden rounded-lg shadow-lg group">
-          <img src="{% static 'images/about-7.png' %}" alt="Cardio Lounge" class="w-full h-full object-cover aspect-[4/3] transition-transform duration-300 group-hover:scale-110">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 p-4">
-            <h3 class="text-white text-xl font-semibold">Cardio Lounge</h3>
-          </div>
-        </div>
- 
-        <div class="relative overflow-hidden rounded-lg shadow-lg group">
-          <img src="{% static 'images/about-8.png' %}" alt="Swimming Pool" class="w-full h-full object-cover aspect-[4/3] transition-transform duration-300 group-hover:scale-110">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 p-4">
-            <h3 class="text-white text-xl font-semibold">Swimming Pool</h3>
-          </div>
-        </div>
- 
-        <div class="relative overflow-hidden rounded-lg shadow-lg group">
-          <img src="{% static 'images/about-9.png' %}" alt="Yoga Studio" class="w-full h-full object-cover aspect-[4/3] transition-transform duration-300 group-hover:scale-110">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 p-4">
-            <h3 class="text-white text-xl font-semibold">Yoga Studio</h3>
-          </div>
-        </div>
- 
-        <div class="relative overflow-hidden rounded-lg shadow-lg group">
-          <img src="{% static 'images/about-10.png' %}" alt="Changing Rooms" class="w-full h-full object-cover aspect-[4/3] transition-transform duration-300 group-hover:scale-110">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 p-4">
-            <h3 class="text-white text-xl font-semibold">Changing Rooms</h3>
-          </div>
-        </div>
- 
-        <div class="relative overflow-hidden rounded-lg shadow-lg group">
-          <img src="{% static 'images/about-11.png' %}" alt="Spa & Sauna" class="w-full h-full object-cover aspect-[4/3] transition-transform duration-300 group-hover:scale-110">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 p-4">
-            <h3 class="text-white text-xl font-semibold">Spa & Sauna</h3>
-          </div>
-        </div>
- 
-      </div>
-    </div>
-  </section>
+  .section-title .divider {
+    width: 64px;
+    height: 4px;
+    background: linear-gradient(90deg, #28a745, #42e06e);
+    border-radius: 2px;
+    margin: 0 auto 16px;
+  }
 
-<br><br>
+  .section-title p {
+    color: #6c757d;
+    max-width: 620px;
+    margin: 0 auto;
+    font-size: 0.97rem;
+  }
+
+  /* Dark section override */
+  .section-title.light h2 {
+    color: #fff;
+  }
+
+  .section-title.light p {
+    color: #adb5bd;
+  }
+
+  /* ── Hero ───────────────────────────────────────────────── */
+  .about-hero {
+    background: linear-gradient(rgba(10, 14, 26, 0.75), rgba(10, 14, 26, 0.85)),
+    url('{% static "images/about-1.png" %}') center/cover no-repeat;
+    min-height: 72vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about-hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 70px;
+    background: linear-gradient(to bottom, transparent, #f8f9fa);
+  }
+
+  .about-hero h1 {
+    font-size: clamp(2.4rem, 7vw, 4.5rem);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.1;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  }
+
+  .about-hero h1 span {
+    color: #42e06e;
+  }
+
+  .about-hero p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.15rem;
+    max-width: 620px;
+    margin: 20px auto 32px;
+    line-height: 1.8;
+  }
+
+  .hero-badges {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .hero-badge {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 30px;
+    padding: 8px 20px;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 500;
+    backdrop-filter: blur(8px);
+  }
+
+  .hero-badge i {
+    color: #42e06e;
+    margin-right: 6px;
+  }
+
+  /* ── Stats strip ────────────────────────────────────────── */
+  .stats-strip {
+    background: linear-gradient(135deg, #0d1b0d 0%, #111b23 100%);
+    padding: 48px 0;
+  }
+
+  .stat-box {
+    text-align: center;
+    padding: 8px;
+  }
+
+  .stat-box .num {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #42e06e;
+    line-height: 1;
+    display: block;
+  }
+
+  .stat-box .lbl {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 6px;
+    display: block;
+  }
+
+  .stat-box .desc {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 4px;
+  }
+
+  /* ── Our Story ──────────────────────────────────────────── */
+  .story-img {
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+    width: 100%;
+    object-fit: cover;
+    height: 420px;
+  }
+
+  .story-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #28a745;
+    color: #fff;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .milestone {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding: 16px;
+    border-radius: 12px;
+    background: #f8fffe;
+    border-left: 4px solid #28a745;
+    transition: box-shadow 0.2s;
+  }
+
+  .milestone:hover {
+    box-shadow: 0 4px 20px rgba(40, 167, 69, 0.15);
+  }
+
+  .milestone .year {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #28a745;
+    white-space: nowrap;
+    min-width: 48px;
+  }
+
+  .milestone .text {
+    font-size: 0.9rem;
+    color: #495057;
+    line-height: 1.6;
+  }
+
+  .milestone .text strong {
+    color: #1a2237;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  /* ── Mission / Vision / Values ──────────────────────────── */
+  .mvv-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 36px 28px;
+    text-align: center;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+    height: 100%;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    border-top: 4px solid transparent;
+  }
+
+  .mvv-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+  }
+
+  .mvv-card.mission {
+    border-color: #28a745;
+  }
+
+  .mvv-card.vision {
+    border-color: #007bff;
+  }
+
+  .mvv-card.values {
+    border-color: #fd7e14;
+  }
+
+  .mvv-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin: 0 auto 20px;
+  }
+
+  .mvv-card.mission .mvv-icon {
+    background: rgba(40, 167, 69, 0.12);
+    color: #28a745;
+  }
+
+  .mvv-card.vision .mvv-icon {
+    background: rgba(0, 123, 255, 0.12);
+    color: #007bff;
+  }
+
+  .mvv-card.values .mvv-icon {
+    background: rgba(253, 126, 20, 0.12);
+    color: #fd7e14;
+  }
+
+  .mvv-card h4 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1a2237;
+    margin-bottom: 14px;
+  }
+
+  .mvv-card p {
+    font-size: 0.9rem;
+    color: #6c757d;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* ── Team cards ─────────────────────────────────────────── */
+  .team-card {
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.09);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .team-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.14);
+  }
+
+  .team-card .tc-img {
+    position: relative;
+    overflow: hidden;
+    height: 280px;
+  }
+
+  .team-card .tc-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .team-card:hover .tc-img img {
+    transform: scale(1.08);
+  }
+
+  .team-card .tc-body {
+    padding: 20px;
+  }
+
+  .team-card .tc-body h5 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a2237;
+    margin-bottom: 4px;
+  }
+
+  .team-card .tc-body .role {
+    font-size: 0.78rem;
+    color: #28a745;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .team-card .tc-body p {
+    font-size: 0.83rem;
+    color: #6c757d;
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+
+  .team-card .tc-social {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .team-card .tc-social a {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #f1f3f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #495057;
+    font-size: 0.75rem;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .team-card .tc-social a:hover {
+    background: #28a745;
+    color: #fff;
+  }
+
+  /* ── Values list ────────────────────────────────────────── */
+  .value-item {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    margin-bottom: 28px;
+  }
+
+  .value-icon {
+    width: 52px;
+    min-width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+  }
+
+  .value-item h5 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a2237;
+    margin-bottom: 6px;
+  }
+
+  .value-item p {
+    font-size: 0.875rem;
+    color: #6c757d;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ── Facilities ─────────────────────────────────────────── */
+  .fac-card {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+    cursor: default;
+  }
+
+  .fac-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .fac-card:hover img {
+    transform: scale(1.08);
+  }
+
+  .fac-card .fac-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(10, 14, 26, 0.85), transparent);
+    padding: 20px 16px 14px;
+    color: #fff;
+  }
+
+  .fac-card .fac-overlay h5 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin: 0 0 2px;
+  }
+
+  .fac-card .fac-overlay small {
+    font-size: 0.75rem;
+    opacity: 0.75;
+  }
+
+  /* ── Why Choose Us ──────────────────────────────────────── */
+  .why-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 24px 20px;
+    text-align: center;
+    transition: background 0.25s;
+    height: 100%;
+  }
+
+  .why-card:hover {
+    background: rgba(50, 205, 50, 0.08);
+    border-color: rgba(50, 205, 50, 0.3);
+  }
+
+  .why-card i {
+    font-size: 2rem;
+    color: #42e06e;
+    margin-bottom: 16px;
+  }
+
+  .why-card h5 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+
+  .why-card p {
+    font-size: 0.83rem;
+    color: rgba(255, 255, 255, 0.55);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* ── CTA strip ──────────────────────────────────────────── */
+  .cta-strip {
+    background: linear-gradient(135deg, #28a745, #1a6b2a);
+    padding: 64px 0;
+    text-align: center;
+  }
+
+  .cta-strip h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  .cta-strip p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    margin: 12px 0 28px;
+  }
+
+  /* ── Animate on scroll ──────────────────────────────────── */
+  /* Default: visible so content shows even before JS kicks in */
+  .reveal {
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  /* Once body.js-loaded is set, elements fade in on scroll */
+  body.js-loaded .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
+  body.js-loaded .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
 {% endblock %}
 
+{% block body %}
 
-{% block footer %}
-<footer id="footer" class="footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-6">
-                <ul class="social-icons">
-                    <li><a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a></li>
-                    <li><a href="https://x.com/"><i class="fa fa-twitter"></i></a></li>
-                    <li><a  href="https://www.linkedin.com/login"><i class="fa fa-linkedin"></i></a></li>
-                    <li><a href="https://www.youtube.com/"><i class="fa fa-youtube"></i></a></li>
-                    <li><a href="https://github.com/login"><i class="fa fa-github"></i></a></li>
-                </ul>
-            </div>
-        </div>
+<!-- ══════════════════════════════ HERO ══════════════════════════════ -->
+<section class="about-hero">
+  <div class="container" style="position:relative;z-index:2;">
+    <h1>About <span>FitZone</span> Gym</h1>
+    <p>Built with passion, driven by results — discover the story, people, and values behind one of the region's most
+      trusted fitness management platforms.</p>
+    <div class="hero-badges">
+      <span class="hero-badge"><i class="fa fa-calendar"></i> Est. 2015</span>
+      <span class="hero-badge"><i class="fa fa-users"></i> 500+ Active Members</span>
+      <span class="hero-badge"><i class="fa fa-user-secret"></i> 20+ Expert Trainers</span>
+      <span class="hero-badge"><i class="fa fa-trophy"></i> Award-Winning Programs</span>
     </div>
-</footer>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ STATS STRIP ══════════════════════ -->
+<section class="stats-strip">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-6 col-md-3 mb-3 mb-md-0">
+        <div class="stat-box">
+          <span class="num">500+</span>
+          <span class="lbl">Members</span>
+          <span class="desc">Happy & Active</span>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 mb-3 mb-md-0">
+        <div class="stat-box">
+          <span class="num">20+</span>
+          <span class="lbl">Trainers</span>
+          <span class="desc">Certified Experts</span>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 mb-3 mb-md-0">
+        <div class="stat-box">
+          <span class="num">9+</span>
+          <span class="lbl">Years</span>
+          <span class="desc">Serving the Community</span>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-box">
+          <span class="num">15+</span>
+          <span class="lbl">Programs</span>
+          <span class="desc">For All Fitness Levels</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ MISSION / VISION / VALUES ════════ -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="section-title reveal">
+      <div class="tag">Our Purpose</div>
+      <h2>Mission, Vision & Values</h2>
+      <div class="divider"></div>
+      <p>Everything we do is guided by three core pillars that define who we are as an organization.</p>
+    </div>
+    <div class="row">
+      <div class="col-md-4 mb-4 reveal">
+        <div class="mvv-card mission">
+          <div class="mvv-icon"><i class="fa fa-bullseye"></i></div>
+          <h4>Our Mission</h4>
+          <p>To empower gyms and fitness studios with technology that simplifies management, so trainers and owners can
+            focus 100% on transforming members' lives — not paperwork.</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 reveal">
+        <div class="mvv-card vision">
+          <div class="mvv-icon"><i class="fa fa-eye"></i></div>
+          <h4>Our Vision</h4>
+          <p>To be the leading gym management platform across India, trusted by thousands of gyms — large and small — as
+            the backbone of their daily operations and member experience.</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 reveal">
+        <div class="mvv-card values">
+          <div class="mvv-icon"><i class="fa fa-heart"></i></div>
+          <h4>Our Values</h4>
+          <p>Integrity in every feature we build. Empathy for every gym owner's challenge. Innovation that keeps pace
+            with the fitness industry's constant evolution.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ OUR STORY ════════════════════════ -->
+<section class="py-5 bg-white">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-6 mb-4 mb-md-0 reveal">
+        <img src="{% static 'images/about-2.png' %}" alt="Gym floor" class="story-img">
+      </div>
+      <div class="col-md-6 reveal">
+        <div class="section-title text-left mb-4" style="text-align:left!important;">
+          <div class="tag">Our Journey</div>
+          <h2>Our Story</h2>
+          <div class="divider" style="margin-left:0;"></div>
+        </div>
+        <div class="story-badge"><i class="fa fa-flag"></i> Founded 2015</div>
+        <p class="text-muted mb-4">At FitZone, our journey began with a simple but powerful belief: <strong>fitness is
+            for everyone.</strong> Founded in 2015, we set out to create a space — and a system — where people of all
+          ages and fitness levels could thrive.</p>
+
+        <div class="milestone">
+          <div class="year">2015</div>
+          <div class="text"><strong>The Beginning</strong>Opened our first location with just 12 equipment pieces and 3
+            trainers. Built the first version of our management software to track members and plans.</div>
+        </div>
+        <div class="milestone">
+          <div class="year">2017</div>
+          <div class="text"><strong>Rapid Growth</strong>Hit 200 members milestone. Expanded the software to handle
+            equipment tracking, enquiry management, and staff payroll.</div>
+        </div>
+        <div class="milestone">
+          <div class="year">2020</div>
+          <div class="text"><strong>Going Digital</strong>Launched a fully web-based management platform. Integrated
+            online member registration, plan selection, and CSV reporting tools.</div>
+        </div>
+        <div class="milestone">
+          <div class="year">2024</div>
+          <div class="text"><strong>Today</strong>Serving 500+ active members, 20+ certified trainers, and continuously
+            expanding features with the goal of making gym management effortless.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ WHY CHOOSE US ════════════════════ -->
+<section class="py-5" style="background: linear-gradient(135deg, #0d1b0d, #111b23);">
+  <div class="container">
+    <div class="section-title light reveal">
+      <div class="tag" style="background:rgba(66,224,110,0.15);color:#42e06e;border-color:rgba(66,224,110,0.25);">Why
+        Us?</div>
+      <h2>Why Choose FitZone?</h2>
+      <div class="divider"></div>
+      <p style="color:#adb5bd;">We're not just a gym — we're a complete fitness management ecosystem backed by
+        technology and passion.</p>
+    </div>
+    <div class="row">
+      <div class="col-6 col-md-4 col-lg-2 mb-4 reveal">
+        <div class="why-card">
+          <i class="fa fa-bolt"></i>
+          <h5>Fast & Responsive</h5>
+          <p>Real-time updates across all pages, no delays.</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2 mb-4 reveal">
+        <div class="why-card">
+          <i class="fa fa-lock"></i>
+          <h5>Secure Portal</h5>
+          <p>Staff-only access with Django authentication.</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2 mb-4 reveal">
+        <div class="why-card">
+          <i class="fa fa-chart-bar"></i>
+          <h5>Data Exports</h5>
+          <p>One-click CSV exports for any report.</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2 mb-4 reveal">
+        <div class="why-card">
+          <i class="fa fa-users"></i>
+          <h5>Full CRUD</h5>
+          <p>Add, edit, delete Members, Trainers, Plans & Equipment.</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2 mb-4 reveal">
+        <div class="why-card">
+          <i class="fa fa-mobile-alt"></i>
+          <h5>Responsive</h5>
+          <p>Works perfectly on desktop, tablet, and mobile.</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2 mb-4 reveal">
+        <div class="why-card">
+          <i class="fa fa-cogs"></i>
+          <h5>Built with Django</h5>
+          <p>Reliable Python/Django backend with SQLite database.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ TEAM ═════════════════════════════ -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="section-title reveal">
+      <div class="tag">The People</div>
+      <h2>Meet Our Team</h2>
+      <div class="divider"></div>
+      <p>Our certified professionals bring expertise, energy, and empathy to every training session.</p>
+    </div>
+    <div class="row">
+      <div class="col-sm-6 col-lg-3 mb-4 reveal">
+        <div class="team-card">
+          <div class="tc-img"><img src="{% static 'images/team/arjun-kumar.jpg' %}" alt="Arjun Kumar"></div>
+          <div class="tc-body">
+            <h5>Arjun Kumar</h5>
+            <div class="role">Lead Strength Trainer</div>
+            <p>10+ years in strength & conditioning. Former national-level powerlifter who now coaches members to break
+              their own records.</p>
+            <div class="tc-social">
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3 mb-4 reveal">
+        <div class="team-card">
+          <div class="tc-img"><img src="{% static 'images/team/priya-sharma.jpg' %}" alt="Priya Sharma"></div>
+          <div class="tc-body">
+            <h5>Priya Sharma</h5>
+            <div class="role">Yoga & Wellness Coach</div>
+            <p>Certified yoga instructor & mindfulness coach. Specializes in stress reduction, flexibility, and holistic
+              wellness programs.</p>
+            <div class="tc-social">
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3 mb-4 reveal">
+        <div class="team-card">
+          <div class="tc-img"><img src="{% static 'images/team/raj-mehta.jpg' %}" alt="Raj Mehta"></div>
+          <div class="tc-body">
+            <h5>Raj Mehta</h5>
+            <div class="role">Operations Manager</div>
+            <p>The backbone of daily operations. Raj ensures every member gets a seamless experience from enrollment to
+              daily training.</p>
+            <div class="tc-social">
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3 mb-4 reveal">
+        <div class="team-card">
+          <div class="tc-img"><img src="{% static 'images/team/neha-joshi.jpg' %}" alt="Neha Joshi"></div>
+          <div class="tc-body">
+            <h5>Neha Joshi</h5>
+            <div class="role">Nutrition & Diet Expert</div>
+            <p>Registered dietitian with a passion for sports nutrition. Crafts personalized diet plans to complement
+              every member's goals.</p>
+            <div class="tc-social">
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ OUR VALUES ═══════════════════════ -->
+<section class="py-5 bg-white">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-6 mb-4 mb-md-0 reveal">
+        <div class="section-title text-left mb-4" style="text-align:left!important;">
+          <div class="tag">Core Values</div>
+          <h2>What We Stand For</h2>
+          <div class="divider" style="margin-left:0;"></div>
+        </div>
+        <div class="value-item">
+          <div class="value-icon" style="background:rgba(40,167,69,0.1);color:#28a745;"><i class="fa fa-handshake"></i>
+          </div>
+          <div>
+            <h5>Inclusivity</h5>
+            <p>Fitness is a right, not a privilege. We welcome members of every fitness level, age, background, and
+              ability.</p>
+          </div>
+        </div>
+        <div class="value-item">
+          <div class="value-icon" style="background:rgba(0,123,255,0.1);color:#007bff;"><i class="fa fa-lightbulb"></i>
+          </div>
+          <div>
+            <h5>Innovation</h5>
+            <p>We continuously improve our platform and training programs based on member feedback and the latest
+              fitness science.</p>
+          </div>
+        </div>
+        <div class="value-item">
+          <div class="value-icon" style="background:rgba(253,126,20,0.1);color:#fd7e14;"><i class="fa fa-star"></i>
+          </div>
+          <div>
+            <h5>Excellence</h5>
+            <p>From equipment quality to customer service — we hold ourselves to the highest standard in everything we
+              do.</p>
+          </div>
+        </div>
+        <div class="value-item">
+          <div class="value-icon" style="background:rgba(220,53,69,0.1);color:#dc3545;"><i class="fa fa-shield-alt"></i>
+          </div>
+          <div>
+            <h5>Accountability</h5>
+            <p>Our team is accountable to every member's goal. We track, measure, and celebrate every milestone
+              together.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 reveal">
+        <img src="{% static 'images/about.png' %}" alt="Our Values" class="img-fluid rounded shadow-lg">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ FACILITIES ═══════════════════════ -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="section-title reveal">
+      <div class="tag">World-Class</div>
+      <h2>Our Facilities</h2>
+      <div class="divider"></div>
+      <p>State-of-the-art spaces designed to help you train harder, recover faster, and feel at home.</p>
+    </div>
+    <div class="row">
+      <div class="col-sm-6 col-lg-4 mb-4 reveal">
+        <div class="fac-card">
+          <img src="{% static 'images/about-6.png' %}" alt="Weight Training">
+          <div class="fac-overlay">
+            <h5>Weight Training Area</h5><small>400+ sq ft of free weights & machines</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4 mb-4 reveal">
+        <div class="fac-card">
+          <img src="{% static 'images/about-7.png' %}" alt="Cardio Lounge">
+          <div class="fac-overlay">
+            <h5>Cardio Lounge</h5><small>30+ treadmills, cycles & rowers</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4 mb-4 reveal">
+        <div class="fac-card">
+          <img src="{% static 'images/about-8.png' %}" alt="Swimming Pool">
+          <div class="fac-overlay">
+            <h5>Swimming Pool</h5><small>Olympic-size heated pool</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4 mb-4 reveal">
+        <div class="fac-card">
+          <img src="{% static 'images/about-9.png' %}" alt="Yoga Studio">
+          <div class="fac-overlay">
+            <h5>Yoga Studio</h5><small>Dedicated meditation & yoga space</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4 mb-4 reveal">
+        <div class="fac-card">
+          <img src="{% static 'images/about-10.png' %}" alt="Changing Rooms">
+          <div class="fac-overlay">
+            <h5>Premium Changing Rooms</h5><small>Modern lockers & shower facilities</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4 mb-4 reveal">
+        <div class="fac-card">
+          <img src="{% static 'images/about-11.png' %}" alt="Spa & Sauna">
+          <div class="fac-overlay">
+            <h5>Spa & Sauna</h5><small>Recovery & relaxation centre</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ DEV TEAM ═════════════════════════ -->
+<section class="py-5" style="background:#1a1f2e;">
+  <div class="container">
+    <div class="section-title light reveal">
+      <div class="tag" style="background:rgba(253,210,20,0.15);color:#FFD700;border-color:rgba(253,210,20,0.3);">Project
+        Team</div>
+      <h2 style="color:#FFD700;">Meet the Developers</h2>
+      <div class="divider" style="background:linear-gradient(90deg,#FFD700,#fd7e14);"></div>
+      <p style="color:#8e9ab5;">The BCA students who built FitZone Gym Management System as their semester project.</p>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-sm-6 col-md-4 mb-4 reveal">
+        <div class="team-card" style="background:#252d3d;border:1px solid rgba(255,255,255,0.07);">
+          <div class="tc-img"><img src="{% static 'images/vikas.jpg' %}" alt="Vikas Chauhan"></div>
+          <div class="tc-body" style="background:#252d3d;">
+            <h5 style="color:#fff;">Vikas Chauhan</h5>
+            <div class="role" style="color:#FFD700;">Lead Developer · BCA Student</div>
+            <p style="color:#8e9ab5;">Aspiring Python developer passionate about coding, data science, and building
+              real-world web applications with Django.</p>
+            <div class="tc-social">
+              <a href="#" style="background:rgba(255,255,255,0.07);color:#adb5bd;"><i class="fab fa-github"></i></a>
+              <a href="#" style="background:rgba(255,255,255,0.07);color:#adb5bd;"><i
+                  class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 mb-4 reveal">
+        <div class="team-card" style="background:#252d3d;border:1px solid rgba(255,255,255,0.07);">
+          <div class="tc-img"><img src="{% static 'images/milan.jpg' %}" alt="Milan Rathod"></div>
+          <div class="tc-body" style="background:#252d3d;">
+            <h5 style="color:#fff;">Milan Rathod</h5>
+            <div class="role" style="color:#FFD700;">Frontend Developer · BCA Student</div>
+            <p style="color:#8e9ab5;">Creative frontend enthusiast focused on building beautiful, user-friendly
+              interfaces with HTML, CSS, and JavaScript.</p>
+            <div class="tc-social">
+              <a href="#" style="background:rgba(255,255,255,0.07);color:#adb5bd;"><i class="fab fa-github"></i></a>
+              <a href="#" style="background:rgba(255,255,255,0.07);color:#adb5bd;"><i
+                  class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 mb-4 reveal">
+        <div class="team-card" style="background:#252d3d;border:1px solid rgba(255,255,255,0.07);">
+          <div class="tc-img"><img src="{% static 'images/vishal.jpg' %}" alt="Vishal Kindarkhediya"></div>
+          <div class="tc-body" style="background:#252d3d;">
+            <h5 style="color:#fff;">Vishal Kindarkhediya</h5>
+            <div class="role" style="color:#FFD700;">Backend Developer · BCA Student</div>
+            <p style="color:#8e9ab5;">Backend developer with a strong interest in database design, API development, and
+              scalable software architecture.</p>
+            <div class="tc-social">
+              <a href="#" style="background:rgba(255,255,255,0.07);color:#adb5bd;"><i class="fab fa-github"></i></a>
+              <a href="#" style="background:rgba(255,255,255,0.07);color:#adb5bd;"><i
+                  class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ CTA ══════════════════════════════ -->
+<section class="cta-strip reveal">
+  <div class="container">
+    <h2>Ready to Experience FitZone?</h2>
+    <p>Join hundreds of gym operators already leveraging our platform to save time and delight members.</p>
+    <a href="{% url 'home' %}" class="btn btn-light btn-lg font-weight-bold px-5 mr-3">
+      <i class="fa fa-tachometer-alt mr-2"></i> Go to Dashboard
+    </a>
+    <a href="{% url 'contact' %}" class="btn btn-outline-light btn-lg px-5">
+      <i class="fa fa-envelope mr-2"></i> Contact Us
+    </a>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block js %}
+<script>
+  // Mark body so CSS can hide elements ready for reveal
+  document.body.classList.add('js-loaded');
+  // Reveal on scroll using IntersectionObserver
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
+  reveals.forEach(el => observer.observe(el));
+</script>
 {% endblock %}

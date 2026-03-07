@@ -1,195 +1,158 @@
-{% extends 'navigation.html' %}
+﻿{% extends 'navigation.html' %}
 {% load static %}
 
-{% block body %}
+{% block css %}
 <style>
-    /* Background gradient similar to the image */
-    body {
-        background: linear-gradient(135deg, #3a94f6, #00d2ff);
-        min-height: 100vh;
-        margin: 0;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    /* Center wrapper */
-    .center-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: calc(100vh - 120px); /* adjust to exclude navbar & footer */
-        padding: 20px;
-    }
-
-    /* Card container styling */
-    .enquiry-card {
-        background-color: #e6f2ff; /* light blue background */
-        border-radius: 15px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        width: 100%;
-        max-width: 450px;
-        padding-bottom: 30px;
-    }
-
-    /* Header image with rounded corners top */
-    .enquiry-card img.header-img {
-        width: 100%;
-        height: 160px;
-        object-fit: cover;
-        border-radius: 15px 15px 0 0;
-    }
-
-    /* Form title */
-    .form-title {
-        text-align: center;
-        font-weight: 600;
-        font-size: 1.3rem;
-        margin: 20px 0 10px 0;
-        color: #212121;
-    }
-
-    /* Form styling */
-    form {
-        padding: 0 25px;
-    }
-
-    label {
-        font-weight: 600;
-        font-size: 0.9rem;
-        color: #212121;
-    }
-
-    input[type="text"],
-    input[type="email"],
-    input[type="tel"],
-    input[type="date"],
-    select,
-    textarea {
-        width: 100%;
-        padding: 8px 12px;
-        margin: 6px 0 15px 0;
-        border: 1.8px solid #c7d1e3;
-        border-radius: 8px;
-        font-size: 1rem;
-        transition: border-color 0.3s ease;
-        background-color: white;
-        box-sizing: border-box;
-    }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-        border-color: #3a94f6;
-        outline: none;
-        background-color: #f0fbff;
-    }
-
-    textarea {
-        resize: vertical;
-        min-height: 70px;
-        font-family: inherit;
-    }
-
-    button[type="submit"] {
-        width: 100%;
-        padding: 12px 0;
-        background: linear-gradient(90deg, #665edc, #8e47ff);
-        border: none;
+    .form-card {
+        background: #ffffff;
         border-radius: 12px;
-        color: white;
+        box-shadow: 0 6px 30px rgba(0,0,0,0.12);
+        overflow: hidden;
+        max-width: 680px;
+        width: 100%;
+    }
+    .form-header {
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        color: #fff;
+        text-align: center;
+        padding: 22px 20px;
+        font-size: 1.4rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+    .form-body {
+        padding: 30px 35px;
+        background: #f0f6ff;
+    }
+    .form-body label {
+        font-weight: 600;
+        font-size: 0.92rem;
+        color: #333;
+        margin-bottom: 4px;
+    }
+    .form-body .form-control {
+        border: 1.5px solid #c7d1e3;
+        border-radius: 8px;
+        padding: 9px 14px;
+        font-size: 0.95rem;
+        transition: border-color 0.25s;
+    }
+    .form-body .form-control:focus {
+        border-color: #6a11cb;
+        box-shadow: 0 0 0 0.15rem rgba(106,17,203,0.15);
+    }
+    .req { color: #e53935; }
+    .btn-submit {
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 0;
         font-weight: 700;
         font-size: 1rem;
+        width: 100%;
         cursor: pointer;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 8px;
-        transition: background 0.3s ease;
+        transition: opacity 0.2s;
     }
-
-    button[type="submit"]:hover {
-        background: linear-gradient(90deg, #8e47ff, #665edc);
-    }
+    .btn-submit:hover { opacity: 0.9; color: #fff; }
 </style>
+{% endblock %}
 
-<div class="center-wrapper">
-    <div class="enquiry-card shadow-lg">
-        <img src="{% static 'images/enquiry-form.png' %}" alt="Gym Enquiry Form" class="header-img">
+{% block body %}
+<div class="container d-flex justify-content-center py-4">
+    <div class="form-card">
+        <div class="form-header">
+            <i class="fa fa-question-circle"></i>
+            {% if enq %}Edit Enquiry{% else %}Add New Enquiry{% endif %}
+        </div>
+        <div class="form-body">
+            <form action="{% if enq %}{% url 'edit_enquiry' enq.id %}{% else %}{% url 'add_enquiry' %}{% endif %}" method="post">
+                {% csrf_token %}
 
-        <h2 class="form-title">Add New Enquiry</h2>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Full Name <span class="req">*</span></label>
+                        <input type="text" name="name" class="form-control" placeholder="Enter full name" value="{{ enq.name|default:'' }}" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Email Address <span class="req">*</span></label>
+                        <input type="email" name="emailid" class="form-control" placeholder="Enter email" value="{{ enq.emailid|default:'' }}" required>
+                    </div>
+                </div>
 
-        <form action="{% if enq %}{% url 'edit_enquiry' enq.id %}{% else %}{% url 'add_enquiry' %}{% endif %}" method="post">
-            {% csrf_token %}
-            <label for="name">Full Name <span style="color:red;">*</span></label>
-            <input type="text" id="name" name="name" placeholder="Enter your full name" value="{{ enq.name|default:'' }}" required>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label>Phone Number <span class="req">*</span></label>
+                        <input type="tel" name="contact" class="form-control" placeholder="Enter phone" value="{{ enq.contact|default:'' }}" maxlength="15" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Age <span class="req">*</span></label>
+                        <input type="number" name="age" class="form-control" placeholder="Age" min="1" max="120" value="{{ enq.age|default:'' }}" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Gender <span class="req">*</span></label>
+                        <select name="gender" class="form-control" required>
+                            <option value="" disabled {% if not enq %}selected{% endif %}>Select</option>
+                            <option value="Male"   {% if enq.gender == 'Male' %}selected{% endif %}>Male</option>
+                            <option value="Female" {% if enq.gender == 'Female' %}selected{% endif %}>Female</option>
+                            <option value="Other"  {% if enq.gender == 'Other' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                </div>
 
-            <label for="emailid">Email Address <span style="color:red;">*</span></label>
-            <input type="email" id="emailid" name="emailid" placeholder="Enter your email" value="{{ enq.emailid|default:'' }}" required>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Preferred Branch <span class="req">*</span></label>
+                        <select name="branch" class="form-control" required>
+                            <option value="" disabled {% if not enq %}selected{% endif %}>Select branch</option>
+                            <option value="Branch 1" {% if enq.branch == 'Branch 1' %}selected{% endif %}>Branch 1</option>
+                            <option value="Branch 2" {% if enq.branch == 'Branch 2' %}selected{% endif %}>Branch 2</option>
+                            <option value="Branch 3" {% if enq.branch == 'Branch 3' %}selected{% endif %}>Branch 3</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Enquiry Type <span class="req">*</span></label>
+                        <select name="enquiry_type" class="form-control" required>
+                            <option value="" disabled {% if not enq %}selected{% endif %}>Select type</option>
+                            <option value="membership"        {% if enq.enquiry_type == 'membership' %}selected{% endif %}>Membership</option>
+                            <option value="classes"           {% if enq.enquiry_type == 'classes' %}selected{% endif %}>Classes</option>
+                            <option value="personal_training" {% if enq.enquiry_type == 'personal_training' %}selected{% endif %}>Personal Training</option>
+                            <option value="general"           {% if enq.enquiry_type == 'general' %}selected{% endif %}>General</option>
+                        </select>
+                    </div>
+                </div>
 
-            <label for="contact">Phone Number <span style="color:red;">*</span></label>
-            <input type="tel" id="contact" name="contact" placeholder="Enter your phone number" value="{{ enq.contact|default:'' }}" required>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Preferred Contact Date</label>
+                        <input type="date" name="contact_date" class="form-control" value="{% if enq and enq.preferred_contact_date %}{{ enq.preferred_contact_date|date:'Y-m-d' }}{% endif %}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Status</label>
+                        <select name="status" class="form-control">
+                            <option value="Pending"   {% if enq.status == 'Pending' or not enq %}selected{% endif %}>Pending</option>
+                            <option value="Processed" {% if enq.status == 'Processed' %}selected{% endif %}>Processed</option>
+                            <option value="Closed"    {% if enq.status == 'Closed' %}selected{% endif %}>Closed</option>
+                        </select>
+                    </div>
+                </div>
 
-            <label for="branch">Preferred Branch <span style="color:red;">*</span></label>
-            <select id="branch" name="branch" required>
-                <option value="" disabled {% if not enq %}selected{% endif %}>Select a branch</option>
-                <option value="branch1" {% if enq and enq.branch == 'branch1' %}selected{% endif %}>Branch 1</option>
-                <option value="branch2" {% if enq and enq.branch == 'branch2' %}selected{% endif %}>Branch 2</option>
-                <option value="branch3" {% if enq and enq.branch == 'branch3' %}selected{% endif %}>Branch 3</option>
-            </select>
+                <div class="form-group">
+                    <label>Additional Information</label>
+                    <textarea name="additional_info" class="form-control" rows="3" placeholder="Any additional details or questions...">{{ enq.additional_info|default:'' }}</textarea>
+                </div>
 
-            <label for="enquiry_type">Enquiry Type <span style="color:red;">*</span></label>
-            <select id="enquiry_type" name="enquiry_type" required>
-                <option value="" disabled {% if not enq %}selected{% endif %}>Select enquiry type</option>
-                <option value="membership" {% if enq and enq.enquiry_type == 'membership' %}selected{% endif %}>Membership</option>
-                <option value="classes" {% if enq and enq.enquiry_type == 'classes' %}selected{% endif %}>Classes</option>
-                <option value="general" {% if enq and enq.enquiry_type == 'general' %}selected{% endif %}>General</option>
-            </select>
-
-            <label for="contact_date">Preferred Contact Date <span style="color:red;">*</span></label>
-            <input type="date" id="contact_date" name="contact_date" value="{% if enq and enq.preferred_contact_date %}{{ enq.preferred_contact_date|date:'Y-m-d' }}{% endif %}" required>
-
-            <label for="status">Status</label>
-            <select id="status" name="status">
-                <option value="Pending" {% if enq and enq.status == 'Pending' %}selected{% endif %}>Pending</option>
-                <option value="Processed" {% if enq and enq.status == 'Processed' %}selected{% endif %}>Processed</option>
-                <option value="Closed" {% if enq and enq.status == 'Closed' %}selected{% endif %}>Closed</option>
-            </select>
-
-            <label for="additional_info">Additional Information</label>
-            <textarea id="additional_info" name="additional_info" placeholder="Any additional details or questions...">{{ enq.additional_info|default:'' }}</textarea>
-
-            <button type="submit">
-                {% if enq %}Save Changes{% else %}<i class="fa fa-paper-plane" aria-hidden="true"></i> Submit Enquiry{% endif %}
-            </button>
-        </form>
+                <button type="submit" class="btn-submit mt-2">
+                    {% if enq %}<i class="fa fa-save"></i> Save Changes{% else %}<i class="fa fa-paper-plane"></i> Submit Enquiry{% endif %}
+                </button>
+            </form>
+        </div>
     </div>
 </div>
 
 {% if error == "no" %}
-<script>
-    alert('Record Inserted Successfully');
-    window.location = "{% url 'view_enquiry' %}";
-</script>
+<script>alert('Record Inserted Successfully'); window.location="{% url 'view_enquiry' %}";</script>
 {% elif error == "yes" %}
-<script>
-    alert('Something went wrong, Try Again');
-</script>
+<script>alert('Something went wrong. Please fill all required fields and try again.');</script>
 {% endif %}
-{% endblock %}
-
-{% block footer %}
-<footer id="footer" class="footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-6">
-                <ul class="social-icons">
-                    <li><a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a></li>
-                    <li><a href="https://x.com/"><i class="fa fa-twitter"></i></a></li>
-                    <li><a  href="https://www.linkedin.com/login"><i class="fa fa-linkedin"></i></a></li>
-                    <li><a href="https://www.youtube.com/"><i class="fa fa-youtube"></i></a></li>
-                    <li><a href="https://github.com/login"><i class="fa fa-github"></i></a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</footer>
 {% endblock %}

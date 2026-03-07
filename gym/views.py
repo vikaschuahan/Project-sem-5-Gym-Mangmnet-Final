@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404 # pyright: ignore[reportMissingModuleSource]
-from django.http import HttpResponseRedirect # pyright: ignore[reportMissingModuleSource]
+from django.http import HttpResponseRedirect, HttpResponse # pyright: ignore[reportMissingModuleSource]
 from django.contrib import messages # pyright: ignore[reportMissingModuleSource] # pyright: ignore[reportMissingModuleSource]
+import csv
 
 from django.contrib.auth.models import User # pyright: ignore[reportMissingModuleSource]
 from django.contrib.auth import authenticate, logout, login # pyright: ignore[reportMissingModuleSource]
@@ -31,7 +32,14 @@ def admin_login_view(request):
 def Home(request):
     if not request.user.is_staff:
         return redirect('login')
-    return render(request, 'index.html')
+    context = {
+        'total_members': Member.objects.count(),
+        'total_equipment': Equipment.objects.count(),
+        'total_enquiries': Enquiry.objects.count(),
+        'total_plans': Plan.objects.count(),
+        'total_trainers': Trainer.objects.count(),
+    }
+    return render(request, 'index.html', context)
 
 
 def About(request):
@@ -60,12 +68,60 @@ def Login(request):
     d = {'error': error}
     return render(request, 'login.html', d)
 def register_view(request):
+    errors = {}
+    form_data = {}
     if request.method == 'POST':
-        # Process registration form data
-        # ... (add user creation logic here)
-        return redirect('login')  # Redirect to login after registration
-    else:
-        return render(request, 'register.html')
+        full_name   = request.POST.get('full_name', '').strip()
+        username    = request.POST.get('username', '').strip()
+        email       = request.POST.get('email', '').strip()
+        password    = request.POST.get('password', '')
+        confirm_pw  = request.POST.get('confirm_password', '')
+
+        # Preserve form data for re-display
+        form_data = {
+            'full_name': full_name,
+            'username': username,
+            'email': email,
+        }
+
+        # ── Validation ──────────────────────────────────────────
+        if not full_name:
+            errors['full_name'] = 'Full name is required.'
+        if not username:
+            errors['username'] = 'Username is required.'
+        elif User.objects.filter(username=username).exists():
+            errors['username'] = 'This username is already taken.'
+        if not email:
+            errors['email'] = 'Email address is required.'
+        elif User.objects.filter(email=email).exists():
+            errors['email'] = 'An account with this email already exists.'
+        if not password:
+            errors['password'] = 'Password is required.'
+        elif len(password) < 8:
+            errors['password'] = 'Password must be at least 8 characters.'
+        if not confirm_pw:
+            errors['confirm_password'] = 'Please confirm your password.'
+        elif password and password != confirm_pw:
+            errors['confirm_password'] = 'Passwords do not match.'
+
+        if not errors:
+            # Split full name into first/last
+            name_parts = full_name.split(' ', 1)
+            first_name = name_parts[0]
+            last_name  = name_parts[1] if len(name_parts) > 1 else ''
+
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password,
+                first_name=first_name,
+                last_name=last_name,
+                is_staff=True,   # grant admin portal access
+            )
+            messages.success(request, f'Account created successfully! Welcome, {first_name}. You can now sign in.')
+            return redirect('login')
+
+    return render(request, 'register.html', {'errors': errors, 'form_data': form_data})
 def forgot_password(request):
     if request.method == "POST":
         email = request.POST.get("email")
@@ -277,6 +333,7 @@ def Add_Member(request):
         c = request.POST.get('contact', '').strip()
         e = request.POST.get('emailid', '').strip()
         dob = request.POST.get('dob', '').strip()
+        gender = request.POST.get('gender', '').strip()
         membership_type = request.POST.get('membership_type', 'basic').strip()
         address = request.POST.get('address', '').strip()
         emergency_contact = request.POST.get('emergency_contact', '').strip()
@@ -307,7 +364,7 @@ def Add_Member(request):
                     emailid=e,
                     age=age,
                     dob=dob if dob else None,
-                    gender="",
+                    gender=gender,
                     membership_type=membership_type,
                     address=address,
                     emergency_contact=emergency_contact,
@@ -371,6 +428,7 @@ def Edit_Member(request, pid):
             except Exception:
                 pass
         member.membership_type = request.POST.get('membership_type', member.membership_type).strip()
+        member.gender = request.POST.get('gender', member.gender).strip()
         plan_id = request.POST.get('plan')
         if plan_id:
             try:
@@ -396,3 +454,126 @@ def Edit_Member(request, pid):
     # render the add member template pre-filled for editing
     d = {'member': member, 'plan': plan1}
     return render(request, 'add_member.html', d)
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# CSV Export Views
+# ──────────────────────────────────────────────────────────────────────────────
+
+def Export_Enquiry_CSV(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="enquiries.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['#', 'Full Name', 'Email', 'Phone', 'Branch', 'Enquiry Type',
+                     'Preferred Contact Date', 'Status', 'Additional Info'])
+    for idx, enq in enumerate(Enquiry.objects.all(), start=1):
+        writer.writerow([idx, enq.name, enq.emailid, enq.contact, enq.branch,
+                         enq.enquiry_type, enq.preferred_contact_date,
+                         enq.status, enq.additional_info])
+    return response
+
+
+def Export_Equipment_CSV(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="equipment.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['#', 'Equipment Name', 'Category', 'Quantity',
+                     'Purchase Date', 'Condition', 'Notes'])
+    for idx, equ in enumerate(Equipment.objects.all(), start=1):
+        writer.writerow([idx, equ.name, equ.category, equ.quantity,
+                         equ.date, equ.condition, equ.description])
+    return response
+
+
+def Export_Member_CSV(request):
+    import datetime
+    today = datetime.date.today()
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="members.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['#', 'Full Name', 'Email', 'Phone', 'Membership Type',
+                     'Join Date', 'Expire Date', 'Status'])
+    for idx, m in enumerate(Member.objects.all(), start=1):
+        try:
+            status = "Active" if m.expiredate and m.expiredate >= today else "Inactive"
+        except Exception:
+            status = "Inactive"
+        writer.writerow([idx, m.name, m.emailid, m.contact, m.plan,
+                         m.joindate, m.expiredate, status])
+    return response
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Trainer Views
+# ──────────────────────────────────────────────────────────────────────────────
+
+def Add_Trainer(request):
+    error = ""
+    if not request.user.is_staff:
+        return redirect('login')
+    if request.method == 'POST':
+        n = request.POST.get('name', '').strip()
+        c = request.POST.get('contact', '').strip()
+        e = request.POST.get('emailid', '').strip()
+        dob = request.POST.get('dob', '').strip()
+        gender = request.POST.get('gender', 'Male').strip()
+        join_date = request.POST.get('join_date', '').strip()
+        salary = request.POST.get('salary', '0').strip()
+        shift = request.POST.get('shift', 'Morning').strip()
+        specialty = request.POST.get('specialty', 'None').strip()
+        
+        if n and c and e and join_date:
+            try:
+                Trainer.objects.create(
+                    name=n,
+                    contact=c,
+                    emailid=e,
+                    dob=dob if dob else None,
+                    gender=gender,
+                    join_date=join_date,
+                    salary=float(salary) if salary else 0,
+                    shift=shift,
+                    specialty=specialty
+                )
+                error = "no"
+            except Exception as ex:
+                print("Trainer creation error:", ex)
+                error = "yes"
+        else:
+            error = "yes"
+    d = {'error': error}
+    return render(request, 'add_trainer.html', d)
+
+def View_Trainer(request):
+    trainer = Trainer.objects.all()
+    d = {'trainer': trainer}
+    return render(request, 'view_trainer.html', d)
+
+def Delete_Trainer(request, pid):
+    trainer = Trainer.objects.get(id=pid)
+    trainer.delete()
+    return redirect('view_trainer')
+
+def Edit_Trainer(request, pid):
+    trainer = get_object_or_404(Trainer, id=pid)
+    if request.method == 'POST':
+        trainer.name = request.POST.get('name', trainer.name).strip()
+        trainer.contact = request.POST.get('contact', trainer.contact).strip()
+        trainer.emailid = request.POST.get('emailid', trainer.emailid).strip()
+        dob = request.POST.get('dob', '')
+        if dob:
+            trainer.dob = dob
+        trainer.gender = request.POST.get('gender', trainer.gender).strip()
+        join_date = request.POST.get('join_date', '')
+        if join_date:
+            trainer.join_date = join_date
+        try:
+            trainer.salary = float(request.POST.get('salary', trainer.salary))
+        except Exception:
+            pass
+        trainer.shift = request.POST.get('shift', trainer.shift).strip()
+        trainer.specialty = request.POST.get('specialty', trainer.specialty).strip()
+        trainer.save()
+        return redirect('view_trainer')
+    
+    d = {'trainer': trainer}
+    return render(request, 'edit_trainer.html', d)
