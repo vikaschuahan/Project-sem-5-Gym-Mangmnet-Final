@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gym Management System – Project Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #080c18;
+      --card: #111827;
+      --border: #1e2d4a;
+      --blue: #00c8ff;
+      --purple: #7c3aed;
+      --gold: #f59e0b;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* ── Progress bar ── */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      transition: width 0.4s ease;
+      z-index: 100;
+      box-shadow: 0 0 12px var(--blue);
+    }
+
+    /* ── Slide container ── */
+    #deck {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 60px;
+      opacity: 0;
+      transform: translateX(60px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      pointer-events: none;
+    }
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: all;
+    }
+    .slide.exit {
+      opacity: 0;
+      transform: translateX(-60px);
+    }
+
+    /* ── Slide image fills entire screen ── */
+    .slide-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    /* ── Inline content slides ── */
+    .slide-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    .slide-tag {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--blue);
+      background: rgba(0,200,255,0.08);
+      border: 1px solid rgba(0,200,255,0.25);
+      padding: 4px 14px;
+      border-radius: 20px;
+    }
+
+    h1.slide-title {
+      font-size: clamp(2rem, 4.5vw, 3.6rem);
+      font-weight: 900;
+      text-align: center;
+      background: linear-gradient(135deg, #fff 30%, var(--blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.15;
+    }
+    h2.slide-title {
+      font-size: clamp(1.4rem, 3vw, 2.4rem);
+      font-weight: 700;
+      text-align: center;
+      color: var(--blue);
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--muted);
+      text-align: center;
+      max-width: 700px;
+      line-height: 1.7;
+    }
+
+    /* ── Grids ── */
+    .grid3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; width: 100%; }
+    .grid2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 20px; width: 100%; }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 20px;
+      text-align: center;
+      transition: transform 0.25s, border-color 0.25s;
+    }
+    .card:hover { transform: translateY(-4px); border-color: var(--blue); }
+    .card .icon { font-size: 2rem; margin-bottom: 10px; }
+    .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .card p { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+    /* ── Stat cards ── */
+    .stat-card {
+      background: linear-gradient(135deg, var(--card), #1a2035);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 20px;
+      text-align: center;
+    }
+    .stat-card .stat-num {
+      font-size: 2.4rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .stat-card .stat-lbl { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
+
+    /* ── Tech chips ── */
+    .chips { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+    .chip {
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 1px solid;
+    }
+    .chip-blue  { background: rgba(0,200,255,0.1); border-color: var(--blue);   color: var(--blue); }
+    .chip-green { background: rgba(16,185,129,0.1); border-color: var(--green); color: var(--green); }
+    .chip-gold  { background: rgba(245,158,11,0.1); border-color: var(--gold);  color: var(--gold); }
+    .chip-purple{ background: rgba(124,58,237,0.1); border-color: var(--purple);color: #a78bfa; }
+
+    /* ── Model table ── */
+    .db-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; width: 100%; }
+    .db-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+    .db-card h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 8px; }
+    .db-card ul { list-style: none; }
+    .db-card ul li { font-size: 0.75rem; color: var(--muted); padding: 2px 0; font-family: 'JetBrains Mono', monospace; }
+    .db-card ul li::before { content: '› '; color: var(--blue); }
+
+    /* ── Navigation ── */
+    #nav {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: rgba(17,24,39,0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 12px 28px;
+      z-index: 50;
+    }
+
+    .nav-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 22px;
+      border-radius: 30px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-btn:hover:not(:disabled) {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #000;
+    }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+    #slide-counter { font-size: 0.85rem; color: var(--muted); min-width: 70px; text-align: center; }
+
+    /* ── Dots ── */
+    #dots { display: flex; gap: 7px; }
+    .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--border);
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .dot.active { background: var(--blue); transform: scale(1.4); }
+
+    /* ── Keyboard hint ── */
+    #hint {
+      position: fixed;
+      top: 16px;
+      right: 20px;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Slide 1 background ── */
+    #s1 { background: radial-gradient(ellipse at 20% 50%, rgba(0,200,255,0.08) 0%, transparent 60%),
+                      radial-gradient(ellipse at 80% 50%, rgba(124,58,237,0.08) 0%, transparent 60%),
+                      var(--bg); }
+
+    /* ── Slide: title meta ── */
+    .meta-row { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
+    .meta-badge {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 0.85rem;
+    }
+    .meta-badge span { font-size: 1.1rem; }
+
+    /* Glow divider */
+    .divider {
+      width: 80px; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--blue), transparent);
+      border-radius: 2px;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .slide.active .slide-content > * {
+      animation: fadeUp 0.5s ease both;
+    }
+    .slide.active .slide-content > *:nth-child(1) { animation-delay: 0.05s; }
+    .slide.active .slide-content > *:nth-child(2) { animation-delay: 0.13s; }
+    .slide.active .slide-content > *:nth-child(3) { animation-delay: 0.21s; }
+    .slide.active .slide-content > *:nth-child(4) { animation-delay: 0.29s; }
+    .slide.active .slide-content > *:nth-child(5) { animation-delay: 0.37s; }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="hint">← → Arrow keys or click below</div>
+
+<div id="deck">
+
+  <!-- ═══════════════════════════════════
+       SLIDE 1 – Title
+  ═══════════════════════════════════ -->
+  <div class="slide active" id="s1">
+    <div class="slide-content">
+      <div class="slide-tag">B.Tech Semester 6 — Major Project</div>
+      <h1 class="slide-title">🏋️ Gym Management<br>System</h1>
+      <div class="divider"></div>
+      <p class="subtitle">A comprehensive web-based platform built with <strong style="color:var(--blue)">Django & Python</strong> to streamline gym operations — member enrollment, equipment tracking, attendance, and more.</p>
+      <div class="meta-row">
+        <div class="meta-badge"><span>👤</span> Vikas Chauhan</div>
+        <div class="meta-badge"><span>🐍</span> Python · Django 4.x</div>
+        <div class="meta-badge"><span>🚀</span> Deployed on Railway</div>
+        <div class="meta-badge"><span>📅</span> 2025–26</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SLIDE 2 – Problem Statement
+  ═══════════════════════════════════ -->
+  <div class="slide" id="s2">
+    <div class="slide-content">
+      <div class="slide-tag">Problem Statement</div>
+      <h2 class="slide-title">Why a Gym Management System?</h2>
+      <div class="grid3">
+        <div class="card">
+          <div class="icon">📋</div>
+          <h3>Manual Records</h3>
+          <p>Gyms still rely on paper registers and spreadsheets, leading to errors and data loss.</p>
+        </div>
+        <div class="card">
+          <div class="icon">⏳</div>
+          <h3>Slow Operations</h3>
+          <p>Manual follow-ups on memberships and enquiries waste staff time every single day.</p>
+        </div>
+        <div class="card">
+          <div class="icon">📉</div>
+          <h3>No Insights</h3>
+          <p>No real-time view of active members, revenue, or equipment condition at a glance.</p>
+        </div>
+      </div>
+      <div class="chip chip-blue">Solution → A centralized digital management platform</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SLIDE 3 – Project Overview (image)
+  ═══════════════════════════════════ -->
+  <div class="slide" id="s3">
+    <img class="slide-img" src="C:/Users/Vikas/.gemini/antigravity/brain/45858584-4e74-4330-860b-a5e5681e4673/slide_overview_1773054136745.png" alt="Project Overview" />
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SLIDE 4 – Key Features (image)
+  ═══════════════════════════════════ -->
+  <div class="slide" id="s4">
+    <img class="slide-img" src="C:/Users/Vikas/.gemini/antigravity/brain/45858584-4e74-4330-860b-a5e5681e4673/slide_features_1773054187624.png" alt="Key Features" />
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SLIDE 5 – Modules Detail
+  ═══════════════════════════════════ -->
+  <div class="slide" id="s5">
+    <div class="slide-content">
+      <div class="slide-tag">Core Modules</div>
+      <h2 class="slide-title">What the System Does</h2>
+      <div class="grid2">
+        <div class="card" style="border-left:3px solid #00c8ff">
+          <div class="icon">👥</div>
+          <h3>Member Management</h3>
+          <p>Register members with full profiles — DOB, gender, contact, emergency info, medical conditions, membership plan & join/expiry dates.</p>
+        </div>
+        <div class="card" style="border-left:3px solid #a855f7">
+          <div class="icon">🏋️</div>
+          <h3>Equipment Tracking</h3>
+          <p>Maintain inventory with category, condition, quantity, purchase date & cost. Know what needs servicing at a glance.</p>
+        </div>
+        <div class="card" style="border-left:3px solid #10b981">
+          <div class="icon">💳</div>
+          <h3>Membership Plans</h3>
+          <p>Create flexible plans with duration, pricing & features. Members are linked to a plan with automatic expiry calculation.</p>
+        </div>
+        <div class="card" style="border-left:3px solid #f59e0b">
+          <div class="icon">📩</div>
+          <h3>Enquiry Management</h3>
+          <p>Track walk-in leads with branch, enquiry type, preferred callback date, status (Pending/Converted) & additional notes.</p>
+        </div>
+        <div class="card" style="border-left:3px solid #ef4444">
+          <div class="icon">📅</div>
+          <h3>Attendance System</h3>
+          <p>Mark daily attendance (Present/Absent) per member with unique date constraint — one record per member per day.</p>
+        </div>
+        <div class="card" style="border-left:3px solid #06b6d4">
+          <div class="icon">🧑‍🏫</div>
+          <h3>Trainer Management</h3>
+          <p>Record trainer details, shift (Morning/Evening/Full), specialty (Yoga/CrossFit/Cardio/etc.) and salary.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SLIDE 6 – Tech Stack (image)
+  ═══════════════════════════════════ -->
+  <div class="slide" id="s6">
+    <img class="slide-img" src="C:/Users/Vikas/.gemini/antigravity/brain/45858584-4e74-4330-860b-a5e5681e4673/slide_techstack_1773054157788.png" alt="Technology Stack" />
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SLIDE 7 – Tech Stack detail
+  ═══════════════════════════════════ -->
+  <div class="slide" id="s7">
+    <div class="slide-content">
+      <div class="slide-tag">Technologies Used</div>
+      <h2 class="slide-title">Tech Stack</h2>
+      <div class="grid3">
+        <div class="card">
+          <div class="icon">🐍</div>
+          <h3>Backend</h3>
+          <p><strong style="color:var(--green)">Python 3.11+</strong><br>Django 4.x · SQLite3<br>gunicorn · whitenoise</p>
+        </div>
+        <div class="card">
+          <div class="icon">🎨</div>
+          <h3>Frontend</h3>
+          <p><strong style="color:var(--blue)">HTML5 · CSS3</strong><br>Bootstrap 5 · jQuery<br>Font Awesome · WOW.js</p>
+        </div>
+        <div class="card">
+          <div class="icon">🚀</div>
+          <h3>Deployment</h3>
+          <p><strong style="color:var(--purple)">Railway Cloud</strong><br>Procfile · .env config<br>GitHub CI/CD</p>
+        </div>
+      </div>
+      <div class="chips">
+        <span class="chip chip-green">Django MVT Pattern</span>
+        <span class="chip chip-blue">REST-like Views</span>
+        <span class="chip chip-gold">Admin Panel</span>
+        <span class="chip chip-purple">Session Auth</span>
+        <span class="chip chip-green">Responsive Design</span>
+        <span class="chip chip-blue">Static Files CDN</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SLIDE 8 – Architecture (image)
+  ═══════════════════════════════════ -->
+  <div class="slide" id="s8">
+    <img class="slide-img" src="C:/Users/Vikas/.gemini/antigravity/brain/45858584-4e74-4330-860b-a5e5681e4673/slide_architecture_1773054256669.png" alt="System Architecture" />
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SLIDE 9 – Database (image)
+  ═══════════════════════════════════ -->
+  <div class="slide" id="s9">
+    <img class="slide-img" src="C:/Users/Vikas/.gemini/antigravity/brain/45858584-4e74-4330-860b-a5e5681e4673/slide_database_1773054236999.png" alt="Database Design" />
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SLIDE 10 – Database Models
+  ═══════════════════════════════════ -->
+  <div class="slide" id="s10">
+    <div class="slide-content">
+      <div class="slide-tag">Data Layer</div>
+      <h2 class="slide-title">Database Models</h2>
+      <div class="db-grid">
+        <div class="db-card" style="border-top:2px solid var(--blue)">
+          <h4 style="color:var(--blue)">👤 Member</h4>
+          <ul>
+            <li>name, age, gender, dob</li>
+            <li>contact, email</li>
+            <li>address, emergency_contact</li>
+            <li>medical_conditions</li>
+            <li>plan (FK), joindate, expiredate</li>
+            <li>initialamount</li>
+          </ul>
+        </div>
+        <div class="db-card" style="border-top:2px solid #a855f7">
+          <h4 style="color:#a855f7">🏋️ Equipment</h4>
+          <ul>
+            <li>name, category</li>
+            <li>quantity, price, unit</li>
+            <li>date (purchase)</li>
+            <li>condition (new/old)</li>
+            <li>description</li>
+          </ul>
+        </div>
+        <div class="db-card" style="border-top:2px solid var(--green)">
+          <h4 style="color:var(--green)">💳 Plan</h4>
+          <ul>
+            <li>name</li>
+            <li>amount (price)</li>
+            <li>duration (days/months)</li>
+          </ul>
+        </div>
+        <div class="db-card" style="border-top:2px solid var(--gold)">
+          <h4 style="color:var(--gold)">📩 Enquiry</h4>
+          <ul>
+            <li>name, contact, emailid</li>
+            <li>age, gender, branch</li>
+            <li>enquiry_type, status</li>
+            <li>preferred_contact_date</li>
+            <li>additional_info</li>
+          </ul>
+        </div>
+        <div class="db-card" style="border-top:2px solid #ef4444">
+          <h4 style="color:#ef4444">📅 Attendance</h4>
+          <ul>
+            <li>member (FK → Member)</li>
+            <li>date</li>
+            <li>status (Present/Absent)</li>
+            <li>unique_together: (member, date)</li>
+          </ul>
+        </div>
+        <div class="db-card" style="border-top:2px solid #06b6d4">
+          <h4 style="color:#06b6d4">🧑‍🏫 Trainer</h4>
+          <ul>
+            <li>name, contact, emailid</li>
+            <li>dob, gender</li>
+            <li>join_date, salary</li>
+            <li>shift (Morning/Evening/Full)</li>
+            <li>specialty (Yoga/CrossFit…)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SLIDE 11 – Screenshots (image)
+  ═══════════════════════════════════ -->
+  <div class="slide" id="s11">
+    <img class="slide-img" src="C:/Users/Vikas/.gemini/antigravity/brain/45858584-4e74-4330-860b-a5e5681e4673/slide_screenshots_1773054311065.png" alt="App Screenshots" />
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SLIDE 12 – Deployment
+  ═══════════════════════════════════ -->
+  <div class="slide" id="s12">
+    <div class="slide-content">
+      <div class="slide-tag">Live Deployment</div>
+      <h2 class="slide-title">Deployment Pipeline</h2>
+      <div class="grid3">
+        <div class="card">
+          <div class="icon">💻</div>
+          <h3>Local Dev</h3>
+          <p>Python venv, SQLite, <code style="color:var(--blue);font-size:0.8rem">runserver</code> at <strong>localhost:8000</strong></p>
+        </div>
+        <div class="card">
+          <div class="icon" style="font-size:1.6rem">🐙</div>
+          <h3>GitHub</h3>
+          <p>Source control with <strong>Procfile</strong>, <strong>runtime.txt</strong>, <strong>.env</strong> config</p>
+        </div>
+        <div class="card">
+          <div class="icon">🚂</div>
+          <h3>Railway</h3>
+          <p>Auto-deploy from GitHub push. Gunicorn server, whitenoise static files, env secrets.</p>
+        </div>
+      </div>
+      <div class="chips">
+        <span class="chip chip-blue">SECRET_KEY via ENV</span>
+        <span class="chip chip-gold">DEBUG=False in Production</span>
+        <span class="chip chip-green">collectstatic on Build</span>
+        <span class="chip chip-purple">gunicorn GMS.wsgi</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SLIDE 13 – Challenges & Learnings
+  ═══════════════════════════════════ -->
+  <div class="slide" id="s13">
+    <div class="slide-content">
+      <div class="slide-tag">Challenges & Learnings</div>
+      <h2 class="slide-title">What I Learned</h2>
+      <div class="grid2">
+        <div class="card" style="text-align:left;">
+          <h3 style="color:#f87171; margin-bottom:12px">⚠️ Challenges Faced</h3>
+          <ul style="list-style:none;font-size:0.85rem;color:var(--muted);line-height:2">
+            <li>🔸 Database migrations after model changes</li>
+            <li>🔸 Configuring static files for Railway deployment</li>
+            <li>🔸 Managing CSRF tokens in all forms</li>
+            <li>🔸 Handling ForeignKey cascades safely</li>
+            <li>🔸 Environment variable management in production</li>
+          </ul>
+        </div>
+        <div class="card" style="text-align:left;">
+          <h3 style="color:var(--green); margin-bottom:12px">✅ Key Learnings</h3>
+          <ul style="list-style:none;font-size:0.85rem;color:var(--muted);line-height:2">
+            <li>✔ Django MVT architecture pattern</li>
+            <li>✔ Full CRUD with Django ORM</li>
+            <li>✔ User authentication & session management</li>
+            <li>✔ Cloud deployment with Railway</li>
+            <li>✔ Responsive UI with Bootstrap + CSS</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SLIDE 14 – Future Scope
+  ═══════════════════════════════════ -->
+  <div class="slide" id="s14">
+    <div class="slide-content">
+      <div class="slide-tag">Future Enhancements</div>
+      <h2 class="slide-title">Roadmap & Future Scope</h2>
+      <div class="grid3">
+        <div class="card">
+          <div class="icon">📊</div>
+          <h3>Analytics Dashboard</h3>
+          <p>Charts & graphs for revenue, member growth, and equipment usage trends using Chart.js.</p>
+        </div>
+        <div class="card">
+          <div class="icon">💰</div>
+          <h3>Payment Gateway</h3>
+          <p>Online fee collection with Razorpay/Stripe integration and automated receipts.</p>
+        </div>
+        <div class="card">
+          <div class="icon">📱</div>
+          <h3>Mobile App</h3>
+          <p>React Native or Flutter app for members to check schedules and track workouts.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🤖</div>
+          <h3>AI Diet Planner</h3>
+          <p>Personalized diet and workout plans using machine learning based on member goals.</p>
+        </div>
+        <div class="card">
+          <div class="icon">📲</div>
+          <h3>SMS/Email Alerts</h3>
+          <p>Automated reminders for membership expiry and attendance via Twilio/SendGrid.</p>
+        </div>
+        <div class="card">
+          <div class="icon">📷</div>
+          <h3>QR Check-In</h3>
+          <p>Members scan a QR code at the gym entrance for instant attendance marking.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SLIDE 15 – Thank You (image)
+  ═══════════════════════════════════ -->
+  <div class="slide" id="s15">
+    <img class="slide-img" src="C:/Users/Vikas/.gemini/antigravity/brain/45858584-4e74-4330-860b-a5e5681e4673/slide_conclusion_1773054292364.png" alt="Thank You" />
+  </div>
+
+</div><!-- #deck -->
+
+<!-- ── Navigation ── -->
+<div id="nav">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Prev</button>
+  <div id="dots"></div>
+  <span id="slide-counter">1 / 15</span>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.getElementById('dots');
+  const counter = document.getElementById('slide-counter');
+  const bar = document.getElementById('progress-bar');
+  const total = slides.length;
+  let current = 0;
+
+  // Build dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dots.appendChild(d);
+  });
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    slides[current].classList.add('exit');
+    setTimeout(() => slides[current].classList.remove('exit'), 500);
+    current = n;
+    slides[current].classList.add('active');
+    document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+    counter.textContent = `${current + 1} / ${total}`;
+    bar.style.width = `${((current + 1) / total) * 100}%`;
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === total - 1;
+  }
+
+  function changeSlide(dir) {
+    const next = current + dir;
+    if (next >= 0 && next < total) goTo(next);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   changeSlide(-1);
+  });
+
+  // Init
+  goTo(0);
+</script>
+</body>
+</html>

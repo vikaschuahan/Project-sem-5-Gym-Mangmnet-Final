@@ -100,3 +100,20 @@ class Trainer(models.Model):
 
     def __str__(self):
         return self.name
+
+
+# Attendance Model
+class Attendance(models.Model):
+    STATUS_CHOICES = (
+        ('Present', 'Present'),
+        ('Absent', 'Absent'),
+    )
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='attendances')
+    date = models.DateField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Present')
+
+    class Meta:
+        unique_together = ('member', 'date')  # One record per member per day
+
+    def __str__(self):
+        return f"{self.member.name} - {self.date} - {self.status}"

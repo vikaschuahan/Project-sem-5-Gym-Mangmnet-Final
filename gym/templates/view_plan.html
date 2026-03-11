@@ -1,102 +1,44 @@
-﻿{% extends 'navigation.html' %}
-
-{% block css %}
-<style>
-    .view-header {
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-        color: #fff;
-        padding: 18px 24px;
-        border-radius: 10px 10px 0 0;
-        font-weight: 700;
-        font-size: 1.3rem;
-        text-align: center;
-        letter-spacing: 0.5px;
-    }
-    .view-card {
-        border: none;
-        border-radius: 10px;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-        overflow: hidden;
-    }
-    .table thead th {
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-        color: #fff;
-        font-weight: 600;
-        border: none;
-        padding: 12px 14px;
-        white-space: nowrap;
-    }
-    .table tbody td {
-        vertical-align: middle;
-        padding: 10px 14px;
-    }
-    .table tbody tr:hover {
-        background-color: #f0f4ff;
-    }
-</style>
-{% endblock %}
+{% extends 'navigation.html' %}
+{% load static %}
+{% block title %}Membership Plans — GymPro{% endblock %}
 
 {% block body %}
-<div class="container-fluid py-4" style="max-width: 900px;">
-    <div class="view-card bg-white">
-        <div class="view-header">
-            <i class="fa fa-list-alt"></i> FitZone Gym &mdash; View Plans
+<div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+    <div style="width:4px; height:28px; background:#22c55e; border-radius:2px;"></div>
+    <h1 style="font-size:1.25rem; font-weight:800; margin:0;">Membership Plans</h1>
+    <a href="{% url 'add_plan' %}" class="btn-gms-primary" style="margin-left:auto; text-decoration:none; display:inline-flex; align-items:center; gap:8px; font-size:0.85rem; padding:8px 16px;">
+        <i class="fa fa-plus"></i> Create Plan
+    </a>
+</div>
+<p style="color:#64748b; font-size:0.85rem; margin-bottom:24px;">Manage your gym's subscription packages and pricing.</p>
+
+<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:20px;">
+    {% for p in plan %}
+    <div class="app-card" style="padding:24px; position:relative;">
+        <div style="position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg, #22c55e, #3b82f6);"></div>
+        <div style="font-size:0.7rem; font-weight:700; text-transform:uppercase; color:#94a3b8; letter-spacing:1px; margin-bottom:8px;">Plan Package</div>
+        <h3 style="font-size:1.25rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">{{ p.name }}</h3>
+        <div style="font-size:2.25rem; font-weight:900; color:#10b981; margin-bottom:4px;">₹{{ p.amount }}</div>
+        <div style="font-size:0.85rem; color:#64748b; margin-bottom:20px;">
+            <i class="fa fa-clock-o"></i> Valid for {{ p.duration }} days
         </div>
-        <div class="p-3">
-            <div class="row mb-3 align-items-center">
-                <div class="col-md-6 mb-2 mb-md-0">
-                    <input type="text" id="planSearch" class="form-control" style="max-width:350px;" placeholder="Search plans..." onkeyup="searchPlans()">
-                </div>
-                <div class="col-md-6 text-md-right">
-                    <button class="btn btn-primary mr-1" onclick="location.reload();"><i class="fa fa-refresh"></i> Refresh</button>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Plan Name</th>
-                            <th>Amount (Rs.)</th>
-                            <th>Duration (days)</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="planTable">
-                        {% for i in pln %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td><strong>{{ i.name }}</strong></td>
-                            <td>&#8377;{{ i.amount }}</td>
-                            <td>{{ i.duration }}</td>
-                            <td style="white-space:nowrap;">
-                                <a class="btn btn-warning btn-sm" href="{% url 'edit_plan' i.id %}"><i class="fa fa-pencil"></i> Edit</a>
-                                <a class="btn btn-danger btn-sm" href="{% url 'delete_plan' i.id %}" onclick="return confirm('Are you sure?')"><i class="fa fa-trash"></i> Delete</a>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="5" class="text-center text-muted py-4">No plans found.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+        
+        <div style="display:flex; gap:10px; border-top:1px solid #f1f5f9; padding-top:16px;">
+            <a href="{% url 'edit_plan' p.id %}" class="btn-action-edit" style="flex:1; justify-content:center;">
+                <i class="fa fa-pencil"></i> Edit
+            </a>
+            <a href="{% url 'delete_plan' p.id %}" onclick="return confirm('Delete plan {{ p.name }}?')" class="btn-action-delete">
+                <i class="fa fa-trash"></i>
+            </a>
         </div>
     </div>
+    {% empty %}
+    <div style="grid-column:1/-1; text-align:center; padding:60px 20px; background:#fff; border:1px dashed #cbd5e1; border-radius:12px;">
+        <div style="font-size:2.5rem; margin-bottom:12px;">💳</div>
+        <h4 style="color:#0f172a; margin-bottom:4px;">No Plans Yet</h4>
+        <p style="color:#64748b; font-size:0.9rem; margin-bottom:20px;">Create your first membership plan to start enrolling members.</p>
+        <a href="{% url 'add_plan' %}" class="btn-gms-primary" style="text-decoration:none;">+ Create First Plan</a>
+    </div>
+    {% endfor %}
 </div>
-<script>
-function searchPlans() {
-    var input = document.getElementById("planSearch").value.toUpperCase();
-    var rows = document.getElementById("planTable").getElementsByTagName("tr");
-    for (var i = 0; i < rows.length; i++) {
-        var cells = rows[i].getElementsByTagName("td");
-        var match = false;
-        for (var j = 0; j < cells.length; j++) {
-            if (cells[j] && cells[j].textContent.toUpperCase().indexOf(input) > -1) { match = true; break; }
-        }
-        rows[i].style.display = match ? "" : "none";
-    }
-}
-</script>
 {% endblock %}

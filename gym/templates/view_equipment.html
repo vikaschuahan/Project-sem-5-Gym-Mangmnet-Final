@@ -1,120 +1,86 @@
-﻿{% extends 'navigation.html' %}
-
-{% block css %}
-<style>
-    .view-header {
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-        color: #fff;
-        padding: 18px 24px;
-        border-radius: 10px 10px 0 0;
-        font-weight: 700;
-        font-size: 1.3rem;
-        text-align: center;
-        letter-spacing: 0.5px;
-    }
-    .view-card {
-        border: none;
-        border-radius: 10px;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-        overflow: hidden;
-    }
-    .table thead th {
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-        color: #fff;
-        font-weight: 600;
-        border: none;
-        padding: 12px 14px;
-        white-space: nowrap;
-    }
-    .table tbody td {
-        vertical-align: middle;
-        padding: 10px 14px;
-    }
-    .table tbody tr:hover {
-        background-color: #f0f4ff;
-    }
-    .badge-new { background-color: #28a745; color: #fff; padding: 5px 12px; border-radius: 12px; }
-    .badge-used { background-color: #6c757d; color: #fff; padding: 5px 12px; border-radius: 12px; }
-    .badge-refurbished { background-color: #17a2b8; color: #fff; padding: 5px 12px; border-radius: 12px; }
-    .search-bar { max-width: 350px; }
-</style>
-{% endblock %}
+{% extends 'navigation.html' %}
+{% load static %}
+{% block title %}Equipment — GymPro{% endblock %}
 
 {% block body %}
-<div class="container-fluid py-4" style="max-width: 1200px;">
-    <div class="view-card bg-white">
-        <div class="view-header">
-            <i class="fa fa-cogs"></i> FitZone Gym &mdash; View Equipment
-        </div>
-        <div class="p-3">
-            <div class="row mb-3 align-items-center">
-                <div class="col-md-6 mb-2 mb-md-0">
-                    <input type="text" id="searchInput" class="form-control search-bar" placeholder="Search by name or category..." onkeyup="searchTable()">
-                </div>
-                <div class="col-md-6 text-md-right">
-                    <button class="btn btn-primary mr-1" onclick="location.reload();"><i class="fa fa-refresh"></i> Refresh</button>
-                    <a href="{% url 'export_equipment_csv' %}" class="btn btn-success"><i class="fa fa-download"></i> Download CSV</a>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Equipment Name</th>
-                            <th>Category</th>
-                            <th>Qty</th>
-                            <th>Price</th>
-                            <th>Purchase Date</th>
-                            <th>Condition</th>
-                            <th>Notes</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="equipmentTable">
-                        {% for i in equ %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td><strong>{{ i.name }}</strong></td>
-                            <td>{{ i.category }}</td>
-                            <td>{{ i.quantity }} {{ i.unit }}</td>
-                            <td>&#8377;{{ i.price }}</td>
-                            <td>{{ i.date|date:"M d, Y" }}</td>
-                            <td>
-                                {% if i.condition == "new" %}
-                                    <span class="badge-new">New</span>
-                                {% elif i.condition == "refurbished" %}
-                                    <span class="badge-refurbished">Refurbished</span>
-                                {% else %}
-                                    <span class="badge-used">{{ i.condition|capfirst }}</span>
-                                {% endif %}
-                            </td>
-                            <td>{{ i.description|default:"-" }}</td>
-                            <td style="white-space:nowrap;">
-                                <a class="btn btn-warning btn-sm" href="{% url 'edit_equipment' i.id %}"><i class="fa fa-pencil"></i> Edit</a>
-                                <a class="btn btn-danger btn-sm" href="{% url 'delete_equipment' i.id %}" onclick="return confirm('Are you sure?')"><i class="fa fa-trash"></i> Delete</a>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="9" class="text-center text-muted py-4">No equipment found.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+
+<div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+    <div style="width:4px; height:28px; background:#22c55e; border-radius:2px;"></div>
+    <h1 style="font-size:1.25rem; font-weight:800; margin:0;">Equipment</h1>
+</div>
+<p style="color:#6b7280; font-size:0.85rem; margin-bottom:20px;">Track gym equipment inventory, condition and purchase details.</p>
+
+<div class="app-card">
+    <div style="padding:14px 16px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; flex-wrap:wrap; gap:10px; justify-content:space-between;">
+        <input type="text" id="equipmentSearch" class="form-control" style="width:260px;font-size:0.85rem;padding:8px 14px;" placeholder="🔍 Search equipment…" onkeyup="searchEquipment()">
+        <div style="display:flex;gap:8px;">
+            <a href="{% url 'add_equipment' %}" class="btn-gms-primary" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-size:0.83rem;padding:8px 16px;">
+                <i class="fa fa-plus"></i> Add Equipment
+            </a>
+            <a href="{% url 'export_equipment_csv' %}" class="btn-gms-outline" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-size:0.83rem;padding:7px 14px;">
+                <i class="fa fa-download"></i> CSV
+            </a>
         </div>
     </div>
+    <div style="overflow-x:auto;">
+        <table class="gms-table" style="min-width:640px;" id="eqTable">
+            <thead>
+                <tr>
+                    <th>#</th><th>Name</th><th>Category</th><th>Qty</th><th>Price</th><th>Purchase Date</th><th>Condition</th><th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="equipmentBody">
+            {% for e in equ %}
+            <tr>
+                <td style="color:#6b7280;font-size:0.75rem;">{{ forloop.counter }}</td>
+                <td>
+                    <div style="font-weight:600;font-size:0.88rem;">{{ e.name }}</div>
+                    <div style="font-size:0.72rem;color:#6b7280;">{{ e.description|truncatechars:42 }}</div>
+                </td>
+                <td><span class="badge-blue">{{ e.category|default:"—" }}</span></td>
+                <td style="font-size:0.85rem; font-weight:600;">{{ e.quantity }}</td>
+                <td style="font-size:0.85rem; font-weight:600;">₹{{ e.price }}</td>
+                <td style="color:#6b7280;font-size:0.82rem;">{{ e.date|date:"d M Y" }}</td>
+                <td>
+                    {% if e.condition == 'new' %}
+                        <span class="badge-green">New</span>
+                    {% elif e.condition == 'good' %}
+                        <span class="badge-blue">Good</span>
+                    {% elif e.condition == 'worn' %}
+                        <span class="badge-yellow">Worn</span>
+                    {% else %}
+                        <span class="badge-blue">{{ e.condition|default:"—" }}</span>
+                    {% endif %}
+                </td>
+                <td style="white-space:nowrap;">
+                    <a href="{% url 'edit_equipment' e.id %}" class="btn-action-edit">
+                        <i class="fa fa-pencil"></i> Edit
+                    </a>
+                    <a href="{% url 'delete_equipment' e.id %}" onclick="return confirm('Delete equipment {{ e.name }}?')" class="btn-action-delete">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="8" style="text-align:center; padding:48px; color:#6b7280;">No equipment found.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
+
 <script>
-function searchTable() {
-    var input = document.getElementById("searchInput").value.toUpperCase();
-    var rows = document.getElementById("equipmentTable").getElementsByTagName("tr");
+function searchEquipment() {
+    var input = document.getElementById("equipmentSearch").value.toUpperCase();
+    var rows = document.getElementById("equipmentBody").getElementsByTagName("tr");
     for (var i = 0; i < rows.length; i++) {
-        var cells = rows[i].getElementsByTagName("td");
         var match = false;
+        var cells = rows[i].getElementsByTagName("td");
         for (var j = 0; j < cells.length; j++) {
-            if (cells[j] && cells[j].textContent.toUpperCase().indexOf(input) > -1) { match = true; break; }
+            if (cells[j] && cells[j].textContent.toUpperCase().indexOf(input) > -1) {
+                match = true;
+                break;
+            }
         }
         rows[i].style.display = match ? "" : "none";
     }

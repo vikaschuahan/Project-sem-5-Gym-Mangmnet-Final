@@ -32,12 +32,29 @@ def admin_login_view(request):
 def Home(request):
     if not request.user.is_staff:
         return redirect('login')
+    import datetime
+    today = datetime.date.today()
+    soon = today + datetime.timedelta(days=7)
+
+    # Fetch recent 8 members for dashboard table, compute days_left
+    recent_qs = Member.objects.select_related('plan').order_by('-joindate')[:8]
+    recent_members = []
+    for m in recent_qs:
+        try:
+            m.days_left = (m.expiredate - today).days if m.expiredate else None
+        except Exception:
+            m.days_left = None
+        recent_members.append(m)
+
     context = {
         'total_members': Member.objects.count(),
+        'active_members': Member.objects.filter(expiredate__gte=today).count(),
+        'expiring_soon': Member.objects.filter(expiredate__gte=today, expiredate__lte=soon).count(),
         'total_equipment': Equipment.objects.count(),
         'total_enquiries': Enquiry.objects.count(),
         'total_plans': Plan.objects.count(),
         'total_trainers': Trainer.objects.count(),
+        'recent_members': recent_members,
     }
     return render(request, 'index.html', context)
 
@@ -296,8 +313,8 @@ def Add_Plan(request):
 
 
 def View_Plan(request):
-    pln = Plan.objects.all()
-    d = {'pln': pln}
+    plan = Plan.objects.all()
+    d = {'plan': plan}
     return render(request, 'view_plan.html', d)
 
 def Delete_Plan(request,pid):
@@ -388,16 +405,15 @@ def Add_Member(request):
 
 def View_Member(request):
     member = Member.objects.all()
-    # compute a safe status and notes for each member to avoid template errors
     import datetime
     today = datetime.date.today()
-    # attach computed attributes to each member instance in memory
     for m in member:
         try:
             m.status = "Active" if m.expiredate and m.expiredate >= today else "Inactive"
+            m.days_left = (m.expiredate - today).days if m.expiredate else None
         except Exception:
             m.status = "Inactive"
-        # fallback for notes field (templates reference i.notes)
+            m.days_left = None
         if not hasattr(m, 'notes'):
             m.notes = ""
     d = {'member': member}
@@ -577,3 +593,87 @@ def Edit_Trainer(request, pid):
     
     d = {'trainer': trainer}
     return render(request, 'edit_trainer.html', d)
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Attendance Views
+# ──────────────────────────────────────────────────────────────────────────────
+
+def Mark_Attendance(request):
+    import datetime
+    if not request.user.is_staff:
+        return redirect('login')
+
+    today = datetime.date.today()
+    members = Member.objects.all()
+
+    if request.method == 'POST':
+        date_str = request.POST.get('attendance_date', str(today))
+        try:
+            att_date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+        except Exception:
+            att_date = today
+
+        for member in members:
+            status = request.POST.get(f'status_{member.id}', 'Absent')
+            Attendance.objects.update_or_create(
+                member=member,
+                date=att_date,
+                defaults={'status': status}
+            )
+        messages.success(request, f"Attendance for {att_date.strftime('%d %B %Y')} saved successfully!")
+        return redirect('view_attendance')
+
+    # GET: Pre-load existing attendance for today if any
+    existing = {a.member_id: a.status for a in Attendance.objects.filter(date=today)}
+    member_data = []
+    for m in members:
+        member_data.append({
+            'member': m,
+            'status': existing.get(m.id, 'Present'),
+        })
+
+    context = {
+        'member_data': member_data,
+        'today': today,
+        'total_members': members.count(),
+    }
+    return render(request, 'attendance.html', context)
+
+
+def View_Attendance(request):
+    import datetime
+    if not request.user.is_staff:
+        return redirect('login')
+
+    today = datetime.date.today()
+    filter_date = request.GET.get('date', '')
+    filter_name = request.GET.get('name', '').strip()
+
+    attendance_qs = Attendance.objects.select_related('member').order_by('-date', 'member__name')
+
+    if filter_date:
+        try:
+            fd = datetime.datetime.strptime(filter_date, "%Y-%m-%d").date()
+            attendance_qs = attendance_qs.filter(date=fd)
+        except Exception:
+            pass
+    if filter_name:
+        attendance_qs = attendance_qs.filter(member__name__icontains=filter_name)
+
+    # Summary stats for today
+    today_records = Attendance.objects.filter(date=today)
+    today_present = today_records.filter(status='Present').count()
+    today_absent = today_records.filter(status='Absent').count()
+    total_members = Member.objects.count()
+
+    context = {
+        'attendance_list': attendance_qs,
+        'filter_date': filter_date,
+        'filter_name': filter_name,
+        'today': today,
+        'today_present': today_present,
+        'today_absent': today_absent,
+        'total_members': total_members,
+    }
+    return render(request, 'view_attendance.html', context)

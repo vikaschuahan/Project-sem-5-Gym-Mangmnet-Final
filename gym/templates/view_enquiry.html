@@ -1,124 +1,82 @@
-﻿{% extends 'navigation.html' %}
-
-{% block css %}
-<style>
-    .view-header {
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-        color: #fff;
-        padding: 18px 24px;
-        border-radius: 10px 10px 0 0;
-        font-weight: 700;
-        font-size: 1.3rem;
-        text-align: center;
-        letter-spacing: 0.5px;
-    }
-    .view-card {
-        border: none;
-        border-radius: 10px;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-        overflow: hidden;
-    }
-    .table thead th {
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-        color: #fff;
-        font-weight: 600;
-        border: none;
-        padding: 12px 14px;
-        white-space: nowrap;
-    }
-    .table tbody td {
-        vertical-align: middle;
-        padding: 10px 14px;
-    }
-    .table tbody tr:hover {
-        background-color: #f0f4ff;
-    }
-    .badge-pending   { background-color: #ffc107; color: #212529; padding: 5px 12px; border-radius: 12px; }
-    .badge-processed { background-color: #28a745; color: #fff; padding: 5px 12px; border-radius: 12px; }
-    .badge-closed    { background-color: #6c757d; color: #fff; padding: 5px 12px; border-radius: 12px; }
-    .search-bar { max-width: 350px; }
-</style>
-{% endblock %}
-
+{% extends 'navigation.html' %}
+{% block title %}Enquiries — GymPro{% endblock %}
 {% block body %}
-<div class="container-fluid py-4" style="max-width: 1200px;">
-    <div class="view-card bg-white">
-        <div class="view-header">
-            <i class="fa fa-question-circle"></i> FitZone Gym &mdash; View Enquiries
-        </div>
-        <div class="p-3">
-            <div class="row mb-3 align-items-center">
-                <div class="col-md-6 mb-2 mb-md-0">
-                    <input type="text" id="enquirySearch" class="form-control search-bar" placeholder="Search by name, email, or phone..." onkeyup="searchEnquiries()">
-                </div>
-                <div class="col-md-6 text-md-right">
-                    <button class="btn btn-primary mr-1" onclick="location.reload();"><i class="fa fa-refresh"></i> Refresh</button>
-                    <a href="{% url 'export_enquiry_csv' %}" class="btn btn-success"><i class="fa fa-download"></i> Download CSV</a>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Full Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Age</th>
-                            <th>Gender</th>
-                            <th>Branch</th>
-                            <th>Enquiry Type</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="enquiryTable">
-                        {% for i in enq %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td><strong>{{ i.name }}</strong></td>
-                            <td><a href="mailto:{{ i.emailid }}" style="color:#5559e0;">{{ i.emailid }}</a></td>
-                            <td><a href="tel:{{ i.contact }}" style="color:#5559e0;">{{ i.contact }}</a></td>
-                            <td>{{ i.age }}</td>
-                            <td>{{ i.gender }}</td>
-                            <td>{{ i.branch|default:"-" }}</td>
-                            <td>{{ i.enquiry_type|default:"-" }}</td>
-                            <td>
-                                {% if i.status == "Pending" %}
-                                    <span class="badge-pending">Pending</span>
-                                {% elif i.status == "Processed" %}
-                                    <span class="badge-processed">Processed</span>
-                                {% elif i.status == "Closed" %}
-                                    <span class="badge-closed">Closed</span>
-                                {% else %}
-                                    <span>{{ i.status }}</span>
-                                {% endif %}
-                            </td>
-                            <td style="white-space:nowrap;">
-                                <a class="btn btn-warning btn-sm" href="{% url 'edit_enquiry' i.id %}"><i class="fa fa-pencil"></i> Edit</a>
-                                <a class="btn btn-danger btn-sm" href="{% url 'delete_enquiry' i.id %}" onclick="return confirm('Are you sure?')"><i class="fa fa-trash"></i> Delete</a>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="10" class="text-center text-muted py-4">No enquiries found.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+
+<div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+    <div style="width:4px; height:28px; background:#22c55e; border-radius:2px;"></div>
+    <h1 style="font-size:1.25rem; font-weight:800; margin:0;">Enquiries</h1>
+</div>
+<p style="color:#6b7280; font-size:0.85rem; margin-bottom:20px;">Track walk-in leads, follow-ups and conversion status.</p>
+
+<div class="app-card">
+    <div style="padding:14px 16px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; flex-wrap:wrap; gap:10px; justify-content:space-between;">
+        <input type="text" id="enquirySearch" class="form-control" style="width:260px;font-size:0.85rem;padding:8px 14px;" placeholder="🔍 Search enquiries…" onkeyup="searchEnquiries()">
+        <div style="display:flex;gap:8px;">
+            <a href="{% url 'add_enquiry' %}" class="btn-gms-primary" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-size:0.83rem;padding:8px 16px;">
+                <i class="fa fa-plus"></i> Add Enquiry
+            </a>
+            <a href="{% url 'export_enquiry_csv' %}" class="btn-gms-outline" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-size:0.83rem;padding:7px 14px;">
+                <i class="fa fa-download"></i> CSV
+            </a>
         </div>
     </div>
+    <div style="overflow-x:auto;">
+        <table class="gms-table" style="min-width:640px;">
+            <thead>
+                <tr><th>#</th><th>Name</th><th>Contact</th><th>Branch</th><th>Type</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="enquiryBody">
+            {% for e in enq %}
+            <tr>
+                <td style="color:#6b7280;font-size:0.75rem;">{{ forloop.counter }}</td>
+                <td>
+                    <div style="font-weight:600;font-size:0.88rem;">{{ e.name }}</div>
+                    <div style="font-size:0.72rem;color:#6b7280;">Age {{ e.age }} · {{ e.gender }}</div>
+                </td>
+                <td>
+                    <div style="font-size:0.83rem;color:#4f46e5;">{{ e.contact }}</div>
+                    <div style="font-size:0.72rem;color:#6b7280;">{{ e.emailid }}</div>
+                </td>
+                <td style="font-size:0.85rem;color:#475569;">{{ e.branch|default:"—" }}</td>
+                <td><span class="badge-blue">{{ e.enquiry_type|default:"—" }}</span></td>
+                <td>
+                    {% if e.status == 'Pending' %}
+                        <span class="badge-yellow">{{ e.status }}</span>
+                    {% elif e.status == 'Converted' %}
+                        <span class="badge-green">{{ e.status }}</span>
+                    {% else %}
+                        <span class="badge-blue">{{ e.status }}</span>
+                    {% endif %}
+                </td>
+                <td style="white-space:nowrap;">
+                    <a href="{% url 'edit_enquiry' e.id %}" class="btn-action-edit">
+                        <i class="fa fa-pencil"></i> Edit
+                    </a>
+                    <a href="{% url 'delete_enquiry' e.id %}" onclick="return confirm('Delete enquiry from {{ e.name }}?')" class="btn-action-delete">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="7" style="text-align:center; padding:48px; color:#6b7280;">No enquiries found.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
+
 <script>
 function searchEnquiries() {
     var input = document.getElementById("enquirySearch").value.toUpperCase();
-    var rows = document.getElementById("enquiryTable").getElementsByTagName("tr");
+    var rows = document.getElementById("enquiryBody").getElementsByTagName("tr");
     for (var i = 0; i < rows.length; i++) {
-        var cells = rows[i].getElementsByTagName("td");
         var match = false;
+        var cells = rows[i].getElementsByTagName("td");
         for (var j = 0; j < cells.length; j++) {
-            if (cells[j] && cells[j].textContent.toUpperCase().indexOf(input) > -1) { match = true; break; }
+            if (cells[j] && cells[j].textContent.toUpperCase().indexOf(input) > -1) {
+                match = true;
+                break;
+            }
         }
         rows[i].style.display = match ? "" : "none";
     }

@@ -1,157 +1,268 @@
-﻿{% extends 'navigation.html' %}
-{% load static %}
-
-{% block css %}
-<style>
-    .form-card {
-        background: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 6px 30px rgba(0,0,0,0.12);
-        overflow: hidden;
-        max-width: 680px;
-        width: 100%;
-    }
-    .form-header {
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-        color: #fff;
-        text-align: center;
-        padding: 22px 20px;
-        font-size: 1.4rem;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-    }
-    .form-body {
-        padding: 30px 35px;
-        background: #f0f6ff;
-    }
-    .form-body label {
-        font-weight: 600;
-        font-size: 0.92rem;
-        color: #333;
-        margin-bottom: 4px;
-    }
-    .form-body .form-control {
-        border: 1.5px solid #c7d1e3;
-        border-radius: 8px;
-        padding: 9px 14px;
-        font-size: 0.95rem;
-        transition: border-color 0.25s;
-    }
-    .form-body .form-control:focus {
-        border-color: #6a11cb;
-        box-shadow: 0 0 0 0.15rem rgba(106,17,203,0.15);
-    }
-    .req { color: #e53935; }
-    .btn-submit {
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        padding: 12px 0;
-        font-weight: 700;
-        font-size: 1rem;
-        width: 100%;
-        cursor: pointer;
-        transition: opacity 0.2s;
-    }
-    .btn-submit:hover { opacity: 0.9; color: #fff; }
-</style>
-{% endblock %}
+{% extends 'navigation.html' %}
+{% block title %}{% if enq %}Edit Enquiry{% else %}Add Enquiry{% endif %} — GymPro{% endblock %}
 
 {% block body %}
-<div class="container d-flex justify-content-center py-4">
-    <div class="form-card">
-        <div class="form-header">
-            <i class="fa fa-question-circle"></i>
-            {% if enq %}Edit Enquiry{% else %}Add New Enquiry{% endif %}
-        </div>
-        <div class="form-body">
-            <form action="{% if enq %}{% url 'edit_enquiry' enq.id %}{% else %}{% url 'add_enquiry' %}{% endif %}" method="post">
-                {% csrf_token %}
+<style>
+/* Override default body background for premium look on this page */
 
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label>Full Name <span class="req">*</span></label>
-                        <input type="text" name="name" class="form-control" placeholder="Enter full name" value="{{ enq.name|default:'' }}" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Email Address <span class="req">*</span></label>
-                        <input type="email" name="emailid" class="form-control" placeholder="Enter email" value="{{ enq.emailid|default:'' }}" required>
+
+.premium-wrapper {
+    max-width: 700px;
+    margin: 40px auto;
+    background: #ffffff;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 35px 35px;
+    box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.premium-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981);
+}
+
+.premium-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.premium-title {
+    color: #0f172a;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    letter-spacing: -0.3px;
+}
+
+.premium-subtitle {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.floating-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.floating-input {
+    width: 100%;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 22px 14px 8px 14px;
+    font-size: 0.95rem;
+    color: #0f172a;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.floating-input:focus {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: #ef4444;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.floating-label {
+    position: absolute;
+    left: 14px;
+    top: 15px;
+    color: #64748b;
+    font-size: 0.95rem;
+    pointer-events: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.floating-input:focus ~ .floating-label,
+.floating-input:not(:placeholder-shown) ~ .floating-label {
+    top: 6px;
+    left: 14px;
+    font-size: 0.75rem;
+    color: #ef4444;
+    font-weight: 600;
+}
+
+input[type="date"].floating-input ~ .floating-label {
+    top: 6px; left: 14px; font-size: 0.75rem; color: #ef4444; font-weight: 600;
+}
+
+select.floating-input {
+    appearance: none;
+    padding-top: 22px;
+    padding-bottom: 10px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 14px;
+}
+select.floating-input option {
+    background: #ffffff;
+    color: #0f172a;
+    padding: 10px;
+}
+
+textarea.floating-input {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.premium-btn {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.premium-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(239, 68, 68, 0.3);
+    background: linear-gradient(135deg, #f87171 0%, #dc2626 100%);
+}
+
+.section-label {
+    color: #334155;
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 24px 0 16px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.section-label i { color: #f87171; }
+</style>
+
+<div class="container pb-5">
+    <div class="premium-wrapper">
+        <div class="premium-header">
+            <h1 class="premium-title">{% if enq %}Edit Enquiry{% else %}Record Enquiry{% endif %}</h1>
+            <p class="premium-subtitle">Document a new potential lead and interaction details</p>
+        </div>
+
+        <form action="{% if enq %}{% url 'edit_enquiry' enq.id %}{% else %}{% url 'add_enquiry' %}{% endif %}" method="post">
+            {% csrf_token %}
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="floating-group">
+                        <input type="text" name="name" class="floating-input" placeholder=" " value="{{ enq.name|default:'' }}" required>
+                        <label class="floating-label">Full Name *</label>
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="floating-group">
+                        <input type="tel" name="contact" class="floating-input" placeholder=" " value="{{ enq.contact|default:'' }}" maxlength="15" required>
+                        <label class="floating-label">Phone Number *</label>
+                    </div>
+                </div>
+            </div>
 
-                <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label>Phone Number <span class="req">*</span></label>
-                        <input type="tel" name="contact" class="form-control" placeholder="Enter phone" value="{{ enq.contact|default:'' }}" maxlength="15" required>
+            <div class="floating-group">
+                <input type="email" name="emailid" class="floating-input" placeholder=" " value="{{ enq.emailid|default:'' }}" required>
+                <label class="floating-label">Email Address *</label>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="floating-group">
+                        <input type="number" name="age" class="floating-input" placeholder=" " min="1" max="120" value="{{ enq.age|default:'' }}" required>
+                        <label class="floating-label">Age *</label>
                     </div>
-                    <div class="form-group col-md-4">
-                        <label>Age <span class="req">*</span></label>
-                        <input type="number" name="age" class="form-control" placeholder="Age" min="1" max="120" value="{{ enq.age|default:'' }}" required>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label>Gender <span class="req">*</span></label>
-                        <select name="gender" class="form-control" required>
-                            <option value="" disabled {% if not enq %}selected{% endif %}>Select</option>
+                </div>
+                <div class="col-md-6">
+                    <div class="floating-group">
+                        <select name="gender" class="floating-input" required>
+                            <option value="" disabled {% if not enq %}selected{% endif %}></option>
                             <option value="Male"   {% if enq.gender == 'Male' %}selected{% endif %}>Male</option>
                             <option value="Female" {% if enq.gender == 'Female' %}selected{% endif %}>Female</option>
                             <option value="Other"  {% if enq.gender == 'Other' %}selected{% endif %}>Other</option>
                         </select>
+                        <label class="floating-label">Gender *</label>
                     </div>
                 </div>
+            </div>
 
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label>Preferred Branch <span class="req">*</span></label>
-                        <select name="branch" class="form-control" required>
-                            <option value="" disabled {% if not enq %}selected{% endif %}>Select branch</option>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="floating-group">
+                        <select name="branch" class="floating-input" required>
+                            <option value="" disabled {% if not enq %}selected{% endif %}></option>
                             <option value="Branch 1" {% if enq.branch == 'Branch 1' %}selected{% endif %}>Branch 1</option>
                             <option value="Branch 2" {% if enq.branch == 'Branch 2' %}selected{% endif %}>Branch 2</option>
                             <option value="Branch 3" {% if enq.branch == 'Branch 3' %}selected{% endif %}>Branch 3</option>
                         </select>
+                        <label class="floating-label">Branch *</label>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label>Enquiry Type <span class="req">*</span></label>
-                        <select name="enquiry_type" class="form-control" required>
-                            <option value="" disabled {% if not enq %}selected{% endif %}>Select type</option>
+                </div>
+                <div class="col-md-6">
+                    <div class="floating-group">
+                        <select name="enquiry_type" class="floating-input" required>
+                            <option value="" disabled {% if not enq %}selected{% endif %}></option>
                             <option value="membership"        {% if enq.enquiry_type == 'membership' %}selected{% endif %}>Membership</option>
                             <option value="classes"           {% if enq.enquiry_type == 'classes' %}selected{% endif %}>Classes</option>
                             <option value="personal_training" {% if enq.enquiry_type == 'personal_training' %}selected{% endif %}>Personal Training</option>
                             <option value="general"           {% if enq.enquiry_type == 'general' %}selected{% endif %}>General</option>
                         </select>
+                        <label class="floating-label">Type *</label>
                     </div>
                 </div>
+            </div>
 
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label>Preferred Contact Date</label>
-                        <input type="date" name="contact_date" class="form-control" value="{% if enq and enq.preferred_contact_date %}{{ enq.preferred_contact_date|date:'Y-m-d' }}{% endif %}">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="floating-group">
+                        <input type="date" name="contact_date" class="floating-input" placeholder=" " value="{% if enq and enq.preferred_contact_date %}{{ enq.preferred_contact_date|date:'Y-m-d' }}{% endif %}">
+                        <label class="floating-label">Contact Date</label>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label>Status</label>
-                        <select name="status" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <div class="floating-group">
+                        <select name="status" class="floating-input">
                             <option value="Pending"   {% if enq.status == 'Pending' or not enq %}selected{% endif %}>Pending</option>
                             <option value="Processed" {% if enq.status == 'Processed' %}selected{% endif %}>Processed</option>
                             <option value="Closed"    {% if enq.status == 'Closed' %}selected{% endif %}>Closed</option>
                         </select>
+                        <label class="floating-label">Status</label>
                     </div>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label>Additional Information</label>
-                    <textarea name="additional_info" class="form-control" rows="3" placeholder="Any additional details or questions...">{{ enq.additional_info|default:'' }}</textarea>
-                </div>
+            <div class="floating-group">
+                <textarea name="additional_info" class="floating-input" placeholder=" ">{{ enq.additional_info|default:'' }}</textarea>
+                <label class="floating-label">Lead Info</label>
+            </div>
 
-                <button type="submit" class="btn-submit mt-2">
-                    {% if enq %}<i class="fa fa-save"></i> Save Changes{% else %}<i class="fa fa-paper-plane"></i> Submit Enquiry{% endif %}
-                </button>
-            </form>
-        </div>
+            <button type="submit" class="premium-btn">
+                {% if enq %}<i class="fa fa-save"></i> Save Enquiry Record{% else %}<i class="fa fa-bolt"></i> Capture Lead{% endif %}
+            </button>
+        </form>
     </div>
 </div>
 
 {% if error == "no" %}
-<script>alert('Record Inserted Successfully'); window.location="{% url 'view_enquiry' %}";</script>
+<script>window.location="{% url 'view_enquiry' %}";</script>
 {% elif error == "yes" %}
 <script>alert('Something went wrong. Please fill all required fields and try again.');</script>
 {% endif %}

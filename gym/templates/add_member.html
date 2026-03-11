@@ -1,173 +1,288 @@
-﻿{% extends 'navigation.html' %}
-{% load static %}
-
-{% block css %}
-<style>
-    .form-card {
-        background: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 6px 30px rgba(0,0,0,0.12);
-        overflow: hidden;
-        max-width: 720px;
-        width: 100%;
-    }
-    .form-header {
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-        color: #fff;
-        text-align: center;
-        padding: 22px 20px;
-        font-size: 1.4rem;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-    }
-    .form-body {
-        padding: 30px 35px;
-        background: #f0f6ff;
-    }
-    .form-body label {
-        font-weight: 600;
-        font-size: 0.92rem;
-        color: #333;
-        margin-bottom: 4px;
-    }
-    .form-body .form-control {
-        border: 1.5px solid #c7d1e3;
-        border-radius: 8px;
-        padding: 9px 14px;
-        font-size: 0.95rem;
-        transition: border-color 0.25s;
-    }
-    .form-body .form-control:focus {
-        border-color: #6a11cb;
-        box-shadow: 0 0 0 0.15rem rgba(106,17,203,0.15);
-    }
-    .req { color: #e53935; }
-    .btn-submit {
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        padding: 12px 0;
-        font-weight: 700;
-        font-size: 1rem;
-        width: 100%;
-        cursor: pointer;
-        transition: opacity 0.2s;
-    }
-    .btn-submit:hover { opacity: 0.9; color: #fff; }
-</style>
-{% endblock %}
+{% extends 'navigation.html' %}
+{% block title %}{% if member %}Edit Member{% else %}Add Member{% endif %} — GymPro{% endblock %}
 
 {% block body %}
-<div class="container d-flex justify-content-center py-4">
-    <div class="form-card">
-        <div class="form-header">
-            <i class="fa fa-user-plus"></i>
-            {% if member %}Edit Member{% else %}Add New Member{% endif %}
+<style>
+/* Override default body background for premium look on this page */
+
+
+.premium-wrapper {
+    max-width: 750px;
+    margin: 40px auto;
+    background: #ffffff;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 35px 35px;
+    box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.premium-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, #22c55e, #3b82f6, #8b5cf6);
+}
+
+.premium-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.premium-title {
+    color: #0f172a;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    letter-spacing: -0.3px;
+}
+
+.premium-subtitle {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.floating-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.floating-input {
+    width: 100%;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 22px 14px 8px 14px;
+    font-size: 0.95rem;
+    color: #0f172a;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.floating-input:focus {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: #22c55e;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+}
+
+.floating-label {
+    position: absolute;
+    left: 14px;
+    top: 15px;
+    color: #64748b;
+    font-size: 0.95rem;
+    pointer-events: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.floating-input:focus ~ .floating-label,
+.floating-input:not(:placeholder-shown) ~ .floating-label {
+    top: 6px;
+    left: 14px;
+    font-size: 0.75rem;
+    color: #22c55e;
+    font-weight: 600;
+}
+
+input[type="date"].floating-input ~ .floating-label {
+    top: 6px; left: 14px; font-size: 0.75rem; color: #22c55e; font-weight: 600;
+}
+
+select.floating-input {
+    appearance: none;
+    padding-top: 22px;
+    padding-bottom: 10px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 14px;
+}
+select.floating-input option {
+    background: #ffffff;
+    color: #0f172a;
+    padding: 10px;
+}
+
+textarea.floating-input {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.premium-btn {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(34, 197, 94, 0.2);
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.premium-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(34, 197, 94, 0.3);
+    background: linear-gradient(135deg, #2ae76f 0%, #16a34a 100%);
+}
+
+.section-label {
+    color: #334155;
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 24px 0 16px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.section-label i { color: #3b82f6; }
+</style>
+
+<div class="container pb-5">
+    <div class="premium-wrapper">
+        <div class="premium-header">
+            <h1 class="premium-title">{% if member %}Edit Member{% else %}Register Member{% endif %}</h1>
+            <p class="premium-subtitle">Enroll a new client into the GymPro ecosystem</p>
         </div>
-        <div class="form-body">
-            <form action="{% if member %}{% url 'edit_member' member.id %}{% else %}{% url 'add_member' %}{% endif %}" method="post">
-                {% csrf_token %}
 
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label>Full Name <span class="req">*</span></label>
-                        <input type="text" name="name" class="form-control" placeholder="Enter full name" value="{{ member.name|default:'' }}" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Email Address <span class="req">*</span></label>
-                        <input type="email" name="emailid" class="form-control" placeholder="Enter email" value="{{ member.emailid|default:'' }}" required>
+        <form action="{% if member %}{% url 'edit_member' member.id %}{% else %}{% url 'add_member' %}{% endif %}" method="post">
+            {% csrf_token %}
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="floating-group">
+                        <input type="text" name="name" class="floating-input" placeholder=" " value="{{ member.name|default:'' }}" required>
+                        <label class="floating-label">Full Name *</label>
                     </div>
                 </div>
-
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label>Phone Number <span class="req">*</span></label>
-                        <input type="tel" name="contact" class="form-control" placeholder="Enter phone" value="{{ member.contact|default:'' }}" maxlength="15" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Date of Birth <span class="req">*</span></label>
-                        <input type="date" name="dob" class="form-control" value="{% if member and member.dob %}{{ member.dob|date:'Y-m-d' }}{% endif %}" required>
+                <div class="col-md-6">
+                    <div class="floating-group">
+                        <input type="tel" name="contact" class="floating-input" placeholder=" " value="{{ member.contact|default:'' }}" maxlength="15" required>
+                        <label class="floating-label">Phone *</label>
                     </div>
                 </div>
+            </div>
 
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label>Gender <span class="req">*</span></label>
-                        <select name="gender" class="form-control" required>
-                            <option value="" disabled {% if not member %}selected{% endif %}>Select gender</option>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="floating-group">
+                        <select name="gender" class="floating-input" required>
+                            <option value="" disabled {% if not member %}selected{% endif %}></option>
                             <option value="Male"   {% if member.gender == 'Male' %}selected{% endif %}>Male</option>
                             <option value="Female" {% if member.gender == 'Female' %}selected{% endif %}>Female</option>
                             <option value="Other"  {% if member.gender == 'Other' %}selected{% endif %}>Other</option>
                         </select>
+                        <label class="floating-label">Gender *</label>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label>Membership Type <span class="req">*</span></label>
-                        <select name="membership_type" class="form-control" required>
-                            <option value="" disabled {% if not member %}selected{% endif %}>Select type</option>
-                            <option value="basic"   {% if member.membership_type == 'basic' %}selected{% endif %}>Basic</option>
-                            <option value="premium" {% if member.membership_type == 'premium' %}selected{% endif %}>Premium</option>
-                            <option value="vip"     {% if member.membership_type == 'vip' %}selected{% endif %}>VIP</option>
+                </div>
+                <div class="col-md-6">
+                    <div class="floating-group">
+                        <input type="date" name="dob" class="floating-input" placeholder=" " value="{% if member and member.dob %}{{ member.dob|date:'Y-m-d' }}{% endif %}" required>
+                        <label class="floating-label">DOB *</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="floating-group">
+                <input type="email" name="emailid" class="floating-input" placeholder=" " value="{{ member.emailid|default:'' }}" required>
+                <label class="floating-label">Email Address *</label>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="floating-group">
+                        <input type="text" name="emergency_contact" class="floating-input" placeholder=" " value="{{ member.emergency_contact|default:'' }}">
+                        <label class="floating-label">Emergency Contact</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="floating-group">
+                        <input type="text" name="medical_conditions" class="floating-input" placeholder=" " value="{{ member.medical_conditions|default:'' }}">
+                        <label class="floating-label">Medical Cond.</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-label"><i class="fa fa-id-card"></i> Membership & Plan</div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="floating-group">
+                        <select name="membership_type" class="floating-input" required>
+                            <option value="" disabled {% if not member %}selected{% endif %}></option>
+                            <option value="Monthly"     {% if member.membership_type == 'Monthly'     %}selected{% endif %}>Monthly</option>
+                            <option value="Quarterly"   {% if member.membership_type == 'Quarterly'   %}selected{% endif %}>Quarterly</option>
+                            <option value="Half Yearly" {% if member.membership_type == 'Half Yearly' %}selected{% endif %}>Half Yearly</option>
+                            <option value="Annual"      {% if member.membership_type == 'Annual'      %}selected{% endif %}>Annual</option>
                         </select>
+                        <label class="floating-label">Membership Type *</label>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label>Plan</label>
-                    <select name="plan" class="form-control">
-                        <option value="">-- Select Plan --</option>
-                        {% for p in plan %}
-                            {% if member and member.plan and member.plan.id == p.id %}
-                                <option value="{{ p.id }}" selected>{{ p.name }} ({{ p.duration }} days - Rs.{{ p.amount }})</option>
-                            {% else %}
-                                <option value="{{ p.id }}">{{ p.name }} ({{ p.duration }} days - Rs.{{ p.amount }})</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label>Join Date <span class="req">*</span></label>
-                        <input type="date" name="joindate" class="form-control" value="{% if member and member.joindate %}{{ member.joindate|date:'Y-m-d' }}{% endif %}" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Expiry Date <span class="req">*</span></label>
-                        <input type="date" name="expdate" class="form-control" value="{% if member and member.expiredate %}{{ member.expiredate|date:'Y-m-d' }}{% endif %}" required>
+                <div class="col-md-6">
+                    <div class="floating-group">
+                        <select name="plan" class="floating-input">
+                            <option value=""></option>
+                            {% for p in plan %}
+                                {% if p.name == 'Monthly' or p.name == 'Quarterly' or p.name == 'Half Yearly' or p.name == 'Annual' %}
+                                    <option value="{{ p.id }}" {% if member and member.plan and member.plan.id == p.id %}selected{% endif %}>{{ p.name }} (₹{{ p.amount }})</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <label class="floating-label">Plan Details</label>
                     </div>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label>Initial Amount (Rs.) <span class="req">*</span></label>
-                    <input type="number" name="initialamount" class="form-control" min="0" step="0.01" placeholder="e.g. 5000" value="{{ member.initialamount|default:'' }}" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Address</label>
-                    <textarea name="address" class="form-control" rows="2" placeholder="Enter address">{{ member.address|default:'' }}</textarea>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label>Emergency Contact</label>
-                        <input type="text" name="emergency_contact" class="form-control" placeholder="Name & phone" value="{{ member.emergency_contact|default:'' }}">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Medical Conditions</label>
-                        <input type="text" name="medical_conditions" class="form-control" placeholder="Allergies, conditions..." value="{{ member.medical_conditions|default:'' }}">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="floating-group">
+                        <input type="date" name="joindate" class="floating-input" placeholder=" " value="{% if member and member.joindate %}{{ member.joindate|date:'Y-m-d' }}{% endif %}" required>
+                        <label class="floating-label">Join Date *</label>
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="floating-group">
+                        <input type="date" name="expdate" class="floating-input" placeholder=" " value="{% if member and member.expiredate %}{{ member.expiredate|date:'Y-m-d' }}{% endif %}" required>
+                        <label class="floating-label">Expiry Date *</label>
+                    </div>
+                </div>
+            </div>
 
-                <button type="submit" class="btn-submit mt-2">
-                    {% if member %}<i class="fa fa-save"></i> Save Changes{% else %}<i class="fa fa-plus"></i> Add Member{% endif %}
-                </button>
-            </form>
-        </div>
+            <div class="floating-group">
+                <input type="number" name="initialamount" class="floating-input" min="0" step="0.01" placeholder=" " value="{{ member.initialamount|default:'' }}" required>
+                <label class="floating-label">Initial Amount (₹) *</label>
+            </div>
+
+            <div class="floating-group">
+                <textarea name="address" class="floating-input" placeholder=" ">{{ member.address|default:'' }}</textarea>
+                <label class="floating-label">Residential Address</label>
+            </div>
+
+            <button type="submit" class="premium-btn">
+                {% if member %}<i class="fa fa-save"></i> Save Member Profile{% else %}<i class="fa fa-check-circle"></i> Complete Registration{% endif %}
+            </button>
+        </form>
     </div>
 </div>
 
 {% if error == "no" %}
-<script>alert('Record Inserted Successfully'); window.location="{% url 'view_member' %}";</script>
+<script>window.location="{% url 'view_member' %}";</script>
 {% elif error == "yes" %}
 <script>alert('Something went wrong. Please fill all required fields and try again.');</script>
 {% endif %}

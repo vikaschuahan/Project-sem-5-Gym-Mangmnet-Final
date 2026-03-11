@@ -1,117 +1,119 @@
-﻿{% extends 'navigation.html' %}
+{% extends 'navigation.html' %}
+{% load static %}
 
-{% block css %}
-<style>
-    .view-header {
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-        color: #fff;
-        padding: 18px 24px;
-        border-radius: 10px 10px 0 0;
-        font-weight: 700;
-        font-size: 1.3rem;
-        text-align: center;
-        letter-spacing: 0.5px;
-    }
-    .view-card {
-        border: none;
-        border-radius: 10px;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-        overflow: hidden;
-    }
-    .table thead th {
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-        color: #fff;
-        font-weight: 600;
-        border: none;
-        padding: 12px 14px;
-        white-space: nowrap;
-    }
-    .table tbody td {
-        vertical-align: middle;
-        padding: 10px 14px;
-    }
-    .table tbody tr:hover {
-        background-color: #f0f4ff;
-    }
-    .badge-active { background-color: #28a745; color: #fff; padding: 5px 12px; border-radius: 12px; }
-    .badge-inactive { background-color: #dc3545; color: #fff; padding: 5px 12px; border-radius: 12px; }
-    .search-bar { max-width: 350px; }
-</style>
-{% endblock %}
+{% block title %}Members — GymPro{% endblock %}
 
 {% block body %}
-<div class="container-fluid py-4" style="max-width: 1200px;">
-    <div class="view-card bg-white">
-        <div class="view-header">
-            <i class="fa fa-users"></i> FitZone Gym &mdash; View Members
+
+<!-- Page header -->
+<div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+    <div style="width:4px; height:28px; background:#22c55e; border-radius:2px;"></div>
+    <h1 style="font-size:1.25rem; font-weight:800; margin:0;">Members</h1>
+</div>
+<p style="color:#6b7280; font-size:0.85rem; margin-bottom:20px;">Manage all gym members, their plans and membership status.</p>
+
+<div class="app-card">
+    <!-- Toolbar -->
+    <div style="padding:14px 16px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; flex-wrap:wrap; gap:10px; justify-content:space-between;">
+        <div class="search-wrap">
+            <i class="fa fa-search"></i>
+            <input type="text" id="memberSearch" class="search-input" placeholder="Search members…" onkeyup="searchMembers()">
         </div>
-        <div class="p-3">
-            <div class="row mb-3 align-items-center">
-                <div class="col-md-6 mb-2 mb-md-0">
-                    <input type="text" id="memberSearch" class="form-control search-bar" placeholder="Search by name, email, or phone..." onkeyup="searchMembers()">
-                </div>
-                <div class="col-md-6 text-md-right">
-                    <button class="btn btn-primary mr-1" onclick="location.reload();"><i class="fa fa-refresh"></i> Refresh</button>
-                    <a href="{% url 'export_member_csv' %}" class="btn btn-success"><i class="fa fa-download"></i> Download CSV</a>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Full Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Membership</th>
-                            <th>Join Date</th>
-                            <th>Expire Date</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="memberTable">
-                        {% for i in member %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td><strong>{{ i.name }}</strong></td>
-                            <td><a href="mailto:{{ i.emailid }}" style="color:#5559e0;">{{ i.emailid }}</a></td>
-                            <td><a href="tel:{{ i.contact }}" style="color:#5559e0;">{{ i.contact }}</a></td>
-                            <td>{{ i.plan }}</td>
-                            <td>{{ i.joindate|date:"M d, Y" }}</td>
-                            <td>{{ i.expiredate|date:"M d, Y" }}</td>
-                            <td>
-                                {% if i.status == "Active" %}
-                                    <span class="badge-active">Active</span>
-                                {% else %}
-                                    <span class="badge-inactive">Inactive</span>
-                                {% endif %}
-                            </td>
-                            <td style="white-space:nowrap;">
-                                <a class="btn btn-warning btn-sm" href="{% url 'edit_member' i.id %}"><i class="fa fa-pencil"></i> Edit</a>
-                                <a class="btn btn-danger btn-sm" href="{% url 'delete_member' i.id %}" onclick="return confirm('Are you sure?')"><i class="fa fa-trash"></i> Delete</a>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="9" class="text-center text-muted py-4">No members found.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+        <div style="display:flex; gap:8px;">
+            <a href="{% url 'add_member' %}" class="btn-gms-primary" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-size:0.83rem; padding:8px 16px;">
+                <i class="fa fa-plus"></i> Add Member
+            </a>
+            <a href="{% url 'export_member_csv' %}" class="btn-gms-outline" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-size:0.83rem; padding:7px 14px;">
+                <i class="fa fa-download"></i> CSV
+            </a>
         </div>
     </div>
+
+    <!-- Legend -->
+    <div style="padding:8px 16px; background:rgba(255,255,255,0.02); border-bottom:1px solid #f1f5f9; display:flex; gap:16px; flex-wrap:wrap; font-size:0.74rem; color:#6b7280;">
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;background:rgba(253,230,138,0.1);border:1px solid rgba(253,230,138,0.3);border-radius:2px;display:inline-block;"></span> Expiring ≤ 7 days</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;background:rgba(254,202,202,0.1);border:1px solid rgba(254,202,202,0.3);border-radius:2px;display:inline-block;"></span> Expired</span>
+    </div>
+
+    <!-- Table -->
+    <div style="overflow-x:auto;">
+        <table class="gms-table" style="min-width:700px;">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Member</th>
+                    <th>Contact</th>
+                    <th>Plan</th>
+                    <th>Joined</th>
+                    <th>Expires</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="memberBody">
+                {% for m in member %}
+                <tr class="{% if m.days_left is not None %}{% if m.days_left < 0 %}row-expired{% elif m.days_left <= 7 %}row-expiring{% endif %}{% endif %}">
+                    <td style="color:#6b7280;font-size:0.75rem;font-weight:500;">{{ forloop.counter }}</td>
+                    <td>
+                        <div style="display:flex;align-items:center;">
+                            <span class="mem-avatar">{{ m.name|slice:":1"|upper }}</span>
+                            <div>
+                                <div style="font-weight:600;font-size:0.88rem;">{{ m.name }}</div>
+                                <div style="font-size:0.73rem;color:#6b7280;">{{ m.gender }} · Age {{ m.age }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="font-size:0.83rem;color:#4f46e5;">{{ m.contact }}</div>
+                        <div style="font-size:0.73rem;color:#6b7280;">{{ m.emailid }}</div>
+                    </td>
+                    <td>
+                        <div style="font-size:0.85rem; font-weight:600;">{{ m.plan.name }}</div>
+                    </td>
+                    <td style="color:#6b7280;font-size:0.82rem;">{{ m.joindate|date:"d M Y" }}</td>
+                    <td style="color:#6b7280;font-size:0.82rem;">{{ m.expiredate|date:"d M Y" }}</td>
+                    <td>
+                        {% if m.days_left is not None %}
+                            {% if m.days_left < 0 %}
+                                <span class="badge-expired">Expired</span>
+                            {% elif m.days_left <= 7 %}
+                                <span class="badge-expiring">⚠ {{ m.days_left }} days left</span>
+                            {% else %}
+                                <span class="badge-green">Active</span>
+                            {% endif %}
+                        {% else %}
+                            <span class="badge-red">N/A</span>
+                        {% endif %}
+                    </td>
+                    <td style="white-space:nowrap;">
+                        <a href="{% url 'edit_member' m.id %}" class="btn-action-edit">
+                            <i class="fa fa-pencil"></i> Edit
+                        </a>
+                        <a href="{% url 'delete_member' m.id %}" onclick="return confirm('Delete member {{ m.name }}?')" class="btn-action-delete">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="8" style="text-align:center; padding:48px; color:#6b7280;">No members found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
+
 <script>
 function searchMembers() {
     var input = document.getElementById("memberSearch").value.toUpperCase();
-    var rows = document.getElementById("memberTable").getElementsByTagName("tr");
+    var rows = document.getElementById("memberBody").getElementsByTagName("tr");
     for (var i = 0; i < rows.length; i++) {
-        var cells = rows[i].getElementsByTagName("td");
         var match = false;
+        var cells = rows[i].getElementsByTagName("td");
         for (var j = 0; j < cells.length; j++) {
-            if (cells[j] && cells[j].textContent.toUpperCase().indexOf(input) > -1) { match = true; break; }
+            if (cells[j] && cells[j].textContent.toUpperCase().indexOf(input) > -1) {
+                match = true;
+                break;
+            }
         }
         rows[i].style.display = match ? "" : "none";
     }

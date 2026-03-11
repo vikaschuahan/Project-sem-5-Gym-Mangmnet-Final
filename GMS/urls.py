@@ -9,6 +9,7 @@ from gym.views import (
     Add_Member, View_Member, Delete_Member, Edit_Member,
     Add_Trainer, View_Trainer, Delete_Trainer, Edit_Trainer,
     Export_Enquiry_CSV, Export_Equipment_CSV, Export_Member_CSV,
+    Mark_Attendance, View_Attendance,
 )
 from django.contrib.auth import views as auth_views # pyright: ignore[reportMissingModuleSource]
 
@@ -61,4 +62,8 @@ urlpatterns = [
     path('export_enquiry_csv/', Export_Enquiry_CSV, name='export_enquiry_csv'),
     path('export_equipment_csv/', Export_Equipment_CSV, name='export_equipment_csv'),
     path('export_member_csv/', Export_Member_CSV, name='export_member_csv'),
+
+    # Attendance
+    path('mark_attendance/', Mark_Attendance, name='mark_attendance'),
+    path('view_attendance/', View_Attendance, name='view_attendance'),
 ]

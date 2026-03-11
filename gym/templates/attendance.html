@@ -1,0 +1,498 @@
+{% extends 'navigation.html' %}
+{% load static %}
+
+{% block css %}
+<style>
+    :root {
+        --present: #00e676;
+        --absent: #ff5252;
+        --card-bg: #ffffff;
+        --card-border: #e2e8f0;
+        --accent: #00e676;
+    }
+
+    
+
+    .att-hero {
+        background: linear-gradient(135deg, #0d1b2a 0%, #111b23 60%, #0a2818 100%);
+        padding: 32px 0 24px;
+        margin-bottom: 0;
+        border-bottom: 2px solid #00e67620;
+    }
+
+    .att-hero h1 {
+        color: #00e676;
+        font-weight: 800;
+        font-size: 2rem;
+        letter-spacing: 1px;
+        text-shadow: 0 0 20px #00e67650;
+    }
+
+    .att-hero p {
+        color: #64748b;
+        font-size: 0.95rem;
+    }
+
+    .stat-pill {
+        background: #ffffff;
+        border: 1px solid #2a3a4a;
+        border-radius: 50px;
+        padding: 8px 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #0f172a;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .stat-pill .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 8px var(--accent);
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.5; transform: scale(1.3); }
+    }
+
+    .att-toolbar {
+        background: #f8fafc;
+        border-bottom: 1px solid #1e2d3a;
+        padding: 16px 0;
+        position: sticky;
+        top: 56px;
+        z-index: 100;
+    }
+
+    .date-picker-group {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .date-picker-group label {
+        color: #64748b;
+        font-size: 0.85rem;
+        font-weight: 600;
+        white-space: nowrap;
+        margin: 0;
+    }
+
+    .date-picker-group input[type="date"] {
+        background: #ffffff;
+        border: 1px solid #2a3a4a;
+        color: #0f172a;
+        border-radius: 8px;
+        padding: 7px 14px;
+        font-size: 0.9rem;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    .date-picker-group input[type="date"]:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px #00e67615;
+    }
+
+    /* Live counters */
+    .live-counter {
+        display: flex;
+        gap: 16px;
+    }
+
+    .counter-badge {
+        padding: 6px 16px;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .counter-badge.present {
+        background: #00e67615;
+        color: var(--present);
+        border: 1px solid #00e67630;
+    }
+
+    .counter-badge.absent {
+        background: #ff525215;
+        color: var(--absent);
+        border: 1px solid #ff525230;
+    }
+
+    /* Member cards grid */
+    .members-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 16px;
+        padding: 24px 0;
+    }
+
+    .member-card {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 14px;
+        padding: 20px;
+        transition: all 0.25s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .member-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: var(--present);
+        border-radius: 14px 0 0 14px;
+        transition: background 0.25s;
+    }
+
+    .member-card.is-absent::before {
+        background: var(--absent);
+    }
+
+    .member-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        border-color: #cbd5e1;
+    }
+
+    .member-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #00e676, #00b856);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: #0d1b2a;
+        flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(0,230,118,0.3);
+    }
+
+    .member-card.is-absent .member-avatar {
+        background: linear-gradient(135deg, #ff5252, #d32f2f);
+        box-shadow: 0 4px 12px rgba(255,82,82,0.3);
+    }
+
+    .member-name {
+        color: #0f172a;
+        font-weight: 700;
+        font-size: 1rem;
+        margin: 0;
+        line-height: 1.3;
+    }
+
+    .member-meta {
+        color: #64748b;
+        font-size: 0.78rem;
+        margin: 2px 0 0;
+    }
+
+    .member-plan {
+        background: #ffffff;
+        border: 1px solid #1e2d3a;
+        border-radius: 6px;
+        padding: 3px 10px;
+        color: #00e676;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: inline-block;
+        margin-top: 8px;
+    }
+
+    /* Toggle Switch */
+    .toggle-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px solid #1e2d3a;
+    }
+
+    .toggle-btn {
+        flex: 1;
+        padding: 8px 0;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        font-size: 0.82rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        letter-spacing: 0.5px;
+    }
+
+    .toggle-btn.present-btn {
+        background: #00e67615;
+        color: #64748b;
+        border-color: #2a3a4a;
+    }
+
+    .toggle-btn.present-btn.active {
+        background: var(--present);
+        color: #0d1b2a;
+        border-color: var(--present);
+        box-shadow: 0 4px 12px rgba(0,230,118,0.35);
+    }
+
+    .toggle-btn.absent-btn {
+        background: #ff525215;
+        color: #64748b;
+        border-color: #2a3a4a;
+    }
+
+    .toggle-btn.absent-btn.active {
+        background: var(--absent);
+        color: #fff;
+        border-color: var(--absent);
+        box-shadow: 0 4px 12px rgba(255,82,82,0.35);
+    }
+
+    /* Hidden radio */
+    input[type="radio"].att-radio {
+        display: none;
+    }
+
+    /* Sticky save bar */
+    .save-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #ffffff;
+        border-top: 2px solid #22c55e;
+        padding: 14px 0;
+        z-index: 200;
+        box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+    }
+
+    .btn-save-attendance {
+        background: linear-gradient(135deg, #00e676, #00b856);
+        color: #0d1b2a;
+        font-weight: 800;
+        font-size: 1rem;
+        padding: 12px 48px;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.2s;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 20px rgba(0,230,118,0.4);
+    }
+
+    .btn-save-attendance:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 28px rgba(0,230,118,0.6);
+    }
+
+    .btn-view-report {
+        background: transparent;
+        color: #64748b;
+        font-weight: 600;
+        font-size: 0.9rem;
+        padding: 10px 24px;
+        border: 1px solid #2a3a4a;
+        border-radius: 50px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+        display: inline-block;
+    }
+
+    .btn-view-report:hover {
+        border-color: #00e676;
+        color: #00e676;
+    }
+
+    .page-pb { padding-bottom: 90px; }
+
+    .no-members-msg {
+        text-align: center;
+        padding: 60px 0;
+        color: #64748b;
+    }
+
+    .no-members-msg i { font-size: 3rem; color: #2a3a4a; margin-bottom: 12px; display: block; }
+</style>
+{% endblock css %}
+
+{% block body %}
+<div class="page-pb">
+    <!-- Hero -->
+    <div class="att-hero">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap:12px">
+                <div>
+                    <h1><i class="fa fa-check-square-o" style="font-size:1.6rem;"></i> &nbsp;Mark Attendance</h1>
+                    <p class="mb-0">{{ today|date:"l, d F Y" }} &nbsp;·&nbsp; {{ total_members }} member{{ total_members|pluralize }}</p>
+                </div>
+                <div class="d-flex align-items-center" style="gap:12px;">
+                    <div class="stat-pill"><span class="dot"></span> Live Session</div>
+                    <a href="{% url 'view_attendance' %}" class="btn-view-report"><i class="fa fa-bar-chart"></i> View Report</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sticky Toolbar -->
+    <div class="att-toolbar">
+        <div class="container d-flex align-items-center justify-content-between flex-wrap" style="gap:12px;">
+            <div class="date-picker-group">
+                <label><i class="fa fa-calendar"></i> &nbsp;Date:</label>
+                <input type="date" id="attendanceDateDisplay" value="{{ today|date:'Y-m-d' }}"
+                    onchange="document.getElementById('attendanceDateInput').value=this.value">
+            </div>
+            <div class="live-counter">
+                <div class="counter-badge present"><i class="fa fa-check"></i> <span id="presentCount">{{ member_data|length }}</span> Present</div>
+                <div class="counter-badge absent"><i class="fa fa-times"></i> <span id="absentCount">0</span> Absent</div>
+            </div>
+            <div style="display:flex;gap:10px;">
+                <button type="button" onclick="markAll('Present')" class="btn btn-sm" style="background:#00e67615;color:#00e676;border:1px solid #00e67630;border-radius:50px;font-weight:700;padding:6px 18px;">
+                    ✓ All Present
+                </button>
+                <button type="button" onclick="markAll('Absent')" class="btn btn-sm" style="background:#ff525215;color:#ff5252;border:1px solid #ff525230;border-radius:50px;font-weight:700;padding:6px 18px;">
+                    ✗ All Absent
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <form method="POST" id="attendanceForm">
+        {% csrf_token %}
+        <input type="hidden" name="attendance_date" id="attendanceDateInput" value="{{ today|date:'Y-m-d' }}">
+
+        <div class="container">
+            {% if member_data %}
+            <div class="members-grid">
+                {% for item in member_data %}
+                <div class="member-card {% if item.status == 'Absent' %}is-absent{% endif %}" id="card-{{ item.member.id }}">
+                    <div class="d-flex align-items-center" style="gap:14px;">
+                        <div class="member-avatar" id="avatar-{{ item.member.id }}">
+                            {{ item.member.name|slice:":1"|upper }}
+                        </div>
+                        <div style="flex:1; min-width:0;">
+                            <p class="member-name">{{ item.member.name }}</p>
+                            <p class="member-meta">
+                                <i class="fa fa-phone"></i> {{ item.member.contact }}
+                                &nbsp;·&nbsp;
+                                <i class="fa fa-venus-mars"></i> {{ item.member.gender }}
+                            </p>
+                            <span class="member-plan">{{ item.member.plan }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Present / Absent Toggle -->
+                    <div class="toggle-wrapper">
+                        <input type="radio" class="att-radio" name="status_{{ item.member.id }}"
+                            id="present_{{ item.member.id }}" value="Present"
+                            {% if item.status == 'Present' %}checked{% endif %}
+                            onchange="handleToggle({{ item.member.id|default:0 }}, 'Present')">
+
+                        <input type="radio" class="att-radio" name="status_{{ item.member.id }}"
+                            id="absent_{{ item.member.id }}" value="Absent"
+                            {% if item.status == 'Absent' %}checked{% endif %}
+                            onchange="handleToggle({{ item.member.id|default:0 }}, 'Absent')">
+
+                        <label for="present_{{ item.member.id }}"
+                            class="toggle-btn present-btn {% if item.status == 'Present' %}active{% endif %}"
+                            style="text-align:center;">
+                            <i class="fa fa-check"></i> &nbsp;Present
+                        </label>
+                        <label for="absent_{{ item.member.id }}"
+                            class="toggle-btn absent-btn {% if item.status == 'Absent' %}active{% endif %}"
+                            style="text-align:center;">
+                            <i class="fa fa-times"></i> &nbsp;Absent
+                        </label>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% else %}
+            <div class="no-members-msg">
+                <i class="fa fa-users"></i>
+                <h4 style="color:#0f172a;">No Members Found</h4>
+                <p>Add members first to mark attendance.</p>
+                <a href="{% url 'add_member' %}" class="btn" style="background:#22c55e;color:#fff;font-weight:700;border-radius:50px;padding:10px 28px;">
+                    + Add Member
+                </a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sticky Save Bar -->
+        {% if member_data %}
+        <div class="save-bar">
+            <div class="container d-flex align-items-center justify-content-between flex-wrap" style="gap:12px;">
+                <div style="color:#64748b;font-size:0.88rem;">
+                    <i class="fa fa-info-circle"></i> &nbsp;
+                    Saving attendance for <strong style="color:#0f172a;">{{ today|date:"d M Y" }}</strong>
+                </div>
+                <div class="d-flex align-items-center" style="gap:14px;">
+                    <a href="{% url 'home' %}" style="color:#667788;text-decoration:none;font-size:0.88rem;">Cancel</a>
+                    <button type="submit" class="btn-save-attendance">
+                        <i class="fa fa-save"></i> &nbsp; Save Attendance
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </form>
+</div>
+
+{% block js %}
+<script>
+    // Count present/absent on load
+    function updateCounters() {
+        var present = document.querySelectorAll('input[type="radio"][value="Present"]:checked').length;
+        var absent = document.querySelectorAll('input[type="radio"][value="Absent"]:checked').length;
+        document.getElementById('presentCount').textContent = present;
+        document.getElementById('absentCount').textContent = absent;
+    }
+
+    function handleToggle(memberId, status) {
+        var card = document.getElementById('card-' + memberId);
+        var avatar = document.getElementById('avatar-' + memberId);
+        var presentBtn = card.querySelector('.present-btn');
+        var absentBtn = card.querySelector('.absent-btn');
+
+        if (status === 'Present') {
+            card.classList.remove('is-absent');
+            presentBtn.classList.add('active');
+            absentBtn.classList.remove('active');
+        } else {
+            card.classList.add('is-absent');
+            absentBtn.classList.add('active');
+            presentBtn.classList.remove('active');
+        }
+        updateCounters();
+    }
+
+    function markAll(status) {
+        var radios = document.querySelectorAll('input[type="radio"][value="' + status + '"]');
+        radios.forEach(function(radio) {
+            radio.checked = true;
+            var memberId = radio.id.replace(status.toLowerCase() + '_', '');
+            handleToggle(memberId, status);
+        });
+    }
+
+    // Init counters
+    updateCounters();
+</script>
+{% endblock js %}
+{% endblock body %}

@@ -1,0 +1,363 @@
+{% extends 'navigation.html' %}
+{% load static %}
+
+{% block css %}
+<style>
+    /* ── Stat Cards ── */
+    .stat-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-bottom: 28px;
+    }
+    .stat-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 20px 18px;
+        text-align: center;
+        box-shadow: 0 2px 12px -3px rgba(0,0,0,0.06);
+        position: relative;
+        overflow: hidden;
+    }
+    .stat-card::before {
+        content: '';
+        position: absolute; top:0; left:0; right:0; height: 3px;
+    }
+    .stat-card.total::before  { background: linear-gradient(90deg, #3b82f6, #6366f1); }
+    .stat-card.present::before { background: linear-gradient(90deg, #22c55e, #10b981); }
+    .stat-card.absent::before  { background: linear-gradient(90deg, #ef4444, #f97316); }
+    .stat-card.pct::before     { background: linear-gradient(90deg, #f59e0b, #eab308); }
+    .stat-num {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #0f172a;
+        line-height: 1.1;
+    }
+    .stat-card.total .stat-num   { color: #3b82f6; }
+    .stat-card.present .stat-num { color: #22c55e; }
+    .stat-card.absent .stat-num  { color: #ef4444; }
+    .stat-card.pct .stat-num     { color: #f59e0b; }
+    .stat-label {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 4px;
+    }
+
+    /* ── Filter Bar ── */
+    .filter-bar {
+        display: flex;
+        align-items: flex-end;
+        gap: 14px;
+        flex-wrap: wrap;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 18px 20px;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 8px -2px rgba(0,0,0,0.04);
+    }
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+    .filter-group label {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #64748b;
+    }
+    .filter-group input {
+        border: 1.5px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 0.88rem;
+        font-family: 'Inter', sans-serif;
+        color: #0f172a;
+        background: #f8fafc;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        min-width: 180px;
+    }
+    .filter-group input:focus {
+        border-color: #22c55e;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(34,197,94,0.12);
+    }
+    .btn-filter {
+        background: #3b82f6;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 9px 18px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        transition: background 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .btn-filter:hover { background: #2563eb; }
+    .btn-clear {
+        background: transparent;
+        color: #ef4444;
+        border: 1.5px solid #fecaca;
+        border-radius: 8px;
+        padding: 8px 14px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.2s;
+    }
+    .btn-clear:hover { background: #fef2f2; color: #dc2626; text-decoration: none; }
+
+    /* ── Mark Attendance Button ── */
+    .btn-mark-now {
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 22px;
+        font-size: 0.88rem;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 14px -3px rgba(34,197,94,0.4);
+        transition: all 0.2s;
+    }
+    .btn-mark-now:hover { transform: translateY(-1px); box-shadow: 0 6px 20px -3px rgba(34,197,94,0.5); color: #fff; text-decoration: none; }
+
+    /* ── Attendance Table ── */
+    .att-table-wrap {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 2px 12px -3px rgba(0,0,0,0.06);
+    }
+    .att-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .att-table thead th {
+        background: linear-gradient(90deg, #3b82f6, #4f46e5);
+        color: #fff;
+        padding: 12px 16px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        text-transform: capitalize;
+        white-space: nowrap;
+        border: none;
+    }
+    .att-table tbody td {
+        padding: 11px 16px;
+        border-bottom: 1px solid #f1f5f9;
+        font-size: 0.88rem;
+        color: #1e293b;
+        vertical-align: middle;
+    }
+    .att-table tbody tr:last-child td { border-bottom: none; }
+    .att-table tbody tr:hover td { background: #f8fafc; }
+
+    /* ── Mini Avatar ── */
+    .mini-avatar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px; height: 30px;
+        background: linear-gradient(135deg, #22c55e, #3b82f6);
+        border-radius: 50%;
+        color: #fff;
+        font-size: 0.8rem;
+        font-weight: 700;
+        margin-right: 8px;
+        flex-shrink: 0;
+    }
+
+    /* ── Status Badges ── */
+    .badge-present {
+        background: #dcfce7;
+        color: #15803d;
+        border: 1px solid #bbf7d0;
+        border-radius: 20px;
+        padding: 4px 14px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .badge-absent {
+        background: #fef2f2;
+        color: #dc2626;
+        border: 1px solid #fecaca;
+        border-radius: 20px;
+        padding: 4px 14px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    /* ── No Data Block ── */
+    .no-data {
+        text-align: center;
+        padding: 60px 20px;
+        color: #94a3b8;
+    }
+    .no-data i.fa-inbox {
+        font-size: 3rem;
+        color: #cbd5e1;
+        margin-bottom: 12px;
+        display: block;
+    }
+    .no-data h5 {
+        color: #475569;
+        margin-bottom: 6px;
+    }
+    .no-data p {
+        color: #94a3b8;
+        font-size: 0.88rem;
+    }
+</style>
+{% endblock css %}
+
+{% block body %}
+<div style="padding-top:4px;">
+
+    <!-- Hero -->
+    <div style="margin-bottom:0;">
+    </div>
+
+    <div>
+        <!-- Header -->
+        <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap:12px;margin-bottom:24px;">
+            <div>
+                <h2 style="color:#0f172a;font-weight:800;margin:0;">
+                    <i class="fa fa-bar-chart" style="color:#22c55e;"></i> &nbsp;Attendance Report
+                </h2>
+                <p style="color:#64748b;margin:4px 0 0;font-size:0.88rem;">Track and monitor member attendance history</p>
+            </div>
+            <a href="{% url 'mark_attendance' %}" class="btn-mark-now">
+                <i class="fa fa-check-square-o"></i> Mark Today's Attendance
+            </a>
+        </div>
+
+        <!-- Today's Stats -->
+        <div class="stat-cards">
+            <div class="stat-card total">
+                <div class="stat-num">{{ total_members }}</div>
+                <div class="stat-label">Total Members</div>
+            </div>
+            <div class="stat-card present">
+                <div class="stat-num">{{ today_present }}</div>
+                <div class="stat-label">Present Today</div>
+            </div>
+            <div class="stat-card absent">
+                <div class="stat-num">{{ today_absent }}</div>
+                <div class="stat-label">Absent Today</div>
+            </div>
+            <div class="stat-card pct">
+                <div class="stat-num">
+                    {% if total_members > 0 %}
+                        {% widthratio today_present total_members 100 %}%
+                    {% else %}
+                        —
+                    {% endif %}
+                </div>
+                <div class="stat-label">Attendance Rate</div>
+            </div>
+        </div>
+
+        <!-- Filter -->
+        <form method="GET" action="{% url 'view_attendance' %}">
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <label><i class="fa fa-calendar"></i> &nbsp;Filter by Date</label>
+                    <input type="date" name="date" value="{{ filter_date }}">
+                </div>
+                <div class="filter-group">
+                    <label><i class="fa fa-user"></i> &nbsp;Filter by Member Name</label>
+                    <input type="text" name="name" value="{{ filter_name }}" placeholder="e.g. Rahul...">
+                </div>
+                <button type="submit" class="btn-filter">
+                    <i class="fa fa-search"></i> &nbsp;Search
+                </button>
+                {% if filter_date or filter_name %}
+                <a href="{% url 'view_attendance' %}" class="btn-clear">
+                    <i class="fa fa-times"></i> Clear
+                </a>
+                {% endif %}
+            </div>
+        </form>
+
+        <!-- Table -->
+        <div class="att-table-wrap">
+            {% if attendance_list %}
+            <table class="att-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Member</th>
+                        <th>Contact</th>
+                        <th>Plan</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for att in attendance_list %}
+                    <tr>
+                        <td style="color:#64748b;font-size:0.82rem;">{{ forloop.counter }}</td>
+                        <td>
+                            <span class="mini-avatar">{{ att.member.name|slice:":1"|upper }}</span>
+                            <span style="font-weight:600;">{{ att.member.name }}</span>
+                        </td>
+                        <td style="color:#64748b;">{{ att.member.contact }}</td>
+                        <td>
+                            <span style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:2px 10px;color:#15803d;font-size:0.78rem;font-weight:600;">
+                                {{ att.member.plan }}
+                            </span>
+                        </td>
+                        <td style="color:#64748b;font-size:0.88rem;">
+                            <i class="fa fa-calendar" style="margin-right:5px;"></i>{{ att.date|date:"d M Y" }}
+                        </td>
+                        <td>
+                            {% if att.status == 'Present' %}
+                            <span class="badge-present"><i class="fa fa-check"></i> Present</span>
+                            {% else %}
+                            <span class="badge-absent"><i class="fa fa-times"></i> Absent</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="no-data">
+                <i class="fa fa-inbox"></i>
+                <h5 style="color:#475569;">No Attendance Records Found</h5>
+                {% if filter_date or filter_name %}
+                <p>No records match your filter. <a href="{% url 'view_attendance' %}" style="color:#22c55e;">Clear filters</a></p>
+                {% else %}
+                <p>Start by marking today's attendance.</p>
+                <a href="{% url 'mark_attendance' %}" class="btn-mark-now" style="display:inline-flex;margin-top:8px;">
+                    <i class="fa fa-check-square-o"></i> Mark Attendance Now
+                </a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock body %}

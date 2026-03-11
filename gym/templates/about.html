@@ -1,4 +1,4 @@
-﻿{% extends 'navigation.html' %}
+{% extends 'navigation.html' %}
 {% load static %}
 
 {% block css %}
@@ -8,6 +8,9 @@
   body {
     font-family: 'Poppins', 'Segoe UI', sans-serif;
   }
+
+  /* Override main container for full-width edge-to-edge layout */
+  main { padding: 0 !important; max-width: 100% !important; margin: 0 !important; }
 
   /* ── Section utilities ──────────────────────────────────── */
   .section-title {
@@ -915,7 +918,7 @@
       <p style="color:#8e9ab5;">The BCA students who built FitZone Gym Management System as their semester project.</p>
     </div>
     <div class="row justify-content-center">
-      <div class="col-sm-6 col-md-4 mb-4 reveal">
+      <div class="col-sm-8 col-md-5 mb-4 reveal">
         <div class="team-card" style="background:#252d3d;border:1px solid rgba(255,255,255,0.07);">
           <div class="tc-img"><img src="{% static 'images/vikas.jpg' %}" alt="Vikas Chauhan"></div>
           <div class="tc-body" style="background:#252d3d;">
@@ -923,38 +926,6 @@
             <div class="role" style="color:#FFD700;">Lead Developer · BCA Student</div>
             <p style="color:#8e9ab5;">Aspiring Python developer passionate about coding, data science, and building
               real-world web applications with Django.</p>
-            <div class="tc-social">
-              <a href="#" style="background:rgba(255,255,255,0.07);color:#adb5bd;"><i class="fab fa-github"></i></a>
-              <a href="#" style="background:rgba(255,255,255,0.07);color:#adb5bd;"><i
-                  class="fab fa-linkedin-in"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-4 mb-4 reveal">
-        <div class="team-card" style="background:#252d3d;border:1px solid rgba(255,255,255,0.07);">
-          <div class="tc-img"><img src="{% static 'images/milan.jpg' %}" alt="Milan Rathod"></div>
-          <div class="tc-body" style="background:#252d3d;">
-            <h5 style="color:#fff;">Milan Rathod</h5>
-            <div class="role" style="color:#FFD700;">Frontend Developer · BCA Student</div>
-            <p style="color:#8e9ab5;">Creative frontend enthusiast focused on building beautiful, user-friendly
-              interfaces with HTML, CSS, and JavaScript.</p>
-            <div class="tc-social">
-              <a href="#" style="background:rgba(255,255,255,0.07);color:#adb5bd;"><i class="fab fa-github"></i></a>
-              <a href="#" style="background:rgba(255,255,255,0.07);color:#adb5bd;"><i
-                  class="fab fa-linkedin-in"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-4 mb-4 reveal">
-        <div class="team-card" style="background:#252d3d;border:1px solid rgba(255,255,255,0.07);">
-          <div class="tc-img"><img src="{% static 'images/vishal.jpg' %}" alt="Vishal Kindarkhediya"></div>
-          <div class="tc-body" style="background:#252d3d;">
-            <h5 style="color:#fff;">Vishal Kindarkhediya</h5>
-            <div class="role" style="color:#FFD700;">Backend Developer · BCA Student</div>
-            <p style="color:#8e9ab5;">Backend developer with a strong interest in database design, API development, and
-              scalable software architecture.</p>
             <div class="tc-social">
               <a href="#" style="background:rgba(255,255,255,0.07);color:#adb5bd;"><i class="fab fa-github"></i></a>
               <a href="#" style="background:rgba(255,255,255,0.07);color:#adb5bd;"><i
