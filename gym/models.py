@@ -59,9 +59,8 @@ class Member(models.Model):
     dob = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=10, default="")
     membership_type = models.CharField(max_length=20, default="basic")
-    address = models.CharField(max_length=200, blank=True, default="")
-    emergency_contact = models.CharField(max_length=50, blank=True, default="")
-    medical_conditions = models.TextField(blank=True, default="")
+
+
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)  # Linked to Plan
     joindate = models.DateField()
     expiredate = models.DateField()

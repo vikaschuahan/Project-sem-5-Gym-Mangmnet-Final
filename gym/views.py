@@ -352,9 +352,8 @@ def Add_Member(request):
         dob = request.POST.get('dob', '').strip()
         gender = request.POST.get('gender', '').strip()
         membership_type = request.POST.get('membership_type', 'basic').strip()
-        address = request.POST.get('address', '').strip()
-        emergency_contact = request.POST.get('emergency_contact', '').strip()
-        medical_conditions = request.POST.get('medical_conditions', '').strip()
+
+
         joindate = request.POST.get('joindate', '').strip()
         expiredate = request.POST.get('expdate', '').strip()
         initialamount = request.POST.get('initialamount', '0').strip()
@@ -383,9 +382,8 @@ def Add_Member(request):
                     dob=dob if dob else None,
                     gender=gender,
                     membership_type=membership_type,
-                    address=address,
-                    emergency_contact=emergency_contact,
-                    medical_conditions=medical_conditions,
+
+
                     plan=plan_obj,
                     joindate=joindate,
                     expiredate=expiredate,
@@ -452,9 +450,8 @@ def Edit_Member(request, pid):
                 member.plan = plan_obj
             except Exception:
                 pass
-        member.address = request.POST.get('address', member.address).strip()
-        member.emergency_contact = request.POST.get('emergency_contact', member.emergency_contact).strip()
-        member.medical_conditions = request.POST.get('medical_conditions', member.medical_conditions).strip()
+
+
         joindate = request.POST.get('joindate', '')
         if joindate:
             member.joindate = joindate
