@@ -1,0 +1,164 @@
+{% extends 'navigation.html' %}
+{% block title %}Add Staff — GMS{% endblock %}
+
+{% block body %}
+<style>
+.premium-wrapper {
+    max-width: 520px;
+    margin: 40px auto;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 15px 35px -10px rgba(0,0,0,0.08);
+    position: relative;
+    overflow: hidden;
+}
+.premium-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #22c55e);
+}
+.premium-title { color: #0f172a; font-size: 1.6rem; font-weight: 700; margin: 0 0 6px; text-align: center; }
+.premium-subtitle { color: #64748b; font-size: 0.88rem; text-align: center; margin-bottom: 28px; }
+
+.floating-group { position: relative; margin-bottom: 20px; }
+.floating-input {
+    width: 100%; background: #f8fafc; border: 1px solid #cbd5e1;
+    border-radius: 10px; padding: 22px 14px 8px; font-size: 0.95rem;
+    color: #0f172a; transition: all 0.3s; font-family: inherit; box-sizing: border-box;
+}
+.floating-input:focus { border-color: #3b82f6; outline: none; box-shadow: 0 0 0 3px rgba(59,130,246,0.12); }
+.floating-label {
+    position: absolute; left: 14px; top: 15px; color: #64748b;
+    font-size: 0.95rem; pointer-events: none;
+    transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
+}
+.floating-input:focus ~ .floating-label,
+.floating-input:not(:placeholder-shown) ~ .floating-label {
+    top: 6px; font-size: 0.72rem; color: #3b82f6; font-weight: 600;
+}
+.premium-btn {
+    background: linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%);
+    color: white; border: none; border-radius: 10px;
+    padding: 14px; font-size: 1rem; font-weight: 700;
+    cursor: pointer; transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(59,130,246,0.25);
+    width: 100%; margin-top: 8px;
+    display: flex; justify-content: center; align-items: center; gap: 8px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+}
+.premium-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 15px rgba(59,130,246,0.35); }
+
+.success-card {
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    border: 1.5px solid #86efac;
+    border-radius: 14px;
+    padding: 24px;
+    margin-top: 24px;
+    text-align: center;
+}
+.success-card .success-icon {
+    width: 52px; height: 52px;
+    background: #22c55e;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 14px;
+    font-size: 1.4rem; color: #fff;
+}
+.success-card h3 { color: #15803d; font-weight: 700; font-size: 1.1rem; margin: 0 0 10px; }
+.cred-box {
+    background: #fff;
+    border: 1px solid #bbf7d0;
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin: 10px 0;
+    text-align: left;
+}
+.cred-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #e7f5ea; }
+.cred-row:last-child { border-bottom: none; }
+.cred-label { font-size: 0.8rem; color: #6b7280; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.cred-value { font-size: 1rem; color: #0f172a; font-weight: 700; font-family: 'Courier New', monospace; background: #f0fdf4; padding: 2px 10px; border-radius: 6px; }
+
+.error-box {
+    background: #fef2f2; border: 1px solid #fecaca;
+    border-radius: 10px; padding: 12px 16px;
+    color: #dc2626; font-size: 0.88rem;
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 16px;
+}
+.view-btn {
+    display: inline-block; margin-top: 14px;
+    background: #22c55e; color: #fff;
+    padding: 9px 22px; border-radius: 8px;
+    font-weight: 600; font-size: 0.88rem;
+    text-decoration: none;
+}
+.view-btn:hover { background: #16a34a; color: #fff; text-decoration: none; }
+</style>
+
+<div class="container pb-5">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+        <div style="width:4px;height:28px;background:#3b82f6;border-radius:2px;"></div>
+        <h1 style="font-size:1.25rem;font-weight:800;margin:0;">Staff Management</h1>
+    </div>
+    <p style="color:#6b7280;font-size:0.85rem;margin-bottom:20px;">Create a new staff login account.</p>
+
+    <div class="premium-wrapper">
+        <h2 class="premium-title"><i class="fa fa-user-plus" style="color:#3b82f6;margin-right:8px;"></i>Add New Staff</h2>
+        <p class="premium-subtitle">Admin creates the login credentials for the staff member</p>
+
+        {% if error %}
+        <div class="error-box"><i class="fa fa-exclamation-circle"></i> {{ error }}</div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="floating-group">
+                <input type="text" name="full_name" class="floating-input" placeholder=" " required>
+                <label class="floating-label">Full Name *</label>
+            </div>
+            <div class="floating-group">
+                <input type="text" name="username" class="floating-input" placeholder=" " required
+                       autocomplete="off"
+                       oninput="this.value = this.value.replace(/\s/g, '')">
+                <label class="floating-label">Username (Login ID) *</label>
+            </div>
+            <div class="floating-group">
+                <input type="text" name="password" class="floating-input" placeholder=" " required
+                       autocomplete="off" minlength="4">
+                <label class="floating-label">Password *</label>
+            </div>
+            <button type="submit" class="premium-btn">
+                <i class="fa fa-check-circle"></i> Create Staff Account
+            </button>
+        </form>
+
+        {% if created_staff %}
+        <div class="success-card">
+            <div class="success-icon"><i class="fa fa-check"></i></div>
+            <h3>Staff Account Created!</h3>
+            <p style="color:#4b7a57;font-size:0.85rem;margin-bottom:12px;">
+                Share these credentials securely with the staff member.
+            </p>
+            <div class="cred-box">
+                <div class="cred-row">
+                    <span class="cred-label">Full Name</span>
+                    <span class="cred-value">{{ created_staff.name }}</span>
+                </div>
+                <div class="cred-row">
+                    <span class="cred-label">Username</span>
+                    <span class="cred-value">{{ created_staff.username }}</span>
+                </div>
+                <div class="cred-row">
+                    <span class="cred-label">Password</span>
+                    <span class="cred-value">{{ created_staff.password }}</span>
+                </div>
+            </div>
+            <a href="{% url 'view_staff' %}" class="view-btn"><i class="fa fa-users"></i> View All Staff</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

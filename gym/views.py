@@ -85,74 +85,81 @@ def Login(request):
     d = {'error': error}
     return render(request, 'login.html', d)
 def register_view(request):
-    errors = {}
-    form_data = {}
-    if request.method == 'POST':
-        full_name   = request.POST.get('full_name', '').strip()
-        username    = request.POST.get('username', '').strip()
-        email       = request.POST.get('email', '').strip()
-        password    = request.POST.get('password', '')
-        confirm_pw  = request.POST.get('confirm_password', '')
+    """Registration is disabled — only superadmins can create accounts via Add Staff."""
+    if not (request.user.is_authenticated and request.user.is_superuser):
+        messages.error(request, 'Account registration is restricted. Please contact the administrator.')
+        return redirect('login')
+    # If a superuser navigates here, redirect them to the staff creation page
+    return redirect('add_staff')
 
-        # Preserve form data for re-display
-        form_data = {
-            'full_name': full_name,
-            'username': username,
-            'email': email,
-        }
-
-        # ── Validation ──────────────────────────────────────────
-        if not full_name:
-            errors['full_name'] = 'Full name is required.'
-        if not username:
-            errors['username'] = 'Username is required.'
-        elif User.objects.filter(username=username).exists():
-            errors['username'] = 'This username is already taken.'
-        if not email:
-            errors['email'] = 'Email address is required.'
-        elif User.objects.filter(email=email).exists():
-            errors['email'] = 'An account with this email already exists.'
-        if not password:
-            errors['password'] = 'Password is required.'
-        elif len(password) < 8:
-            errors['password'] = 'Password must be at least 8 characters.'
-        if not confirm_pw:
-            errors['confirm_password'] = 'Please confirm your password.'
-        elif password and password != confirm_pw:
-            errors['confirm_password'] = 'Passwords do not match.'
-
-        if not errors:
-            # Split full name into first/last
-            name_parts = full_name.split(' ', 1)
-            first_name = name_parts[0]
-            last_name  = name_parts[1] if len(name_parts) > 1 else ''
-
-            user = User.objects.create_user(
-                username=username,
-                email=email,
-                password=password,
-                first_name=first_name,
-                last_name=last_name,
-                is_staff=True,   # grant admin portal access
-            )
-            messages.success(request, f'Account created successfully! Welcome, {first_name}. You can now sign in.')
-            return redirect('login')
-
-    return render(request, 'register.html', {'errors': errors, 'form_data': form_data})
 def forgot_password(request):
     if request.method == "POST":
         email = request.POST.get("email")
-
-        # Here you can add logic:
-        # 1. Check if email exists in your User model
-        # 2. Generate reset link / token
-        # 3. Send password reset email
-
-        # For now, just show a success message
         messages.success(request, f"Password reset link sent to {email}")
-    
-    # Corrected template name
     return render(request, "forgot_passwod.html")
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Staff Management Views (Admin / Superuser only)
+# ──────────────────────────────────────────────────────────────────────────────
+
+def Add_Staff(request):
+    """Admin creates a new staff account with username and password."""
+    if not (request.user.is_authenticated and request.user.is_superuser):
+        messages.error(request, 'Access denied. Admin only.')
+        return redirect('home')
+
+    created_staff = None
+    error = ''
+
+    if request.method == 'POST':
+        full_name = request.POST.get('full_name', '').strip()
+        username  = request.POST.get('username', '').strip()
+        password  = request.POST.get('password', '').strip()
+
+        if not full_name or not username or not password:
+            error = 'All fields are required.'
+        elif User.objects.filter(username=username).exists():
+            error = f'Username "{username}" is already taken. Please choose another.'
+        elif len(password) < 4:
+            error = 'Password must be at least 4 characters.'
+        else:
+            name_parts = full_name.split(' ', 1)
+            first_name = name_parts[0]
+            last_name  = name_parts[1] if len(name_parts) > 1 else ''
+            user = User.objects.create_user(
+                username=username,
+                password=password,
+                first_name=first_name,
+                last_name=last_name,
+                is_staff=True,
+                is_superuser=False,  # Staff — NOT admin
+            )
+            created_staff = {'name': full_name, 'username': username, 'password': password}
+
+    return render(request, 'add_staff.html', {'created_staff': created_staff, 'error': error})
+
+
+def View_Staff(request):
+    """Admin views all non-superuser staff accounts."""
+    if not (request.user.is_authenticated and request.user.is_superuser):
+        messages.error(request, 'Access denied. Admin only.')
+        return redirect('home')
+    staff_list = User.objects.filter(is_staff=True, is_superuser=False).order_by('date_joined')
+    return render(request, 'view_staff.html', {'staff_list': staff_list})
+
+
+def Delete_Staff(request, uid):
+    """Admin deletes a staff account."""
+    if not (request.user.is_authenticated and request.user.is_superuser):
+        messages.error(request, 'Access denied. Admin only.')
+        return redirect('home')
+    staff = get_object_or_404(User, id=uid, is_superuser=False)
+    staff.delete()
+    messages.success(request, f'Staff account "{staff.username}" has been removed.')
+    return redirect('view_staff')
+
+
 def Logout(request):
     if not request.user.is_staff:
         return redirect('login')
@@ -232,8 +239,9 @@ def Edit_Enquiry(request, pid):
 
 def Add_Equipment(request):
     error = ""
-    if not request.user.is_staff:
-        return redirect('login')
+    if not (request.user.is_authenticated and request.user.is_superuser):
+        messages.error(request, 'Access denied. Admin only.')
+        return redirect('home')
     if request.method == 'POST':
         n = request.POST.get('name', '').strip()
         category = request.POST.get('category', '').strip()
@@ -297,8 +305,9 @@ def Edit_Equipment(request, pid):
 
 def Add_Plan(request):
     error = ""
-    if not request.user.is_staff:
-        return redirect('login')
+    if not (request.user.is_authenticated and request.user.is_superuser):
+        messages.error(request, 'Access denied. Admin only.')
+        return redirect('home')
     if request.method == 'POST':
         n = request.POST['name']
         a = request.POST['amount']

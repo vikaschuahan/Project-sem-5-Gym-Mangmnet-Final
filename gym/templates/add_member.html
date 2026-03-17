@@ -1,5 +1,5 @@
 {% extends 'navigation.html' %}
-{% block title %}{% if member %}Edit Member{% else %}Add Member{% endif %} — GymPro{% endblock %}
+{% block title %}{% if member %}Edit Member{% else %}Add Member{% endif %} — GMS{% endblock %}
 
 {% block body %}
 <style>
@@ -188,7 +188,7 @@ textarea.floating-input {
     <div class="premium-wrapper">
         <div class="premium-header">
             <h1 class="premium-title">{% if member %}Edit Member{% else %}Register Member{% endif %}</h1>
-            <p class="premium-subtitle">Enroll a new client into the GymPro ecosystem</p>
+            <p class="premium-subtitle">Enroll a new client into the GMS ecosystem</p>
         </div>
 
         <form id="memberForm" action="{% if member %}{% url 'edit_member' member.id %}{% else %}{% url 'add_member' %}{% endif %}" method="post" novalidate>

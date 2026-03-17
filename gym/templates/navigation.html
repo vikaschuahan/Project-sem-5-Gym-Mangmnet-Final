@@ -3,7 +3,7 @@
 
 <head>
     {% load static %}
-    <title>{% block title %}GymPro — Management System{% endblock %}</title>
+    <title>{% block title %}GMS — Management System{% endblock %}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -364,36 +364,7 @@
         .badge-expiring { background: #fef3c7; color: #92400e; padding: 3px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; border: 1px solid #fde68a; }
         .badge-expired { background: #fee2e2; color: #991b1b; padding: 3px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; border: 1px solid #fecaca; }
 
-        /* ── THEME TOGGLE SWITCH ── */
-        .theme-switch-wrapper {
-            display: flex;
-            align-items: center;
-            margin-right: 15px;
-        }
-        .theme-switch {
-            display: inline-block;
-            height: 22px;
-            position: relative;
-            width: 42px;
-            margin: 0;
-            vertical-align: middle;
-        }
-        .theme-switch input { display: none; }
-        .theme-slider {
-            background-color: rgba(255,255,255,0.2);
-            bottom: 0; cursor: pointer; left: 0;
-            position: absolute; right: 0; top: 0;
-            transition: .3s; border-radius: 22px;
-        }
-        .theme-slider:before {
-            background-color: #fff;
-            bottom: 3px; content: ""; height: 16px;
-            left: 3px; position: absolute; transition: .3s;
-            width: 16px; border-radius: 50%;
-        }
-        input:checked + .theme-slider { background-color: var(--green); }
-        input:checked + .theme-slider:before { transform: translateX(20px); }
-        .theme-icon { color: rgba(255,255,255,0.6); font-size: 0.85rem; margin: 0 6px; }
+
 
         /* ── BUTTONS ── */
         .btn-gms-primary {
@@ -453,12 +424,6 @@
 
     {% block css %}{% endblock css %}
 
-    <script>
-        // Check local storage for theme early to prevent flash
-        if (localStorage.getItem('theme') === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'dark');
-        }
-    </script>
 </head>
 
 <body>
@@ -467,7 +432,7 @@
     <nav class="top-nav">
         <a class="top-nav-brand" href="{% url 'home' %}">
             <div class="logo-box">G</div>
-            <span class="brand-text">Gym<span>Pro</span></span>
+            <span class="brand-text">GMS</span>
         </a>
 
         <!-- Mobile toggle -->
@@ -483,8 +448,8 @@
                 <a class="nav-link" href="/about/"><i class="fa fa-info-circle" style="margin-right:5px;font-size:0.8rem;"></i>About</a>
             </li>
 
-            {% if request.user.is_staff %}
-            <!-- Members -->
+            {% if request.user.is_authenticated and request.user.is_staff %}
+            <!-- Members (visible to all staff) -->
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-users" style="margin-right:5px;font-size:0.8rem;"></i>Members
@@ -494,7 +459,7 @@
                     <a class="dropdown-item" href="/view_member/"><i class="fa fa-list"></i>View All</a>
                 </div>
             </li>
-            <!-- Attendance -->
+            <!-- Attendance (visible to all staff) -->
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-calendar-check-o" style="margin-right:5px;font-size:0.8rem;"></i>Attendance
@@ -504,17 +469,7 @@
                     <a class="dropdown-item" href="{% url 'view_attendance' %}"><i class="fa fa-bar-chart"></i>View Report</a>
                 </div>
             </li>
-            <!-- Equipment -->
-            <li class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-cogs" style="margin-right:5px;font-size:0.8rem;"></i>Equipment
-                </a>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/add_equipment/"><i class="fa fa-plus"></i>Add Equipment</a>
-                    <a class="dropdown-item" href="/view_equipment/"><i class="fa fa-list"></i>View All</a>
-                </div>
-            </li>
-            <!-- Enquiry -->
+            <!-- Enquiry (visible to all staff) -->
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-envelope" style="margin-right:5px;font-size:0.8rem;"></i>Enquiry
@@ -524,7 +479,20 @@
                     <a class="dropdown-item" href="/view_enquiry/"><i class="fa fa-list"></i>View All</a>
                 </div>
             </li>
-            <!-- Trainers -->
+            {% endif %}
+
+            {% if request.user.is_authenticated and request.user.is_superuser %}
+            <!-- Equipment (Admin only) -->
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-cogs" style="margin-right:5px;font-size:0.8rem;"></i>Equipment
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/add_equipment/"><i class="fa fa-plus"></i>Add Equipment</a>
+                    <a class="dropdown-item" href="/view_equipment/"><i class="fa fa-list"></i>View All</a>
+                </div>
+            </li>
+            <!-- Trainers (Admin only) -->
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-user-secret" style="margin-right:5px;font-size:0.8rem;"></i>Trainers
@@ -534,7 +502,7 @@
                     <a class="dropdown-item" href="/view_trainer/"><i class="fa fa-list"></i>View All</a>
                 </div>
             </li>
-            <!-- Plans -->
+            <!-- Plans (Admin only) -->
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-id-card" style="margin-right:5px;font-size:0.8rem;"></i>Plans
@@ -544,20 +512,22 @@
                     <a class="dropdown-item" href="/view_plan/"><i class="fa fa-list"></i>View All</a>
                 </div>
             </li>
+            <!-- Staff Management (Admin only) -->
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-id-badge" style="margin-right:5px;font-size:0.8rem;"></i>Staff
+                    <span style="background:#3b82f6;color:#fff;font-size:0.65rem;padding:1px 6px;border-radius:4px;margin-left:4px;font-weight:700;">ADMIN</span>
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{% url 'add_staff' %}"><i class="fa fa-user-plus"></i>Add Staff</a>
+                    <a class="dropdown-item" href="{% url 'view_staff' %}"><i class="fa fa-list"></i>View Staff</a>
+                </div>
+            </li>
             {% endif %}
         </ul>
 
         <!-- Right side -->
         <div class="top-nav-right">
-            <!-- Theme Toggle -->
-            <div class="theme-switch-wrapper">
-                <i class="fa fa-sun-o theme-icon"></i>
-                <label class="theme-switch" for="darkModeSwitch">
-                    <input type="checkbox" id="darkModeSwitch" />
-                    <div class="theme-slider"></div>
-                </label>
-                <i class="fa fa-moon-o theme-icon"></i>
-            </div>
 
             {% if request.user.is_authenticated %}
             <div class="user-pill d-none d-md-flex">
@@ -595,7 +565,7 @@
     </div>
 
     <footer class="app-footer">
-        GymPro Management System &nbsp;·&nbsp; Built with <span style="color:#f87171;">♥</span> by <a href="#">Vikas Chauhan</a> &nbsp;·&nbsp; 2025–26
+        GMS Management System &nbsp;·&nbsp; Built with <span style="color:#f87171;">♥</span> by <a href="#">Vikas Chauhan</a> &nbsp;·&nbsp; 2025–26
     </footer>
 
     <!-- Scripts -->
@@ -623,22 +593,7 @@
             if (a.getAttribute('href') === path) a.classList.add('active-link');
         });
 
-        // Dark Mode Toggle Logic
-        const toggleSwitch = document.querySelector('#darkModeSwitch');
-        if (toggleSwitch) {
-            if (document.documentElement.getAttribute('data-theme') === 'dark') {
-                toggleSwitch.checked = true;
-            }
-            toggleSwitch.addEventListener('change', function(e) {
-                if (e.target.checked) {
-                    document.documentElement.setAttribute('data-theme', 'dark');
-                    localStorage.setItem('theme', 'dark');
-                } else {
-                    document.documentElement.removeAttribute('data-theme');
-                    localStorage.setItem('theme', 'light');
-                }
-            });
-        }
+
     </script>
     {% block js %}{% endblock %}
 </body>

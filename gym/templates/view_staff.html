@@ -1,0 +1,82 @@
+{% extends 'navigation.html' %}
+{% block title %}View Staff — GMS{% endblock %}
+
+{% block body %}
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+    <div style="width:4px;height:28px;background:#3b82f6;border-radius:2px;"></div>
+    <h1 style="font-size:1.25rem;font-weight:800;margin:0;">Staff Accounts</h1>
+</div>
+<p style="color:#6b7280;font-size:0.85rem;margin-bottom:20px;">All staff accounts created by admin. Staff can only access Members, Attendance, and Enquiry sections.</p>
+
+<div class="app-card">
+    <!-- Toolbar -->
+    <div style="padding:14px 16px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;flex-wrap:wrap;gap:10px;justify-content:space-between;">
+        <span style="font-weight:600;color:#334155;font-size:0.9rem;">
+            <i class="fa fa-users" style="color:#3b82f6;margin-right:6px;"></i>
+            {{ staff_list|length }} Staff Member{{ staff_list|length|pluralize }}
+        </span>
+        <a href="{% url 'add_staff' %}" class="btn-gms-primary" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-size:0.83rem;padding:8px 16px;background:#3b82f6;">
+            <i class="fa fa-plus"></i> Add New Staff
+        </a>
+    </div>
+
+    <!-- Table -->
+    <div style="overflow-x:auto;">
+        <table class="gms-table" style="min-width:600px;">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Staff Member</th>
+                    <th>Username (Login ID)</th>
+                    <th>Created On</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in staff_list %}
+                <tr>
+                    <td style="color:#6b7280;font-size:0.75rem;font-weight:500;">{{ forloop.counter }}</td>
+                    <td>
+                        <div style="display:flex;align-items:center;">
+                            <span class="mem-avatar" style="background:linear-gradient(135deg,#3b82f6,#8b5cf6);">{{ s.username|slice:":1"|upper }}</span>
+                            <div>
+                                <div style="font-weight:600;font-size:0.88rem;">
+                                    {% if s.first_name %}{{ s.first_name }} {{ s.last_name }}{% else %}{{ s.username }}{% endif %}
+                                </div>
+                                <div style="font-size:0.73rem;color:#6b7280;">Staff Account</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <code style="background:#eff6ff;color:#2563eb;padding:3px 10px;border-radius:6px;font-size:0.85rem;font-weight:600;">{{ s.username }}</code>
+                    </td>
+                    <td style="color:#6b7280;font-size:0.82rem;">{{ s.date_joined|date:"d M Y" }}</td>
+                    <td>
+                        {% if s.is_active %}
+                            <span class="badge-green">Active</span>
+                        {% else %}
+                            <span class="badge-red">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td style="white-space:nowrap;">
+                        <a href="{% url 'delete_staff' s.id %}"
+                           onclick="return confirm('Remove staff account for {{ s.username }}? This cannot be undone.')"
+                           class="btn-action-delete">
+                            <i class="fa fa-trash"></i> Remove
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align:center;padding:48px;color:#6b7280;">
+                        <i class="fa fa-users" style="font-size:2rem;opacity:0.2;display:block;margin-bottom:10px;"></i>
+                        No staff accounts yet. <a href="{% url 'add_staff' %}" style="color:#3b82f6;font-weight:600;">Add one now</a>.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
